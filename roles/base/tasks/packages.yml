@@ -1,0 +1,26 @@
+---
+- name: Update and upgrade apt packages
+  apt:
+    upgrade: 'yes'
+    update_cache: 'yes'
+    cache_valid_time: 86400 # One day
+
+- name: install a default set of packages
+  package:
+    name:
+    - vim
+    - nano
+    - htop
+    - git
+    - tmux
+    - screen
+    - byobu
+    - ncdu
+    - moreutils
+    - apt-transport-https
+    - smartmontools
+    - zip
+    - unzip
+    - zsh
+    state: present
+  tags: packages
