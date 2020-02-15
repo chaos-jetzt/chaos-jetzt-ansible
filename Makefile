@@ -6,3 +6,5 @@ site:
 initial:
 	$(ANSIBLE) --ask-pass --user root -t base ./playbooks/site.yml
 
+docker:
+	$(ANSIBLE) --become -t docker ./playbooks/site.yml

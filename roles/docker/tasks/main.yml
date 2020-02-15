@@ -1,0 +1,39 @@
+---
+# Fix for Debian Buster: https://github.com/docker/docker-py/issues/1502#issuecomment-509898861
+- name: Install python-backports.ssl module
+  apt:
+    name: python-backports.ssl-match-hostname
+    state: present
+  when: ansible_distribution == "Debian" and ansible_distribution_release == "buster"
+
+- name: Add Docker apt key
+  apt_key:
+    url: https://download.docker.com/linux/debian/gpg
+    id: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
+    state: present
+
+- name: Add Docker apt repository
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/{{ansible_distribution|lower}} {{ ansible_distribution_release }} stable"
+    state: present
+    update_cache: 'yes'
+
+- name: Install docker
+  apt:
+    name: "docker-ce"
+    state: present
+
+- name: Install docker-compose python package
+  pip:
+    name: "docker-compose"
+    state: present
+
+- name: Install docker python package
+  pip:
+    name: "docker"
+    state: present
+
+#- name: Create docker daemon configuration from template
+#  template:
+#    dest: "/etc/docker/daemon.json"
+#    src: "daemon.json.j2"

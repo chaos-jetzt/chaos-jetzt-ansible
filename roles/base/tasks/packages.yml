@@ -22,5 +22,7 @@
     - zip
     - unzip
     - zsh
+    - python3-pip
+    - python3-setuptools
     state: present
   tags: packages

@@ -4,3 +4,8 @@
   - base
   tags: base
 
+- hosts: web
+  roles:
+  - docker
+  #- docker-matrix
+  tags: docker
