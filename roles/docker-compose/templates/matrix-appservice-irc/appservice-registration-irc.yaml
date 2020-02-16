@@ -1,0 +1,15 @@
+id: irc_bridge # Can be any helpful identifier
+hs_token: {{ irc_hs_token }} # Both of these should be unique secret tokens
+as_token: {{ irc_as_token }}
+namespaces:
+  users:
+    - exclusive: true
+      regex: '@irc_.*:{{ base_url }}' # localhost should be your homeserver's server_name
+  aliases:
+    - exclusive: true
+      regex: '#irc_.*:{{ base_url }}' # localhost should be your homeserver's server_name
+url: 'http://matrix-appservice-irc:9995'
+sender_localpart: irc_bot
+rate_limited: false
+protocols:
+  - irc

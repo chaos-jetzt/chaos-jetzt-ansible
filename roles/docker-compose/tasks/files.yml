@@ -1,0 +1,44 @@
+---
+- name: make sure config-directories exist
+  file:
+    path: '/root/{{ item }}'
+    state: directory
+    recurse: yes
+    owner: root
+    group: root
+  with_items:
+  - matrix-appservice-irc/
+  - murmur/
+  - nginx/html_known/.well-known/matrix/
+  - pretix/
+  - riot/
+  - synapse/media_store/
+  - synapse/uploads/
+  - traefik/
+
+- name: mass-copy config files
+  template:
+    dest: '/root/{{ item }}'
+    src: '{{ item }}'
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+  - matrix-appservice-irc/appservice-registration-irc.yaml
+  - matrix-appservice-irc/config.yaml
+  - murmur/murmur.ini
+  - nginx/default.conf
+  - nginx/html_known/.well-known/matrix/server
+  - pretix/pretix.cfg
+  - riot/config.json
+  - synapse/homeserver.yaml
+  - synapse/synapse.log.config
+  - synapse/synapse.signing.key
+  - traefik/traefik.toml
+
+- name: clone website repo
+  git:
+    repo: 'https://git.cccgoe.de/Asterix/jetztstatic'
+    dest: /root/nginx/html
+    clone: yes
+    update: yes

@@ -7,5 +7,5 @@
 - hosts: web
   roles:
   - docker
-  #- docker-matrix
+  - docker-compose
   tags: docker

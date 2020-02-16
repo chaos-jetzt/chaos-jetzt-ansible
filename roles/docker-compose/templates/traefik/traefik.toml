@@ -1,0 +1,37 @@
+logLevel = "INFO"
+defaultEntryPoints = ["https","http"]
+[entryPoints]
+  [entryPoints.http]
+  address = ":80"
+    [entryPoints.http.redirect]
+    entryPoint = "https"
+  [entryPoints.https]
+  address = ":443"
+  compress = true
+  [entryPoints.https.tls]
+  [entryPoints.traefik]
+   address=":8080"
+   [entryPoints.traefik.auth]
+     [entryPoints.traefik.auth.basic]
+       users = [
+         "admin:$apr1$ZOeQE6bE$NXEahNWS962G8.lTh0P180",
+         "simeon:$apr1$c7/V5Mhy$vzozg29TxnYXfzZ1deqm1/"
+       ]
+[retry]
+
+[api]
+dashboard = true
+[docker]
+endpoint = "unix:///var/run/docker.sock"
+domain = "{{ base_url }}"
+watch = true
+exposedByDefault = false
+
+[acme]
+email = "mail@{{ base_url }}"
+storage = "/letsencrypt/acme.json"
+entryPoint = "https"
+onHostRule = true
+acmeLogging = true
+[acme.httpChallenge]
+entryPoint = "http"

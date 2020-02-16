@@ -8,3 +8,6 @@ initial:
 
 docker:
 	$(ANSIBLE) --become -t docker ./playbooks/site.yml
+
+dev:
+	$(ANSIBLE) --become --limit 'dev' ./playbooks/site.yml

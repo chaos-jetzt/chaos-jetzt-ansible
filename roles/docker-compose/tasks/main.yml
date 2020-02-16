@@ -1,0 +1,8 @@
+---
+- name: Create the web network
+  docker_network:
+    name: web
+
+- include: files.yml
+
+- include: compose.yml

@@ -1,2 +1,9 @@
 [web]
 chaos.jetzt
+jetzt-dev.n0emis.eu
+
+[dev]
+jetzt-dev.n0emis.eu
+
+[prod]
+chaos.jetzt
