@@ -1,13 +1,17 @@
 ANSIBLE=ansible-playbook
+LIMIT=all
+
+ifeq ($(findstring dev,$(MAKECMDGOALS)),dev)
+    LIMIT=dev
+endif
 
 site:
-	$(ANSIBLE) --become ./playbooks/site.yml
+	$(ANSIBLE) --become --limit $(LIMIT) ./playbooks/site.yml
 
 initial:
-	$(ANSIBLE) --ask-pass --user root -t base ./playbooks/site.yml
+	$(ANSIBLE) --ask-pass --user root -t base --limit $(LIMIT) ./playbooks/site.yml
 
 docker:
-	$(ANSIBLE) --become -t docker ./playbooks/site.yml
+	$(ANSIBLE) --become -t docker --limit $(LIMIT) ./playbooks/site.yml
 
 dev:
-	$(ANSIBLE) --become --limit 'dev' ./playbooks/site.yml
