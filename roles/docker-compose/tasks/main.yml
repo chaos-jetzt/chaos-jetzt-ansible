@@ -6,3 +6,10 @@
 - include: files.yml
 
 - include: compose.yml
+
+- name: setup traefik certificate-exporter cronjob
+  cron:
+    name: traefik certificate-exporter
+    hour: "2"
+    user: root
+    job: '/root/traefik/dumpcerts.sh /root/traefik/letsencrypt/acme.json /etc/ssl/'

@@ -7,5 +7,11 @@
 - hosts: web
   roles:
   - docker
-  - docker-compose
   tags: docker
+
+- hosts: web
+  roles:
+  - docker-compose
+  tags:
+  - docker
+  - compose

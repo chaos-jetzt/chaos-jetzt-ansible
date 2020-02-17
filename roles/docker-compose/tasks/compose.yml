@@ -189,6 +189,7 @@
             - 64738:64738
           volumes:
             - /root/murmur/murmur.ini:/etc/murmur.ini
+            - /etc/ssl:/etc/ssl
             - murmur-data:/data
           networks:
             - web

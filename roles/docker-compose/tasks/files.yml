@@ -36,6 +36,16 @@
   - synapse/synapse.signing.key
   - traefik/traefik.toml
 
+- name: mass-copy scripts
+  template:
+    dest: '/root/{{ item }}'
+    src: '{{ item }}'
+    owner: root
+    group: root
+    mode: 0744
+  with_items:
+  - traefik/dumpcerts.sh
+
 - name: clone website repo
   git:
     repo: 'https://git.cccgoe.de/Asterix/jetztstatic'

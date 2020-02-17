@@ -14,6 +14,9 @@ initial:
 docker:
 	$(ANSIBLE) --become -t docker --limit $(LIMIT) ./playbooks/site.yml
 
+compose:
+	$(ANSIBLE) --become -t compose --limit $(LIMIT) ./playbooks/site.yml
+
 ifeq ($(MAKECMDGOALS),dev)
 dev:
 	$(ANSIBLE) --become --limit $(LIMIT) ./playbooks/site.yml
