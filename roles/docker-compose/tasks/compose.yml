@@ -94,6 +94,23 @@
             - "traefik.docker.network=web"
           container_name:             website
 
+        mumble-web:
+          image:                      rankenstein/mumble-web
+          expose:
+            - 80
+          networks:
+            - web
+          environment:
+            MUMBLE_SERVER: "{{ base_url }}:64738"
+          labels:
+            - "traefik.backend=mumble-web"
+            - "traefik.enable=true"
+            - "traefik.frontend=true"
+            - "traefik.port=80"
+            - "traefik.frontend.rule=Host:mumble.{{ base_url }}"
+            - "traefik.docker.network=web"
+          container_name:             mumble-web
+
         pgadmin:
           image:                      dpage/pgadmin4:latest
           expose:
