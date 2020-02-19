@@ -15,6 +15,7 @@
   - synapse/media_store/
   - synapse/uploads/
   - traefik/
+  - maubot/
 
 - name: mass-copy config files
   template:
@@ -35,6 +36,7 @@
   - synapse/synapse.log.config
   - synapse/synapse.signing.key
   - traefik/traefik.toml
+  - maubot/config.yaml
 
 - name: mass-copy scripts
   template:

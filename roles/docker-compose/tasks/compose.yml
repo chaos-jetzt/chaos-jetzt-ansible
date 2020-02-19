@@ -211,6 +211,24 @@
           networks:
             - web
 
+        maubot:
+          image:                      dock.mau.dev/maubot/maubot:latest
+          expose:
+            - 8080
+          networks:
+            - web
+          volumes:
+            - maubot-data:/data
+            - /root/maubot/config.yaml:/data/config.yaml
+          labels:
+            - "traefik.backend=maubot"
+            - "traefik.enable=true"
+            - "traefik.frontend=true"
+            - "traefik.port=8080"
+            - "traefik.frontend.rule=Host:bot.{{ base_url }}"
+            - "traefik.docker.network=web"
+          container_name:             maubot
+
       volumes:
         postgres-data:
         synapse-media:
@@ -219,6 +237,7 @@
         pretix-data:
         pretix-postgres:
         murmur-data:
+        maubot-data:
 
       networks:
         web:
