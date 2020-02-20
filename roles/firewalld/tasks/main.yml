@@ -1,0 +1,75 @@
+---
+- name: install firewalld
+  package:
+    name: firewalld
+    state: present
+
+- firewalld:
+    service: ssh
+    permanent: yes
+    state: enabled
+    immediate: yes
+
+- firewalld:
+    service: http
+    permanent: yes
+    state: enabled
+    immediate: yes
+
+- firewalld:
+    service: https
+    permanent: yes
+    state: enabled
+    immediate: yes
+
+- firewalld:
+    port: 64738/tcp
+    permanent: yes
+    state: enabled
+    immediate: yes
+#mumble port tcp
+
+- firewalld:
+    port: 64738/udp
+    permanent: yes
+    state: enabled
+    immediate: yes
+#mumble port udp
+
+- firewalld:
+    port: 8080/tcp
+    permanent: yes
+    state: enabled
+    immediate: yes
+#træfik
+
+- firewalld:
+    port: 8181/tcp
+    permanent: yes
+    state: enabled
+    immediate: yes
+#botamusique
+
+- firewalld:
+    port: 8008/tcp
+    permanent: yes
+    state: enabled
+    immediate: yes
+#matrix port
+
+- firewalld:
+    port: 8090/tcp
+    permanent: yes
+    state: enabled
+    immediate: yes
+#matrix port
+
+- firewalld:
+    port: 8448/tcp
+    permanent: yes
+    state: enabled
+    immediate: yes
+#matrix port
+
+- name: Enable firewalld on system reboot
+     service: name=firewalld enabled=yes state=started
