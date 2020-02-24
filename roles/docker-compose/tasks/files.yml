@@ -22,8 +22,8 @@
     path: '/root/{{ item }}'
     state: directory
     recurse: yes
-    owner: 991
-    group: 991
+    owner: '991'
+    group: '991'
     mode: 0755
   with_items:
   - synapse/media_store/
@@ -59,6 +59,15 @@
     mode: 0744
   with_items:
   - traefik/dumpcerts.sh
+
+- name: change permissions for certificate storage
+  file:
+    path: '/root/{{ item }}'
+    owner: root
+    group: root
+    mode: 0600
+  with_items:
+  - traefik/letsencrypt/acme.json
 
 - name: clone website repo
   git:

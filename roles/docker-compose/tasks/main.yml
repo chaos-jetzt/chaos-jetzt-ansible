@@ -13,3 +13,8 @@
     hour: "2"
     user: root
     job: '/root/traefik/dumpcerts.sh /root/traefik/letsencrypt/acme.json /etc/ssl/'
+
+- name: run traefik certificate-exporter
+  shell:
+    cmd: '/root/traefik/dumpcerts.sh /root/traefik/letsencrypt/acme.json /etc/ssl/'
+  become: true
