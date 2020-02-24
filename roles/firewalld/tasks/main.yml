@@ -9,67 +9,33 @@
     permanent: yes
     state: enabled
     immediate: yes
+#this is seperate so you don't accidentally remove it
 
 - firewalld:
-    service: http
+    service: "{{ item }}"
     permanent: yes
     state: enabled
     immediate: yes
+  with_items:
+    - ssh
+    - http
+    - https
+    - murmur
 
 - firewalld:
-    service: https
+    port: "{{ item }}"
     permanent: yes
     state: enabled
     immediate: yes
-
-- firewalld:
-    port: 64738/tcp
-    permanent: yes
-    state: enabled
-    immediate: yes
-#mumble port tcp
-
-- firewalld:
-    port: 64738/udp
-    permanent: yes
-    state: enabled
-    immediate: yes
-#mumble port udp
-
-- firewalld:
-    port: 8080/tcp
-    permanent: yes
-    state: enabled
-    immediate: yes
-#træfik
-
-- firewalld:
-    port: 8181/tcp
-    permanent: yes
-    state: enabled
-    immediate: yes
-#botamusique
-
-- firewalld:
-    port: 8008/tcp
-    permanent: yes
-    state: enabled
-    immediate: yes
-#matrix port
-
-- firewalld:
-    port: 8090/tcp
-    permanent: yes
-    state: enabled
-    immediate: yes
-#matrix port
-
-- firewalld:
-    port: 8448/tcp
-    permanent: yes
-    state: enabled
-    immediate: yes
-#matrix port
+  with_items:
+    - 8080/tcp 
+    - 8181/tcp
+    - 8008/tcp
+    - 8090/tcp
+    - 8448/tcp
 
 - name: Enable firewalld on system reboot
-     service: name=firewalld enabled=yes state=started
+  service:
+    name: firewalld
+    enabled: yes
+    state: started
