@@ -11,6 +11,9 @@ site:
 initial:
 	$(ANSIBLE) --ask-pass --user root -t base --limit $(LIMIT) ./playbooks/site.yml
 
+firewall:
+	$(ANSIBLE) --become -t firewall --limit $(LIMIT) ./playbooks/site.yml
+
 docker:
 	$(ANSIBLE) --become -t docker --limit $(LIMIT) ./playbooks/site.yml
 
