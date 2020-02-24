@@ -13,10 +13,6 @@
     - https
     firewall_ports:
     - 8080/tcp
-    - 8181/tcp
-    - 8008/tcp
-    - 8090/tcp
-    - 8448/tcp
     - 64738/udp
     - 64738/tcp
   tags: firewall
