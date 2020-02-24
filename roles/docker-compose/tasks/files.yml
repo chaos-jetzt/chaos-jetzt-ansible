@@ -6,16 +6,28 @@
     recurse: yes
     owner: root
     group: root
+    mode: 0755
   with_items:
   - matrix-appservice-irc/
   - murmur/
   - nginx/html_known/.well-known/matrix/
   - pretix/
   - riot/
-  - synapse/media_store/
-  - synapse/uploads/
+  - synapse/
   - traefik/
   - maubot/
+
+- name: change owner of synapse media-directories
+  file:
+    path: '/root/{{ item }}'
+    state: directory
+    recurse: yes
+    owner: 991
+    group: 991
+    mode: 0755
+  with_items:
+  - synapse/media_store/
+  - synapse/uploads/
 
 - name: mass-copy config files
   template:

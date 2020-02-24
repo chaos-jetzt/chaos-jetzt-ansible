@@ -1,6 +1,7 @@
 ---
 - name: do compose magic
   docker_compose:
+    pull: yes
     project_name: root
     definition:
       version:                        "3"
