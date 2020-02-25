@@ -1,0 +1,12 @@
+[Unit]
+Description=Mumble monitoring daemon
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/users_in_channel.py
+User=nobody
+Group=nogroup
+
+[Install]
+WantedBy=default.target
