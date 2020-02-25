@@ -6,7 +6,7 @@ import Ice, sys
 import time
 
 mastodon = Mastodon(
-    access_token = '{{ mastodon_access_token }}',
+    access_token = '{{ partyline42_at_chaossocial_access_token }}',
     api_base_url = 'https://chaos.social'
 )
 
