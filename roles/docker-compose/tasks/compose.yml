@@ -28,9 +28,9 @@
           volumes:
             - postgres-data:/var/lib/postgresql/data
           environment:
-           - POSTGRES_PASSWORD={{ synapse_db_password }}
-           - POSTGRES_USER=synapse
-           - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --lc-collate=C --lc-ctype=C
+            - POSTGRES_PASSWORD={{ synapse_db_password }}
+            - POSTGRES_USER=synapse
+            - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --lc-collate=C --lc-ctype=C
           container_name:             synapse-postgres
 
         synapse:
@@ -231,6 +231,27 @@
             - "traefik.docker.network=web"
           container_name:             maubot
 
+        dokuwiki:
+          image:                    bitnami/dokuwiki:0
+          networks:
+            - web
+          volumes:
+            - dokuwiki_data:/bitnami
+          environment:
+            DOKUWIKI_USERNAME: "admin"
+            DOKUWIKI_FULL_NAME: "admin"
+            DOKUWIKI_PASSWORD: "{{ dokuwiki_password }}"
+            DOKUWIKI_EMAIL: "dokuwiki-admin@chaos.jetzt"
+            DOKUWIKI_WIKI_NAME: "{{ base_url }} Wiki"
+          container_name:             dokuwiki
+          labels:
+            - "traefik.backend=dokuwiki"
+            - "traefik.enable=true"
+            - "traefik.frontend=true"
+            - "traefik.port=80"
+            - "traefik.frontend.rule=Host:wiki.{{ base_url }}"
+            - "traefik.docker.network=web"
+
       volumes:
         postgres-data:
         synapse-media:
@@ -240,6 +261,7 @@
         pretix-postgres:
         murmur-data:
         maubot-data:
+        dokuwiki_data:
 
       networks:
         web:
