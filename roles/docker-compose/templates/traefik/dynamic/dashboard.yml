@@ -1,0 +1,18 @@
+http:
+  routers:
+    api_http:
+      rule: "Host(`traefik.{{ base_url }}`)"
+      service: "api@internal"
+      entryPoints:
+        - "http"
+      middlewares:
+        - "https_redirect"
+    api_https:
+      rule: "Host(`traefik.{{ base_url }}`)"
+      tls:
+        certResolver: "le_http"
+      service: "api@internal"
+      entryPoints:
+        - "https"
+      middlewares:
+        - "api_auth"

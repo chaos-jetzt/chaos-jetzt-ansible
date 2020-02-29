@@ -7,17 +7,16 @@
       version:                        "3"
       services:
         traefik:
-          image:                      traefik:v1.7
+          image:                      traefik:2.1
           restart:                    always
           ports:
             - 80:80
             - 443:443
-            - 8080:8080 # The Web UI (enabled by --api)
           networks:
             - web
           volumes:
             - /var/run/docker.sock:/var/run/docker.sock
-            - /root/traefik/traefik.toml:/traefik.toml
+            - /root/traefik:/etc/traefik/
             - /root/traefik/letsencrypt:/letsencrypt
           container_name:             traefik
         synapse-postgres:
@@ -46,14 +45,16 @@
             - /root/synapse:/data
             - /root/matrix-appservice-irc/appservice-registration-irc.yaml:/irc/appservice-registration-irc.yaml
           labels:
-            - "traefik.backend=synapse"
             - "traefik.enable=true"
-            - "traefik.frontend=true"
-            - "traefik.port=8008"
-            - "traefik.frontend.rule=Host:matrix.{{ base_url }}"
-            - "traefik.frontend.redirect.regex=https://matrix.{{ base_url }}(/?)$$"
-            - "traefik.frontend.redirect.replacement=https://chat.{{ base_url }}/"
-            - "traefik.docker.network=web"
+            - "traefik.http.routers.synapse_http.rule=Host(`matrix.{{ base_url }}`)"
+            - "traefik.http.routers.synapse_http.entryPoints=http"
+            - "traefik.http.routers.synapse_http.middlewares=https_redirect@file"
+            - "traefik.http.routers.synapse_https.rule=Host(`matrix.{{ base_url }}`)"
+            - "traefik.http.routers.synapse_https.entryPoints=https"
+            - "traefik.http.routers.synapse_https.tls.certresolver=le_http"
+            - "traefik.http.services.synapse-app.loadbalancer.server.port=8008"
+            - "traefik.http.middlewares.synapse-redirectregex.redirectregex.regex=https://matrix.{{ base_url }}(/?)$$"
+            - "traefik.http.middlewares.synapse-redirectregex.redirectregex.replacement=https://chat.{{ base_url }}/"
           container_name:             synapse
 
         riot:
@@ -68,12 +69,14 @@
           volumes:
             - /root/riot/config.json:/app/config.json
           labels:
-            - "traefik.backend=riot"
             - "traefik.enable=true"
-            - "traefik.frontend=true"
-            - "traefik.port=80"
-            - "traefik.frontend.rule=Host:chat.{{ base_url }}"
-            - "traefik.docker.network=web"
+            - "traefik.http.routers.riot_http.rule=Host(`chat.{{ base_url }}`)"
+            - "traefik.http.routers.riot_http.entryPoints=http"
+            - "traefik.http.routers.riot_http.middlewares=https_redirect@file"
+            - "traefik.http.routers.riot_https.rule=Host(`chat.{{ base_url }}`)"
+            - "traefik.http.routers.riot_https.entryPoints=https"
+            - "traefik.http.routers.riot_https.tls.certresolver=le_http"
+            - "traefik.http.services.riot-app.loadbalancer.server.port=80"
           container_name:             riot
 
         homepage:
@@ -87,12 +90,14 @@
           networks:
             - web
           labels:
-            - "traefik.backend=website"
             - "traefik.enable=true"
-            - "traefik.frontend=true"
-            - "traefik.port=80"
-            - "traefik.frontend.rule=Host:{{ base_url }}"
-            - "traefik.docker.network=web"
+            - "traefik.http.routers.homepage_http.rule=Host(`{{ base_url }}`)"
+            - "traefik.http.routers.homepage_http.entryPoints=http"
+            - "traefik.http.routers.homepage_http.middlewares=https_redirect@file"
+            - "traefik.http.routers.homepage_https.rule=Host(`{{ base_url }}`)"
+            - "traefik.http.routers.homepage_https.entryPoints=https"
+            - "traefik.http.routers.homepage_https.tls.certresolver=le_http"
+            - "traefik.http.services.homepage-app.loadbalancer.server.port=80"
           container_name:             website
 
         mumble-web:
@@ -104,12 +109,14 @@
           environment:
             MUMBLE_SERVER: "{{ base_url }}:64738"
           labels:
-            - "traefik.backend=mumble-web"
             - "traefik.enable=true"
-            - "traefik.frontend=true"
-            - "traefik.port=80"
-            - "traefik.frontend.rule=Host:mumble.{{ base_url }}"
-            - "traefik.docker.network=web"
+            - "traefik.http.routers.mumble_http.rule=Host(`mumble.{{ base_url }}`)"
+            - "traefik.http.routers.mumble_http.entryPoints=http"
+            - "traefik.http.routers.mumble_http.middlewares=https_redirect@file"
+            - "traefik.http.routers.mumble_https.rule=Host(`mumble.{{ base_url }}`)"
+            - "traefik.http.routers.mumble_https.entryPoints=https"
+            - "traefik.http.routers.mumble_https.tls.certresolver=le_http"
+            - "traefik.http.services.mumble-app.loadbalancer.server.port=80"
           container_name:             mumble-web
 
         pgadmin:
@@ -124,12 +131,14 @@
           networks:
             - web
           labels:
-            - "traefik.backend=pgadmin"
             - "traefik.enable=true"
-            - "traefik.frontend=true"
-            - "traefik.port=80"
-            - "traefik.frontend.rule=Host:pgadmin.{{ base_url }}"
-            - "traefik.docker.network=web"
+            - "traefik.http.routers.pgadmin_http.rule=Host(`pgadmin.{{ base_url }}`)"
+            - "traefik.http.routers.pgadmin_http.entryPoints=http"
+            - "traefik.http.routers.pgadmin_http.middlewares=https_redirect@file"
+            - "traefik.http.routers.pgadmin_https.rule=Host(`pgadmin.{{ base_url }}`)"
+            - "traefik.http.routers.pgadmin_https.entryPoints=https"
+            - "traefik.http.routers.pgadmin_https.tls.certresolver=le_http"
+            - "traefik.http.services.pgadmin-app.loadbalancer.server.port=80"
           container_name:             pgadmin
 
         matrix-appservice-irc:
@@ -155,12 +164,6 @@
             - /root/down/html:/usr/share/nginx/html
           networks:
             - web
-          labels:
-            - "traefik.backend=down"
-            - "traefik.enable=false"
-            - "traefik.frontend=false"
-            - "traefik.port=80"
-            - "traefik.docker.network=web"
           container_name:             down
 
         pretix-database:
@@ -192,12 +195,14 @@
           networks:
             - web
           labels:
-            - "traefik.backend=pretix"
             - "traefik.enable=true"
-            - "traefik.frontend=true"
-            - "traefik.port=80"
-            - "traefik.frontend.rule=Host:pretix.{{ base_url }},tickets.{{ base_url }}"
-            - "traefik.docker.network=web"
+            - "traefik.http.routers.pretix_http.rule=Host(`pretix.{{ base_url }}`) || Host(`tickets.{{ base_url }}`)"
+            - "traefik.http.routers.pretix_http.entryPoints=http"
+            - "traefik.http.routers.pretix_http.middlewares=https_redirect@file"
+            - "traefik.http.routers.pretix_https.rule=Host(`pretix.{{ base_url }}`) || Host(`tickets.{{ base_url }}`)"
+            - "traefik.http.routers.pretix_https.entryPoints=https"
+            - "traefik.http.routers.pretix_https.tls.certresolver=le_http"
+            - "traefik.http.services.pretix-app.loadbalancer.server.port=80"
 
         murmur:
           image:                      mattikus/murmur:latest
@@ -223,12 +228,14 @@
             - maubot-data:/data
             - /root/maubot/config.yaml:/data/config.yaml
           labels:
-            - "traefik.backend=maubot"
             - "traefik.enable=true"
-            - "traefik.frontend=true"
-            - "traefik.port=8080"
-            - "traefik.frontend.rule=Host:bot.{{ base_url }}"
-            - "traefik.docker.network=web"
+            - "traefik.http.routers.maubot_http.rule=Host(`bot.{{ base_url }}`)"
+            - "traefik.http.routers.maubot_http.entryPoints=http"
+            - "traefik.http.routers.maubot_http.middlewares=https_redirect@file"
+            - "traefik.http.routers.maubot_https.rule=Host(`bot.{{ base_url }}`)"
+            - "traefik.http.routers.maubot_https.entryPoints=https"
+            - "traefik.http.routers.maubot_https.tls.certresolver=le_http"
+            - "traefik.http.services.maubot-app.loadbalancer.server.port=8080"
           container_name:             maubot
 
         dokuwiki:
@@ -245,12 +252,14 @@
             DOKUWIKI_WIKI_NAME: "{{ base_url }} Wiki"
           container_name:             dokuwiki
           labels:
-            - "traefik.backend=dokuwiki"
             - "traefik.enable=true"
-            - "traefik.frontend=true"
-            - "traefik.port=80"
-            - "traefik.frontend.rule=Host:wiki.{{ base_url }}"
-            - "traefik.docker.network=web"
+            - "traefik.http.routers.dokuwiki_http.rule=Host(`wiki.{{ base_url }}`)"
+            - "traefik.http.routers.dokuwiki_http.entryPoints=http"
+            - "traefik.http.routers.dokuwiki_http.middlewares=https_redirect@file"
+            - "traefik.http.routers.dokuwiki_https.rule=Host(`wiki.{{ base_url }}`)"
+            - "traefik.http.routers.dokuwiki_https.entryPoints=https"
+            - "traefik.http.routers.dokuwiki_https.tls.certresolver=le_http"
+            - "traefik.http.services.dokuwiki-app.loadbalancer.server.port=80"
 
       volumes:
         postgres-data:

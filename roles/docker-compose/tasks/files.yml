@@ -1,4 +1,9 @@
 ---
+- name: delete old traefik config file
+  file:
+    path: '/root/traefik/traefik.toml'
+    state: absent
+
 - name: make sure config-directories exist
   file:
     path: '/root/{{ item }}'
@@ -14,7 +19,7 @@
   - pretix/
   - riot/
   - synapse/
-  - traefik/
+  - traefik/dynamic
   - maubot/
 
 - name: change owner of synapse media-directories
@@ -47,7 +52,10 @@
   - synapse/homeserver.yaml
   - synapse/synapse.log.config
   - synapse/synapse.signing.key
-  - traefik/traefik.toml
+  - traefik/traefik.yml
+  - traefik/dynamic/middlewares.yml
+  - traefik/dynamic/dashboard.yml
+  - traefik/dynamic/tls.yml
   - maubot/config.yaml
 
 - name: mass-copy scripts
