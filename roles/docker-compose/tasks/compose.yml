@@ -34,7 +34,7 @@
           container_name:             synapse-postgres
 
         synapse:
-          image:                      matrixdotorg/synapse:latest
+          image:                      matrixdotorg/synapse:v1.11.1
           restart:                    unless-stopped
           depends_on:
             - synapse-postgres
