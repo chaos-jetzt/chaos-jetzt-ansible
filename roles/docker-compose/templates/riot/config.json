@@ -16,16 +16,22 @@
     "defaultCountryCode": "DE",
     "showLabsSettings": false,
     "features": {
-        "feature_pinning": "labs",
-        "feature_custom_status": "labs",
-        "feature_custom_tags": "labs",
-        "feature_state_counters": "labs"
+        "feature_pinning": "enable",
+        "feature_custom_status": "enable",
+        "feature_custom_tags": "enable",
+        "feature_state_counters": "enable",
+    	"feature_mjolnir": "labs",
+    	"feature_dm_verification": "labs",
+    	"feature_cross_signing": "labs",
+    	"feature_event_indexing": "labs",
+    	"feature_bridge_state": "labs",
+    	"feature_presence_in_room_list": "enable",
+    	"feature_invite_only_padlocks": "enable"
     },
     "default_federate": true,
     "default_theme": "dark",
     "roomDirectory": {
         "servers": [
-            "matrix.{{ base_url }}",
             "matrix.org"
         ]
     }
