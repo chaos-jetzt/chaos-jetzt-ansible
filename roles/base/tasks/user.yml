@@ -41,3 +41,21 @@
   with_items:
   - "{{ users }}"
   when: item.state == 'absent' and item.public_key is defined and item.public_key != ''
+
+- name: create password-user
+  user: state=present
+        name="pass"
+
+- name: add user to pass's authorized_keys
+  authorized_key: user="pass" manage_dir=true key="{{ item.public_key }}"
+                  state=present
+  with_items:
+  - "{{ users + password_users }}"
+  when: item.state != 'absent' and item.public_key is defined and item.public_key != ''
+
+- name: remove user from pass's authorized_keys
+  authorized_key: user="pass" manage_dir=true key="{{ item.public_key }}"
+                state=absent
+  with_items:
+  - "{{ users + password_users }}"
+  when: item.state == 'absent' and item.public_key is defined and item.public_key != ''
