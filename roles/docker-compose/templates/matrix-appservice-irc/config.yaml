@@ -193,6 +193,7 @@ ircService:
         # to a !join. Only applies if joinRule is 'invite'. Default: []
         whitelist:
           - "@n0emis:{{ base_url }}"
+          - "@e1mo:{{ base_url }}"
           - "@n0emis:noemis.me"
           - "@robbi5:matrix.org"
         #
@@ -253,6 +254,7 @@ ircService:
         "#chaos-jetzt": ["!jzpFzjAsmwAABpGore:{{ base_url }}"]
         "#chaos-jetzt_alte-leute-lounge": ["!bzDCiULXRPjUwoMapO:{{ base_url }}"]
         "#voc-lounge": ["!hXGwzNSSDRfpjpQocD:{{ base_url }}"]
+        "#regio": ["!foNvGrpipDkRyUTgxu:{{ base_url }}"]
 
       # Configuration for virtual matrix users. The following variables are
       # exposed:
