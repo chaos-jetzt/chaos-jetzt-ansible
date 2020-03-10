@@ -129,7 +129,7 @@ ircService:
         #      See https://github.com/matrix-org/matrix-appservice-irc/issues/55
         enabled: true
         # The nickname to give the AS bot.
-        nick: "chaos_jetzt"
+        nick: "{{ base_url | replace('.','_') }}"
         # The password to give to NickServ or IRC Server for this nick. Optional.
         # password: "helloworld"
         #
