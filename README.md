@@ -20,9 +20,6 @@ To install the base-configuration on a completely onconfigured server, e.g. with
 make initial
 ```
 
-## Add secrets to the vault
-To add new secret variables, put the vault password in the file `.vault_pass`, then for the variable `radius_client_secret` with the value `totallysecretvaluehere` encrypt it like this:
 
-```
-ansible-vault encrypt_string 'totallysecretvaluehere' --name 'radius_client_secret'
-```
+## Use the password-store
+To specify the path, from within the passwords shall be taken, use `PASSWORD_STORE_DIR=~/.password-store/chaos/jetzt` in front of the `make`/`ansible-playbook` command.
