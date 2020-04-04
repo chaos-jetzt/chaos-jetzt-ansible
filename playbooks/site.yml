@@ -2,6 +2,7 @@
 - hosts: all
   roles:
   - base
+  - jnv.unattended-upgrades
   tags: base
 
 - hosts: web

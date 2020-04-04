@@ -79,7 +79,7 @@
 
 - name: clone website repo
   git:
-    repo: 'https://git.cccgoe.de/Asterix/jetztstatic'
+    repo: 'https://github.com/chaos-jetzt/jetztstatic/'
     dest: /root/nginx/html
     clone: yes
     update: yes

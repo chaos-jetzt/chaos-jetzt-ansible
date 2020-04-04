@@ -33,7 +33,7 @@
           container_name:             synapse-postgres
 
         synapse:
-          image:                      matrixdotorg/synapse:v1.11.1
+          image:                      matrixdotorg/synapse:v1.12.3
           restart:                    unless-stopped
           depends_on:
             - synapse-postgres
