@@ -32,6 +32,13 @@
   - compose
 
 - hosts: web
+  roles:
+  - geerlingguy.nginx
+  - geerlingguy.php
+  - n0emis.dokuwiki
+  tags: wiki
+
+- hosts: web
   tasks:
     - name: create password-user
       user: state=present

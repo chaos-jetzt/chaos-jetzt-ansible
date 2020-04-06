@@ -38,4 +38,103 @@ mail_password: "{{ lookup('passwordstore', 'infra/mail') }}"
 maubot_unshared_secret: "{{ lookup('passwordstore', 'infra/maubot/unshared') }}"
 maubot_admin_password: "{{ lookup('passwordstore', 'infra/maubot/admin') }}"
 
-dokuwiki_password: "{{ lookup('passwordstore', 'infra/wiki/admin create=true') }}"
+nginx_remove_default_vhost: true
+nginx_user: www-data
+nginx_vhosts:
+  - listen: "81"  # Website
+    server_name: "_"
+    root: "/var/www/website"
+    index: "index.html index.htm"
+    state: "present"
+    template: "{{ nginx_vhost_template }}"
+    filename: "default.conf"
+
+  - listen: "82"  # Wiki
+    server_name: "_"
+    root: "/var/www/dokuwiki"
+    index: "doku.php"
+    state: "present"
+    template: "{{ nginx_vhost_template }}"
+    filename: "dokuwiki.conf"
+    extra_parameters: |
+      client_max_body_size 4M;
+      client_body_buffer_size 128k;
+
+      location ~ /(conf/|bin/|inc/|install.php) { deny all; }
+
+      location ~ ^/data/ { internal ; }
+
+      location ~ ^/lib.*\.(js|css|gif|png|ico|jpg|jpeg)$ {
+        expires 365d;
+      }
+
+      location / { try_files $uri $uri/ @dokuwiki; }
+
+      location @dokuwiki {
+        # rewrites "doku.php/" out of the URLs if you set the userwrite setting to .htaccess in dokuwiki config page
+        rewrite ^/_media/(.*) /lib/exe/fetch.php?media=$1 last;
+        rewrite ^/_detail/(.*) /lib/exe/detail.php?media=$1 last;
+        rewrite ^/_export/([^/]+)/(.*) /doku.php?do=export_$1&id=$2 last;
+        rewrite ^/(.*) /doku.php?id=$1&$args last;
+      }
+
+      location ~ \.php$ {
+        try_files $uri $uri/ /doku.php;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param REDIRECT_STATUS 200;
+        fastcgi_pass unix:/var/run/php/php{{ php_default_version_debian }}-fpm.sock;
+      }
+
+
+php_webserver_daemon: nginx
+php_enable_php_fpm: true
+php_use_managed_ini: true
+php_default_version_debian: "7.2"
+
+dokuwiki_title: "{{ base_url }} Wiki"
+dokuwiki_base: /var/www/dokuwiki
+dokuwiki_savedir: "{{ dokuwiki_base }}/data"
+dokuwiki_plugins:
+- name: tag
+  src: https://github.com/dokufreaks/plugin-tag/tarball/master
+- name: pagelist
+  src: https://github.com/dokufreaks/plugin-pagelist/tarball/master
+- name: smtp
+  src: https://github.com/splitbrain/dokuwiki-plugin-smtp/tarball/master
+dokuwiki_plugins_remove:
+  - name: authad
+  - name: authldap
+  - name: authmysql
+  - name: authpdo
+  - name: authpgsql
+  - name: info
+  - name: popularity
+dokuwiki_provision: true
+dokuwiki_disableactions:
+dokuwiki_acl_all: 1
+dokuwiki_acl_user: 8
+dokuwiki_language: de-informal
+dokuwiki_local:
+  - name: "['userewrite']"
+    value: 1
+  - name: "['subscribers']"
+    value: 1
+  - name: "['useslash']"
+    value: 1
+  - name: "['mailfrom']"
+    value: "'wiki@chaos.jetzt'"
+  - name: "['plugin']['smtp']['smtp_host']"
+    value: "'{{ lookup('passwordstore', 'infra/mail subkey=url') }}'"
+  - name: "['plugin']['smtp']['smtp_port']"
+    value: 465
+  - name: "['plugin']['smtp']['smtp_ssl']"
+    value: "'ssl'"
+  - name: "['plugin']['smtp']['auth_user']"
+    value: "'{{ lookup('passwordstore', 'infra/mail subkey=user') }}'"
+  - name: "['plugin']['smtp']['auth_pass']"
+    value: "'{{ lookup('passwordstore', 'infra/mail') }}'"
+  - name: "['plugin']['smtp']['localdomain']"
+    value: "'chaos.jetzt'"
+  - name: "['plugin']['tag']['toolbar_icon']"
+    value: 1

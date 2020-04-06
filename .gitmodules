@@ -7,3 +7,12 @@
 [submodule "roles/base"]
 	path = roles/base
 	url = https://github.com/n0emis/ansible-role-base
+[submodule "roles/geerlingguy.php"]
+	path = roles/geerlingguy.php
+	url = https://github.com/geerlingguy/ansible-role-php
+[submodule "roles/geerlingguy.nginx"]
+	path = roles/geerlingguy.nginx
+	url = https://github.com/geerlingguy/ansible-role-nginx
+[submodule "roles/n0emis.dokuwiki"]
+	path = roles/n0emis.dokuwiki
+	url = https://github.com/n0emis/ansible-role-dokuwiki/
