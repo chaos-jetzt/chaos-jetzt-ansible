@@ -1,0 +1,265 @@
+---
+# Matrix
+- name: Create/Start synapse-postgres docker container
+  docker_container:
+    name: "synapse-postgres"
+    image: "postgres:11"
+    restart_policy: unless-stopped
+    volumes:
+      - root_postgres-data:/var/lib/postgresql/data
+    env:
+      POSTGRES_PASSWORD: "{{ synapse_db_password }}"
+      POSTGRES_USER: "synapse"
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --lc-collate=C --lc-ctype=C"
+    state: started
+
+- name: Create/Start synapse docker container
+  docker_container:
+    name: "synapse"
+    image: "matrixdotorg/synapse:v1.12.3"
+    restart_policy: unless-stopped
+    exposed_ports:
+      - "8008"
+    links:
+      - matrix-appservice-irc:matrix-appservice-irc
+      - synapse-postgres:synapse-postgres
+    volumes:
+      - /root/synapse:/data
+      - /root/matrix-appservice-irc/appservice-registration-irc.yaml:/irc/appservice-registration-irc.yaml
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.synapse_http.rule: "Host(`matrix.{{ base_url }}`)"
+      traefik.http.routers.synapse_http.entryPoints: "http"
+      traefik.http.routers.synapse_http.middlewares: "https_redirect@file"
+      traefik.http.routers.synapse_https.rule: "Host(`matrix.{{ base_url }}`)"
+      traefik.http.routers.synapse_https.entryPoints: "https"
+      traefik.http.routers.synapse_https.tls.certresolver: "le_http"
+      traefik.http.services.synapse-app.loadbalancer.server.port: "8008"
+      traefik.http.middlewares.synapse-redirectregex.redirectregex.regex: "https://matrix.{{ base_url }}(/?)$$"
+      traefik.http.middlewares.synapse-redirectregex.redirectregex.replacement: "https://chat.{{ base_url }}/"
+    state: started
+
+- name: Create/Start riot docker container
+  docker_container:
+    name: "riot"
+    image: "vectorim/riot-web"
+    restart_policy: unless-stopped
+    exposed_ports:
+      - "80"
+    volumes:
+      - /root/riot/config.json:/app/config.json
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.riot_http.rule: "Host(`chat.{{ base_url }}`)"
+      traefik.http.routers.riot_http.entryPoints: "http"
+      traefik.http.routers.riot_http.middlewares: "https_redirect@file"
+      traefik.http.routers.riot_https.rule: "Host(`chat.{{ base_url }}`)"
+      traefik.http.routers.riot_https.entryPoints: "https"
+      traefik.http.routers.riot_https.tls.certresolver: "le_http"
+      traefik.http.services.riot-app.loadbalancer.server.port: "80"
+    state: started
+
+- name: Create/Start synapse-pgadmin docker container
+  docker_container:
+    name: "synapse-pgadmin"
+    image: "dpage/pgadmin4:latest"
+    restart_policy: unless-stopped
+    links:
+      - synapse-postgres:synapse-postgres
+    exposed_ports:
+      - "80"
+    env:
+      PGADMIN_DEFAULT_EMAIL: "ca-pgadmin@noemis.me"
+      PGADMIN_DEFAULT_PASSWORD: "{{ pgadmin_password }}"
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.pgadmin_http.rule: "Host(`pgadmin.{{ base_url }}`)"
+      traefik.http.routers.pgadmin_http.entryPoints: "http"
+      traefik.http.routers.pgadmin_http.middlewares: "https_redirect@file"
+      traefik.http.routers.pgadmin_https.rule: "Host(`pgadmin.{{ base_url }}`)"
+      traefik.http.routers.pgadmin_https.entryPoints: "https"
+      traefik.http.routers.pgadmin_https.tls.certresolver: "le_http"
+      traefik.http.services.pgadmin-app.loadbalancer.server.port: "80"
+    state: started
+
+- name: Create/Start matrix-appservice-irc docker container
+  docker_container:
+    name: "matrix-appservice-irc"
+    image: "tulir/matrix-appservice-irc:latest"
+    restart_policy: unless-stopped
+    command: "node app.js -c config.yaml -p 9995 -f appservice-registration-irc.yaml -u http://0.0.0.0:9995"
+    exposed_ports:
+      - "9995"
+    volumes:
+      - root_irc-appservice:/app/data
+      - /root/matrix-appservice-irc/appservice-registration-irc.yaml:/app/appservice-registration-irc.yaml
+      - /root/matrix-appservice-irc/config.yaml:/app/config.yaml
+    state: started
+
+- name: Create/Start maubot docker container
+  docker_container:
+    name: "maubot"
+    image: "dock.mau.dev/maubot/maubot:latest"
+    restart_policy: unless-stopped
+    exposed_ports:
+      - "8080"
+    volumes:
+      - root_maubot-data:/data
+      - /root/maubot/config.yaml:/data/config.yaml
+    state: started
+
+# Website
+- name: Create/Start website docker container
+  docker_container:
+    name: "website"
+    image: "nginx"
+    restart_policy: unless-stopped
+    exposed_ports:
+      - "80"
+    volumes:
+      - /root/nginx/html:/usr/share/nginx/html
+      - /root/nginx/html_known:/usr/share/nginx/html_known
+      - /root/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.homepage_http.rule: "Host(`{{ base_url }}`)"
+      traefik.http.routers.homepage_http.entryPoints: "http"
+      traefik.http.routers.homepage_http.middlewares: "https_redirect@file"
+      traefik.http.routers.homepage_https.rule: "Host(`{{ base_url }}`)"
+      traefik.http.routers.homepage_https.entryPoints: "https"
+      traefik.http.routers.homepage_https.tls.certresolver: "le_http"
+      traefik.http.services.homepage-app.loadbalancer.server.port: "80"
+    state: started
+
+#- name: Create/Start down docker container
+#  docker_container:
+#    name: "down"
+#    image: "nginx"
+#    exposed_ports:
+#        - 80
+#    restart_policy: unless-stopped
+#    volumes:
+#      - /root/down/html:/usr/share/nginx/html
+#    state: started
+
+# Wiki
+- name: Create/Start maubot docker container
+  docker_container:
+    name: "dokuwiki"
+    image: "bitnami/dokuwiki:0"
+    restart_policy: unless-stopped
+    volumes:
+      - root_dokuwiki_data:/bitnami
+    env:
+      DOKUWIKI_USERNAME: "admin"
+      DOKUWIKI_FULL_NAME: "admin"
+      DOKUWIKI_PASSWORD: "{{ dokuwiki_password }}"
+      DOKUWIKI_EMAIL: "dokuwiki-admin@chaos.jetzt"
+      DOKUWIKI_WIKI_NAME: "{{ base_url }} Wiki"
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.dokuwiki_http.rule: "Host(`wiki.{{ base_url }}`)"
+      traefik.http.routers.dokuwiki_http.entryPoints: "http"
+      traefik.http.routers.dokuwiki_http.middlewares: "https_redirect@file"
+      traefik.http.routers.dokuwiki_https.rule: "Host(`wiki.{{ base_url }}`)"
+      traefik.http.routers.dokuwiki_https.entryPoints: "https"
+      traefik.http.routers.dokuwiki_https.tls.certresolver: "le_http"
+      traefik.http.services.dokuwiki-app.loadbalancer.server.port: "80"
+    state: started
+
+# Mumble
+- name: Create/Start mumble-web docker container
+  docker_container:
+    name: "mumble-web"
+    image: "rankenstein/mumble-web"
+    restart_policy: unless-stopped
+    exposed_ports:
+      - "80"
+    env:
+      MUMBLE_SERVER: "{{ base_url }}:64738"
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.mumble_http.rule: "Host(`mumble.{{ base_url }}`)"
+      traefik.http.routers.mumble_http.entryPoints: "http"
+      traefik.http.routers.mumble_http.middlewares: "https_redirect@file"
+      traefik.http.routers.mumble_https.rule: "Host(`mumble.{{ base_url }}`)"
+      traefik.http.routers.mumble_https.entryPoints: "https"
+      traefik.http.routers.mumble_https.tls.certresolver: "le_http"
+      traefik.http.services.mumble-app.loadbalancer.server.port: "80"
+    state: started
+
+- name: Create/Start murmur docker container
+  docker_container:
+    name: "murmur"
+    image: "mattikus/murmur:latest"
+    restart_policy: unless-stopped
+    ports:
+      - 64738:64738/udp
+      - 64738:64738
+      - 6502:6502
+    volumes:
+      - /root/murmur/murmur.ini:/etc/murmur.ini
+      - /etc/ssl:/etc/ssl
+      - root_murmur-data:/data
+    env:
+      MUMBLE_SERVER: "{{ base_url }}:64738"
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.mumble_http.rule: "Host(`mumble.{{ base_url }}`)"
+      traefik.http.routers.mumble_http.entryPoints: "http"
+      traefik.http.routers.mumble_http.middlewares: "https_redirect@file"
+      traefik.http.routers.mumble_https.rule: "Host(`mumble.{{ base_url }}`)"
+      traefik.http.routers.mumble_https.entryPoints: "https"
+      traefik.http.routers.mumble_https.tls.certresolver: "le_http"
+      traefik.http.services.mumble-app.loadbalancer.server.port: "80"
+    state: started
+
+# Pretix
+- name: Create/Start pretix-postgres docker container
+  docker_container:
+    name: "pretix-postgres"
+    image: "postgres:9.6-alpine"
+    restart_policy: unless-stopped
+    volumes:
+      - root_pretix-postgres:/var/lib/postgresql/data
+    env:
+      MUMBLE_SERVER: "{{ base_url }}:64738"
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.mumble_http.rule: "Host(`mumble.{{ base_url }}`)"
+      traefik.http.routers.mumble_http.entryPoints: "http"
+      traefik.http.routers.mumble_http.middlewares: "https_redirect@file"
+      traefik.http.routers.mumble_https.rule: "Host(`mumble.{{ base_url }}`)"
+      traefik.http.routers.mumble_https.entryPoints: "https"
+      traefik.http.routers.mumble_https.tls.certresolver: "le_http"
+      traefik.http.services.mumble-app.loadbalancer.server.port: "80"
+    state: started
+
+- name: Create/Start pretix-redis docker container
+  docker_container:
+    name: "pretix-redis" # TODO: Rename
+    image: "redis:latest"
+    restart_policy: unless-stopped
+    state: started
+
+- name: Create/Start pretix docker container
+  docker_container:
+    name: "pretix"
+    image: "registry.git.desti.io/n0emis/pretix:latest"
+    restart_policy: unless-stopped
+    state: started
+    links:
+      - pretix-redis:redis
+      - pretix-postgres:pretix-database
+    volumes:
+      - /root/pretix:/etc/pretix
+      - root_pretix-data:/data
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.pretix_http.rule: "Host(`pretix.{{ base_url }}`) || Host(`tickets.{{ base_url }}`)"
+      traefik.http.routers.pretix_http.entryPoints: "http"
+      traefik.http.routers.pretix_http.middlewares: "https_redirect@file"
+      traefik.http.routers.pretix_https.rule: "Host(`pretix.{{ base_url }}`) || Host(`tickets.{{ base_url }}`)"
+      traefik.http.routers.pretix_https.entryPoints: "https"
+      traefik.http.routers.pretix_https.tls.certresolver: "le_http"
+      traefik.http.services.pretix-app.loadbalancer.server.port: "80"

@@ -1,8 +1,10 @@
 ---
-- name: do compose magic
+- name: remove compose magic
   docker_compose:
+    state: absent
     pull: yes
     project_name: root
+    remove_volumes: no
     definition:
       version:                        "3"
       services:

@@ -2,3 +2,5 @@
 - include: files.yml
 
 - include: compose.yml
+
+- include: container.yml
