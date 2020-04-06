@@ -1,6 +1,6 @@
 http:
   routers:
-    labcode-dokuwiki_http:
+    dokuwiki_http:
       rule: "Host(`wiki.{{ base_url }}`)"
       service: "dokuwiki-app@file"
       entryPoints:
