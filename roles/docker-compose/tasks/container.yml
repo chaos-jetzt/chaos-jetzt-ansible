@@ -28,15 +28,14 @@
       - /root/matrix-appservice-irc/appservice-registration-irc.yaml:/irc/appservice-registration-irc.yaml
     labels:
       traefik.enable: "true"
-      traefik.http.routers.synapse_http.rule: "Host(`matrix.{{ base_url }}`)"
+      traefik.http.routers.synapse_http.rule: "Host(`matrix.{{ base_url }}`) && PathPrefix(`/_matrix`)"
       traefik.http.routers.synapse_http.entryPoints: "http"
       traefik.http.routers.synapse_http.middlewares: "https_redirect@file"
-      traefik.http.routers.synapse_https.rule: "Host(`matrix.{{ base_url }}`)"
+      traefik.http.routers.synapse_https.rule: "Host(`matrix.{{ base_url }}`) && PathPrefix(`/_matrix`)"
+      traefik.http.routers.synapse_https.priority: "20"
       traefik.http.routers.synapse_https.entryPoints: "https"
       traefik.http.routers.synapse_https.tls.certresolver: "le_http"
       traefik.http.services.synapse-app.loadbalancer.server.port: "8008"
-      traefik.http.middlewares.synapse-redirectregex.redirectregex.regex: "https://matrix.{{ base_url }}(/?)$$"
-      traefik.http.middlewares.synapse-redirectregex.redirectregex.replacement: "https://chat.{{ base_url }}/"
     state: started
 
 - name: Create/Start riot docker container
@@ -50,10 +49,11 @@
       - /root/riot/config.json:/app/config.json
     labels:
       traefik.enable: "true"
-      traefik.http.routers.riot_http.rule: "Host(`chat.{{ base_url }}`)"
+      traefik.http.routers.riot_http.rule: "Host(`chat.{{ base_url }}`) || Host(`matrix.{{ base_url }}`)"
       traefik.http.routers.riot_http.entryPoints: "http"
       traefik.http.routers.riot_http.middlewares: "https_redirect@file"
-      traefik.http.routers.riot_https.rule: "Host(`chat.{{ base_url }}`)"
+      traefik.http.routers.riot_https.rule: "Host(`chat.{{ base_url }}`) || Host(`matrix.{{ base_url }}`)"
+      traefik.http.routers.riot_https.priority: "10"
       traefik.http.routers.riot_https.entryPoints: "https"
       traefik.http.routers.riot_https.tls.certresolver: "le_http"
       traefik.http.services.riot-app.loadbalancer.server.port: "80"
