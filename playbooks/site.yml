@@ -25,6 +25,7 @@
 
 - hosts: web
   roles:
+  - traefik
   - docker-compose
   tags:
   - docker

@@ -19,7 +19,6 @@
   - pretix/
   - riot/
   - synapse/
-  - traefik/dynamic
   - maubot/
 
 - name: change owner of synapse media-directories
@@ -52,30 +51,7 @@
   - synapse/homeserver.yaml
   - synapse/synapse.log.config
   - synapse/synapse.signing.key
-  - traefik/traefik.yml
-  - traefik/dynamic/middlewares.yml
-  - traefik/dynamic/dashboard.yml
-  - traefik/dynamic/tls.yml
   - maubot/config.yaml
-
-- name: mass-copy scripts
-  template:
-    dest: '/root/{{ item }}'
-    src: '{{ item }}'
-    owner: root
-    group: root
-    mode: 0744
-  with_items:
-  - traefik/dumpcerts.sh
-
-- name: change permissions for certificate storage
-  file:
-    path: '/root/{{ item }}'
-    owner: root
-    group: root
-    mode: 0600
-  with_items:
-  - traefik/letsencrypt/acme.json
 
 - name: clone website repo
   git:

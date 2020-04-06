@@ -1,7 +1,6 @@
 providers:
   docker:
     exposedByDefault: false
-    network: "web"
   file:
     directory: "/etc/traefik/dynamic"
     watch: true
@@ -22,7 +21,7 @@ certificatesResolvers:
       httpChallenge:
         entryPoint: http
       email: mail@{{ base_url }}
-      storage: /letsencrypt/acme_http.json
+      storage: /etc/traefik/letsencrypt/acme.json
 
 log:
   format: json
