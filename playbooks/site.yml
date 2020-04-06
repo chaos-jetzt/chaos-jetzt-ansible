@@ -36,6 +36,11 @@
   - geerlingguy.nginx
   - geerlingguy.php
   - n0emis.dokuwiki
+  tasks:
+    - name: Add traefik config
+      template:
+        src: ../templates/traefik/dokuwiki.yml
+        dest: /etc/traefik/dynamic/dokuwiki.yml
   tags: wiki
 
 - hosts: web

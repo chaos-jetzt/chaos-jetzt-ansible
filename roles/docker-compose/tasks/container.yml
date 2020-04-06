@@ -153,7 +153,6 @@
     env:
       DOKUWIKI_USERNAME: "admin"
       DOKUWIKI_FULL_NAME: "admin"
-      DOKUWIKI_PASSWORD: "{{ dokuwiki_password }}"
       DOKUWIKI_EMAIL: "dokuwiki-admin@chaos.jetzt"
       DOKUWIKI_WIKI_NAME: "{{ base_url }} Wiki"
     labels:
