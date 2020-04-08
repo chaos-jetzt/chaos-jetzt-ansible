@@ -143,7 +143,7 @@
 #    state: started
 
 # Wiki
-- name: stop dokuwiki docker container
+- name: Stop dokuwiki docker container
   docker_container:
     name: "dokuwiki"
     image: "bitnami/dokuwiki:0"

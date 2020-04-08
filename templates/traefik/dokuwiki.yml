@@ -9,7 +9,7 @@ http:
         - "https_redirect"
     dokuwiki_https:
       rule: "Host(`wiki.{{ base_url }}`)"
-      service: "dokuwiki-app"
+      service: "dokuwiki-app@file"
       entryPoints:
         - "https"
       tls:

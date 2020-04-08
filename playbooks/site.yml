@@ -32,6 +32,14 @@
   - compose
 
 - hosts: web
+  pre_tasks:
+    - name: move old wiki data to new path
+      command: mv /var/lib/docker/volumes/root_dokuwiki_data/_data/dokuwiki/data/ {{ dokuwiki_savedir }}
+      ignore_errors: yes
+
+    - name: move old wiki users to new path
+      command: mv /var/lib/docker/volumes/root_dokuwiki_data/_data/dokuwiki/conf/users.auth.php {{ dokuwiki_base }}/conf/users.auth.php
+      ignore_errors: yes
   roles:
   - geerlingguy.nginx
   - geerlingguy.php
