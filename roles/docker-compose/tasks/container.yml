@@ -109,7 +109,7 @@
     state: started
 
 # Website
-- name: Create/Start website docker container
+- name: Stop website docker container
   docker_container:
     name: "website"
     image: "nginx"
@@ -129,7 +129,7 @@
       traefik.http.routers.homepage_https.entryPoints: "https"
       traefik.http.routers.homepage_https.tls.certresolver: "le_http"
       traefik.http.services.homepage-app.loadbalancer.server.port: "80"
-    state: started
+    state: absent
 
 #- name: Create/Start down docker container
 #  docker_container:

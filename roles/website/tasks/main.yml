@@ -1,0 +1,17 @@
+---
+- name: clone website repository
+  git:
+    repo: 'https://github.com/chaos-jetzt/jetztstatic/'
+    dest: /var/www/website
+    clone: yes
+    update: yes
+
+- name: Ensure well-known matrix dir exists
+  file:
+    path: /var/www/.well-known/matrix/
+    state: directory
+
+- name: copy matrix discovery file
+  template:
+    src: matrix/server.j2
+    dest: /var/www/.well-known/matrix/server

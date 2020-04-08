@@ -43,11 +43,18 @@ nginx_user: www-data
 nginx_vhosts:
   - listen: "81"  # Website
     server_name: "_"
-    root: "/var/www/website"
-    index: "index.html index.htm"
     state: "present"
-    template: "{{ nginx_vhost_template }}"
     filename: "default.conf"
+    extra_parameters: |
+      location / {
+          root   /var/www/website;
+          index  index.html index.htm;
+      }
+
+      location ^~/.well-known/ {
+          default_type "text/plain";
+          root   /var/www;
+      }
 
   - listen: "82"  # Wiki
     server_name: "_"

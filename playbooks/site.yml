@@ -52,6 +52,17 @@
   tags: wiki
 
 - hosts: web
+  roles:
+  - geerlingguy.nginx
+  - website
+  tasks:
+    - name: Add traefik config
+      template:
+        src: ../templates/traefik/website.yml
+        dest: /etc/traefik/dynamic/website.yml
+  tags: website
+
+- hosts: web
   tasks:
     - name: create password-user
       user: state=present

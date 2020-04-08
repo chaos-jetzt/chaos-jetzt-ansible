@@ -1,0 +1,21 @@
+http:
+  routers:
+    website_http:
+      rule: "Host(`{{ base_url }}`)"
+      service: "website-app@file"
+      entryPoints:
+        - "http"
+      middlewares:
+        - "https_redirect"
+    website_https:
+      rule: "Host(`{{ base_url }}`)"
+      service: "website-app@file"
+      entryPoints:
+        - "https"
+      tls:
+        certResolver: "le_http"
+  services:
+    website-app:
+      loadBalancer:
+        servers:
+          - url: "http://{{ ansible_fqdn }}:81"
