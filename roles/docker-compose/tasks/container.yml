@@ -214,6 +214,27 @@
     state: started
 
 # Pretix
+- name: Create/Start pretix docker container
+  docker_container:
+    name: "pretix"
+    image: "registry.git.desti.io/n0emis/pretix:latest"
+    restart_policy: unless-stopped
+    state: absent
+    links:
+      - pretix-redis:redis
+      - pretix-postgres:pretix-database
+    volumes:
+      - /root/pretix:/etc/pretix
+      - root_pretix-data:/data
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.pretix_http.rule: "Host(`pretix.{{ base_url }}`) || Host(`tickets.{{ base_url }}`)"
+      traefik.http.routers.pretix_http.entryPoints: "http"
+      traefik.http.routers.pretix_http.middlewares: "https_redirect@file"
+      traefik.http.routers.pretix_https.rule: "Host(`pretix.{{ base_url }}`) || Host(`tickets.{{ base_url }}`)"
+      traefik.http.routers.pretix_https.entryPoints: "https"
+      traefik.http.routers.pretix_https.tls.certresolver: "le_http"
+      traefik.http.services.pretix-app.loadbalancer.server.port: "80"
 - name: Create/Start pretix-postgres docker container
   docker_container:
     name: "pretix-postgres"
@@ -232,33 +253,11 @@
       traefik.http.routers.mumble_https.entryPoints: "https"
       traefik.http.routers.mumble_https.tls.certresolver: "le_http"
       traefik.http.services.mumble-app.loadbalancer.server.port: "80"
-    state: started
+    state: absent
 
 - name: Create/Start pretix-redis docker container
   docker_container:
-    name: "pretix-redis" # TODO: Rename
+    name: "pretix-redis"
     image: "redis:latest"
     restart_policy: unless-stopped
-    state: started
-
-- name: Create/Start pretix docker container
-  docker_container:
-    name: "pretix"
-    image: "registry.git.desti.io/n0emis/pretix:latest"
-    restart_policy: unless-stopped
-    state: started
-    links:
-      - pretix-redis:redis
-      - pretix-postgres:pretix-database
-    volumes:
-      - /root/pretix:/etc/pretix
-      - root_pretix-data:/data
-    labels:
-      traefik.enable: "true"
-      traefik.http.routers.pretix_http.rule: "Host(`pretix.{{ base_url }}`) || Host(`tickets.{{ base_url }}`)"
-      traefik.http.routers.pretix_http.entryPoints: "http"
-      traefik.http.routers.pretix_http.middlewares: "https_redirect@file"
-      traefik.http.routers.pretix_https.rule: "Host(`pretix.{{ base_url }}`) || Host(`tickets.{{ base_url }}`)"
-      traefik.http.routers.pretix_https.entryPoints: "https"
-      traefik.http.routers.pretix_https.tls.certresolver: "le_http"
-      traefik.http.services.pretix-app.loadbalancer.server.port: "80"
+    state: absent

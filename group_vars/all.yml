@@ -145,3 +145,37 @@ dokuwiki_local:
     value: "'chaos.jetzt'"
   - name: "['plugin']['tag']['toolbar_icon']"
     value: 1
+
+postgresql_python_library: python3-psycopg2
+postgresql_users:
+  - name: pretix
+    password: "{{ lookup('passwordstore', 'infra/pretix/db') }}"
+postgresql_databases:
+  - name: pretix
+    owner: pretix
+
+redis_requirepass: "{{ lookup('passwordstore', 'infra/redis') }}"
+
+pretix_version: "3.7.0"
+pretix_bind_address: "0.0.0.0:83" # TODO: Change to 127.0.0.1 when traefik is not running in docker anymore
+pretix_base_path: "/opt/pretix"
+pretix_gunicorn_worker: 2
+pretix_celery_concurrency: 4
+pretix_pretix_instance_name: "{{ base_url }} Pretix"
+pretix_pretix_url: "https://pretix.{{ base_url }}"
+pretix_database_backend: "postgresql"
+pretix_database_name: "pretix"
+pretix_database_user: "pretix"
+pretix_database_password: "{{ lookup('passwordstore', 'infra/pretix/db') }}"
+pretix_database_host: "localhost"
+pretix_database_port: 5432
+pretix_mail_from: "pretix@{{ base_url }}"
+pretix_mail_host: "smtp.mailbox.org"
+pretix_mail_user: "mail@{{ base_url }}"
+pretix_mail_password: "{{ lookup('passwordstore', 'infra/mail') }}"
+pretix_mail_port: 465
+pretix_mail_ssl: on
+pretix_django_secret: "{{ lookup('passwordstore', 'infra/pretix/secret') }}"
+pretix_redis_location: "redis://:{{ lookup('passwordstore', 'infra/redis') }}@localhost:6379/0"
+pretix_celery_broker: "redis://:{{ lookup('passwordstore', 'infra/redis') }}@localhost:6379/1"
+pretix_celery_backend: "redis://:{{ lookup('passwordstore', 'infra/redis') }}@localhost:6379/2"

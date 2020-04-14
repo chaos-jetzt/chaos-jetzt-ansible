@@ -24,6 +24,13 @@
   tags: docker
 
 - hosts: web
+  tasks:
+    - name: create dump of old postgresql database
+      shell: docker exec pretix-postgres pg_dump pretix -U pretix >> /tmp/pretix-dump.sql
+      ignore_errors: yes
+  tags: pretix
+
+- hosts: web
   roles:
   - traefik
   - docker-compose
@@ -81,3 +88,51 @@
       with_items:
       - "{{ users + password_users }}"
       when: item.state == 'absent' and item.public_key is defined and item.public_key != ''
+
+- hosts: web
+  roles:
+    - geerlingguy.postgresql
+    - geerlingguy.redis
+  tags: pretix
+
+- hosts: web
+  pre_tasks:
+    - name: restore dump of old postgresql database
+      postgresql_db:
+        name: "{{ pretix_database_name }}"
+        state: restore
+        target: "/tmp/pretix-dump.sql"
+      ignore_errors: yes
+      become_user: postgres
+
+    - name: delete postgresql dump
+      file:
+        path: "/tmp/pretix-dump.sql"
+        state: absent
+
+    - name: create parents for media directory
+      file:
+        path: "{{ pretix_base_path }}/data"
+        recurse: yes
+        owner: "pretix"
+        group: "pretix"
+        state: directory
+
+    - name: move old media directory
+      command: mv /var/lib/docker/volumes/root_pretix-data/_data/media {{ pretix_base_path }}/data/
+      ignore_errors: yes
+
+    - name: chown new media directory
+      file:
+        path: "{{ pretix_base_path }}/data/media"
+        owner: "pretix"
+        group: "pretix"
+        recurse: yes
+  roles:
+    - em0lar.pretix
+  tasks:
+    - name: Add traefik config
+      template:
+        src: ../templates/traefik/pretix.yml
+        dest: /etc/traefik/dynamic/pretix.yml
+  tags: pretix

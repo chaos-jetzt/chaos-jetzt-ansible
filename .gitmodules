@@ -16,3 +16,12 @@
 [submodule "roles/n0emis.dokuwiki"]
 	path = roles/n0emis.dokuwiki
 	url = https://github.com/n0emis/ansible-role-dokuwiki/
+[submodule "roles/em0lar.pretix"]
+	path = roles/em0lar.pretix
+	url = https://github.com/em0lar/ansible-role-pretix.git
+[submodule "roles/geerlingguy.postgresql"]
+	path = roles/geerlingguy.postgresql
+	url = https://github.com/geerlingguy/ansible-role-postgresql.git
+[submodule "roles/geerlingguy.redis"]
+	path = roles/geerlingguy.redis
+	url = https://github.com/geerlingguy/ansible-role-redis.git
