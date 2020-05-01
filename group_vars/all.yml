@@ -194,4 +194,6 @@ mumble_web_path: "/usr/lib/node_modules/mumble-web"
 # to define use yaml multiline string
 mumble_web_config: ""
 mumble_web_supplementary_groups: "certs"
-mumble_web_port: "84"
+mumble_web_listen: "84"
+mumble_web_ssl_activated: False
+mumble_web_ssl_target: True
