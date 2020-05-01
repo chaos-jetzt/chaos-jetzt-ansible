@@ -136,3 +136,48 @@
         src: ../templates/traefik/pretix.yml
         dest: /etc/traefik/dynamic/pretix.yml
   tags: pretix
+
+- hosts: web
+  pre_tasks:
+    - name: Create sqlite database directory
+      file:
+        path: "{{ murmur_database | dirname }}"
+        state: directory
+
+    - name: Move old sqlite database
+      command: "mv /var/lib/docker/volumes/root_murmur-data/_data/murmur.sqlite {{ murmur_database }}"
+      args:
+        creates: "{{ murmur_database }}"
+  roles:
+    - geerlingguy.nodejs
+    - systemli.mumble
+  tasks:
+    - name: Make database readable by mumble group
+      file:
+        path: "{{ murmur_database }}"
+        owner: "mumble-server"
+        group: "mumble-server"
+        mode: "0660"
+      notify:
+        - restart murmur
+
+    - name: Make mumble certificate readable by mumble group
+      file:
+        path: "/etc/ssl/private/{{ base_url }}.key"
+        group: "certs"
+        mode: "0640"
+      notify:
+        - restart murmur
+        - restart mumble-web
+
+    - name: Add user mumble-server to certs group
+      user:
+        name: "mumble-server"
+        groups: "certs"
+        append: yes
+
+    - name: Add traefik config
+      template:
+        src: ../templates/traefik/mumble-web.yml
+        dest: /etc/traefik/dynamic/mumble-web.yml
+  tags: mumble

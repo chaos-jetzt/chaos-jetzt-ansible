@@ -45,6 +45,18 @@
       - /etc/traefik:/etc/traefik/
       - /etc/traefik/letsencrypt:/letsencrypt
 
+- name: Create certs group
+  group:
+    name: "certs"
+    system: yes
+
+- name: Make private cert folder readable for certs group
+  file:
+    path: "/etc/ssl/private"
+    group: "certs"
+    mode: "0750"
+    state: directory
+
 - name: copy certificate export script
   template:
     dest: /etc/traefik/dumpcerts.sh
@@ -58,9 +70,8 @@
     name: traefik certificate-exporter
     hour: "2"
     user: root
-    job: '/root/traefik/dumpcerts.sh /root/traefik/letsencrypt/acme_http.json /etc/ssl/'
+    job: '/etc/traefik/dumpcerts.sh /etc/traefik/letsencrypt/acme.json /etc/ssl/'
 
 - name: run traefik certificate-exporter
-  shell:
-    cmd: '/root/traefik/dumpcerts.sh /root/traefik/letsencrypt/acme_http.json /etc/ssl/'
+  command: '/etc/traefik/dumpcerts.sh /etc/traefik/letsencrypt/acme.json /etc/ssl/'
   become: true

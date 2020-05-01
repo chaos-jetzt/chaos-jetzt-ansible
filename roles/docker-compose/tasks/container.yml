@@ -167,7 +167,7 @@
     state: stopped
 
 # Mumble
-- name: Create/Start mumble-web docker container
+- name: Stop mumble-web docker container
   docker_container:
     name: "mumble-web"
     image: "rankenstein/mumble-web"
@@ -185,9 +185,9 @@
       traefik.http.routers.mumble_https.entryPoints: "https"
       traefik.http.routers.mumble_https.tls.certresolver: "le_http"
       traefik.http.services.mumble-app.loadbalancer.server.port: "80"
-    state: started
+    state: stopped
 
-- name: Create/Start murmur docker container
+- name: Stop murmur docker container
   docker_container:
     name: "murmur"
     image: "mattikus/murmur:latest"
@@ -211,10 +211,10 @@
       traefik.http.routers.mumble_https.entryPoints: "https"
       traefik.http.routers.mumble_https.tls.certresolver: "le_http"
       traefik.http.services.mumble-app.loadbalancer.server.port: "80"
-    state: started
+    state: stopped
 
 # Pretix
-- name: Create/Start pretix docker container
+- name: Stop pretix docker container
   docker_container:
     name: "pretix"
     image: "registry.git.desti.io/n0emis/pretix:latest"
@@ -235,7 +235,8 @@
       traefik.http.routers.pretix_https.entryPoints: "https"
       traefik.http.routers.pretix_https.tls.certresolver: "le_http"
       traefik.http.services.pretix-app.loadbalancer.server.port: "80"
-- name: Create/Start pretix-postgres docker container
+
+- name: Stop pretix-postgres docker container
   docker_container:
     name: "pretix-postgres"
     image: "postgres:9.6-alpine"
@@ -253,11 +254,11 @@
       traefik.http.routers.mumble_https.entryPoints: "https"
       traefik.http.routers.mumble_https.tls.certresolver: "le_http"
       traefik.http.services.mumble-app.loadbalancer.server.port: "80"
-    state: absent
+    state: stopped
 
-- name: Create/Start pretix-redis docker container
+- name: Stop pretix-redis docker container
   docker_container:
     name: "pretix-redis"
     image: "redis:latest"
     restart_policy: unless-stopped
-    state: absent
+    state: stopped

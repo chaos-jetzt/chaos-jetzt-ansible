@@ -25,3 +25,9 @@
 [submodule "roles/geerlingguy.redis"]
 	path = roles/geerlingguy.redis
 	url = https://github.com/geerlingguy/ansible-role-redis.git
+[submodule "roles/systemli.mumble"]
+	path = roles/systemli.mumble
+	url = https://github.com/em0lar/ansible-role-mumble.git
+[submodule "roles/geerlingguy.nodejs"]
+	path = roles/geerlingguy.nodejs
+	url = https://github.com/geerlingguy/ansible-role-nodejs.git

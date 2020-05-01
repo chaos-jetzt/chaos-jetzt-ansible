@@ -179,3 +179,19 @@ pretix_django_secret: "{{ lookup('passwordstore', 'infra/pretix/secret') }}"
 pretix_redis_location: "redis://:{{ lookup('passwordstore', 'infra/redis') }}@localhost:6379/0"
 pretix_celery_broker: "redis://:{{ lookup('passwordstore', 'infra/redis') }}@localhost:6379/1"
 pretix_celery_backend: "redis://:{{ lookup('passwordstore', 'infra/redis') }}@localhost:6379/2"
+
+nodejs_install_npm_user: "root"
+murmur_icesecretread: "secret"
+murmur_welcometext: "Welcome on the {{ base_url }}-mumble server running murmur. Enjoy your stay!"
+murmur_bandwidth: "128000"
+murmur_sslcert: "/etc/ssl/certs/{{ base_url }}.crt"
+murmur_sslkey: "/etc/ssl/private/{{ base_url }}.key"
+murmur_registername: no
+
+
+mumble_web: yes
+mumble_web_path: "/usr/lib/node_modules/mumble-web"
+# to define use yaml multiline string
+mumble_web_config: ""
+mumble_web_supplementary_groups: "certs"
+mumble_web_port: "84"
