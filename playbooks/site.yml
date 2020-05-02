@@ -204,19 +204,19 @@
       notify:
         - restart murmur
 
-    - name: Make mumble certificate readable by mumble group
+    - name: Make mumble certificate readable by ssl-cert group
       file:
         path: "/etc/ssl/private/{{ base_url }}.key"
-        group: "certs"
+        group: "ssl-cert"
         mode: "0640"
       notify:
         - restart murmur
         - restart mumble-web
 
-    - name: Add user mumble-server to certs group
+    - name: Add user mumble-server to ssl-cert group
       user:
         name: "mumble-server"
-        groups: "certs"
+        groups: "ssl-cert"
         append: yes
 
     - name: Add traefik config
