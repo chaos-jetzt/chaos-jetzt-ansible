@@ -18,4 +18,4 @@ http:
     mumble-web-app:
       loadBalancer:
         servers:
-          - url: "http://{{ ansible_fqdn }}:{{ mumble_web_port }}"
+          - url: "http://{{ ansible_fqdn }}:{{ mumble_web_listen }}"

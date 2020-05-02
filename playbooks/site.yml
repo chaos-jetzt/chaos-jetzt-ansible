@@ -25,9 +25,31 @@
 
 - hosts: web
   tasks:
+    - name: stop synapse docker container
+      docker_container:
+        name: "synapse"
+        state: stopped
+
+    - name: create dump of old synapse database
+      shell: docker exec synapse-postgres pg_dump synapse -U synapse >> /root/synapse-dump.sql
+      args:
+        creates: /root/synapse-dump.sql
+      register: synapse_postgresql_dump
+  tags: matrix
+
+- hosts: web
+  tasks:
+    - name: stop pretix docker container
+      docker_container:
+        name: "pretix"
+        image: "registry.git.desti.io/n0emis/pretix:latest"
+        state: stopped
+
     - name: create dump of old postgresql database
-      shell: docker exec pretix-postgres pg_dump pretix -U pretix >> /tmp/pretix-dump.sql
-      ignore_errors: yes
+      shell: docker exec pretix-postgres pg_dump pretix -U pretix >> /root/pretix-dump.sql
+      args:
+        creates: /root/pretix-dump.sql
+      register: pretix_postgresql_dump
   tags: pretix
 
 - hosts: web
@@ -70,6 +92,35 @@
   tags: website
 
 - hosts: web
+  roles:
+    - geerlingguy.postgresql
+  tags: pretix,matrix
+
+- hosts: web
+  pre_tasks:
+    - name: restore dump of old synapse postgresql database
+      postgresql_db:
+        name: "{{ synapse_database_database }}"
+        state: restore
+        target: "/root/synapse-dump.sql"
+        login_host: "localhost"
+        login_user: "{{ synapse_database_user }}"
+        login_password: "{{ synapse_database_password }}"
+      when: synapse_postgresql_dump.changed
+  roles:
+  - n0emis.synapse
+  tasks:
+    - name: move media directory
+      shell: mv /root/synapse/media_store/* {{ synapse_data_directory }}/media-store
+      ignore_errors: yes
+
+    - name: Add traefik config
+      template:
+        src: ../templates/traefik/synapse.yml
+        dest: /etc/traefik/dynamic/synapse.yml
+  tags: matrix
+
+- hosts: web
   tasks:
     - name: create password-user
       user: state=present
@@ -90,25 +141,16 @@
       when: item.state == 'absent' and item.public_key is defined and item.public_key != ''
 
 - hosts: web
-  roles:
-    - geerlingguy.postgresql
-    - geerlingguy.redis
-  tags: pretix
-
-- hosts: web
   pre_tasks:
-    - name: restore dump of old postgresql database
+    - name: restore dump of old pretix postgresql database
       postgresql_db:
         name: "{{ pretix_database_name }}"
         state: restore
-        target: "/tmp/pretix-dump.sql"
-      ignore_errors: yes
-      become_user: postgres
-
-    - name: delete postgresql dump
-      file:
-        path: "/tmp/pretix-dump.sql"
-        state: absent
+        target: "/root/pretix-dump.sql"
+        login_host: "localhost"
+        login_user: "{{ pretix_database_user }}"
+        login_password: "{{ pretix_database_password }}"
+      when: pretix_postgresql_dump.changed
 
     - name: create parents for media directory
       file:
@@ -129,6 +171,7 @@
         group: "pretix"
         recurse: yes
   roles:
+    - geerlingguy.redis
     - em0lar.pretix
   tasks:
     - name: Add traefik config

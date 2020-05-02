@@ -45,15 +45,10 @@
       - /etc/traefik:/etc/traefik/
       - /etc/traefik/letsencrypt:/letsencrypt
 
-- name: Create certs group
-  group:
-    name: "certs"
-    system: yes
-
 - name: Make private cert folder readable for certs group
   file:
     path: "/etc/ssl/private"
-    group: "certs"
+    group: "ssl-cert"
     mode: "0750"
     state: directory
 

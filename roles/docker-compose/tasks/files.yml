@@ -14,23 +14,9 @@
     mode: 0755
   with_items:
   - matrix-appservice-irc/
-  - murmur/
-  - pretix/
   - riot/
-  - synapse/
   - maubot/
 
-- name: change owner of synapse media-directories
-  file:
-    path: '/root/{{ item }}'
-    state: directory
-    recurse: yes
-    owner: '991'
-    group: '991'
-    mode: 0755
-  with_items:
-  - synapse/media_store/
-  - synapse/uploads/
 
 - name: mass-copy config files
   template:
@@ -42,10 +28,5 @@
   with_items:
   - matrix-appservice-irc/appservice-registration-irc.yaml
   - matrix-appservice-irc/config.yaml
-  - murmur/murmur.ini
-  - pretix/pretix.cfg
   - riot/config.json
-  - synapse/homeserver.yaml
-  - synapse/synapse.log.config
-  - synapse/synapse.signing.key
-  - maubot/config.yaml
+
