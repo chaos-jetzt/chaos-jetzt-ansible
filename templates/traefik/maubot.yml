@@ -1,0 +1,21 @@
+http:
+  routers:
+    maubot_http:
+      rule: "Host(`bot.{{ base_url }}`)"
+      service: "maubot-app@file"
+      entryPoints:
+        - "http"
+      middlewares:
+        - "https_redirect"
+    maubot_https:
+      rule: "Host(`bot.{{ base_url }}`)"
+      service: "maubot-app@file"
+      entryPoints:
+        - "https"
+      tls:
+        certResolver: "le_http"
+  services:
+    maubot-app:
+      loadBalancer:
+        servers:
+          - url: "http://{{ ansible_fqdn }}:87"

@@ -106,7 +106,7 @@
     volumes:
       - root_maubot-data:/data
       - /root/maubot/config.yaml:/data/config.yaml
-    state: started
+    state: stopped
 
 # Website
 - name: Stop website docker container
