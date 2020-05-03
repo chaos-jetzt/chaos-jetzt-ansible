@@ -20,9 +20,6 @@
     restart_policy: unless-stopped
     exposed_ports:
       - "8008"
-    links:
-      - matrix-appservice-irc:matrix-appservice-irc
-      - synapse-postgres:synapse-postgres
     volumes:
       - /root/synapse:/data
       - /root/matrix-appservice-irc/appservice-registration-irc.yaml:/irc/appservice-registration-irc.yaml
@@ -38,7 +35,7 @@
       traefik.http.services.synapse-app.loadbalancer.server.port: "8008"
     state: stopped
 
-- name: Create/Start riot docker container
+- name: Stop riot docker container
   docker_container:
     name: "riot"
     image: "vectorim/riot-web"
@@ -59,13 +56,11 @@
       traefik.http.services.riot-app.loadbalancer.server.port: "80"
     state: stopped
 
-- name: Create/Start synapse-pgadmin docker container
+- name: Stop synapse-pgadmin docker container
   docker_container:
     name: "synapse-pgadmin"
     image: "dpage/pgadmin4:latest"
     restart_policy: unless-stopped
-    links:
-      - synapse-postgres:synapse-postgres
     exposed_ports:
       - "80"
     env:
@@ -80,7 +75,7 @@
       traefik.http.routers.pgadmin_https.entryPoints: "https"
       traefik.http.routers.pgadmin_https.tls.certresolver: "le_http"
       traefik.http.services.pgadmin-app.loadbalancer.server.port: "80"
-    state: started
+    state: stopped
 
 - name: Create/Start matrix-appservice-irc docker container
   docker_container:
@@ -96,7 +91,7 @@
       - /etc/matrix-appservice-irc/config.yaml:/app/config.yaml
     state: started
 
-- name: Create/Start maubot docker container
+- name: Stop maubot docker container
   docker_container:
     name: "maubot"
     image: "dock.mau.dev/maubot/maubot:latest"
@@ -220,9 +215,6 @@
     image: "registry.git.desti.io/n0emis/pretix:latest"
     restart_policy: unless-stopped
     state: stopped
-    links:
-      - pretix-redis:redis
-      - pretix-postgres:pretix-database
     volumes:
       - /root/pretix:/etc/pretix
       - root_pretix-data:/data
@@ -236,9 +228,9 @@
       traefik.http.routers.pretix_https.tls.certresolver: "le_http"
       traefik.http.services.pretix-app.loadbalancer.server.port: "80"
 
-- name: Stop pretix-postgres docker container
+- name: Stop pretix-database docker container
   docker_container:
-    name: "pretix-postgres"
+    name: "pretix-database"
     image: "postgres:9.6-alpine"
     restart_policy: unless-stopped
     volumes:

@@ -46,7 +46,7 @@
         state: stopped
 
     - name: create dump of old postgresql database
-      shell: docker exec pretix-postgres pg_dump pretix -U pretix >> /root/pretix-dump.sql
+      shell: docker exec pretix-database pg_dump pretix -U pretix >> /root/pretix-dump.sql
       args:
         creates: /root/pretix-dump.sql
       register: pretix_postgresql_dump
@@ -87,6 +87,7 @@
     - name: run traefik certificate-exporter
       command: '{{ traefik_config_directory }}/dumpcerts.sh {{ traefik_config_directory }}/acme.json /etc/ssl/'
       become: true
+      ignore_errors: yes
   tags:
     - traefik
 

@@ -154,13 +154,20 @@ dokuwiki_plugins:
   src: https://github.com/splitbrain/dokuwiki-plugin-smtp/tarball/master
 - name: sqlite
   src: https://github.com/cosmocode/sqlite/tarball/master
+- name: nspages
+  src: https://github.com/gturri/nspages/tarball/master
+- name: move
+  src: https://github.com/michitux/dokuwiki-plugin-move/tarball/master
+- name: icalevents
+  src: https://github.com/real-or-random/dokuwiki-plugin-icalevents/releases/download/2017-06-16/dokuwiki-plugin-icalevents-2017-06-16.zip
+  direct: yes
+
 dokuwiki_plugins_remove:
   - name: authad
   - name: authldap
   - name: authmysql
   - name: authpdo
   - name: authpgsql
-  - name: info
   - name: popularity
 dokuwiki_provision: true
 dokuwiki_disableactions:
@@ -190,6 +197,26 @@ dokuwiki_local:
     value: "'chaos.jetzt'"
   - name: "['plugin']['tag']['toolbar_icon']"
     value: 1
+  - name: "['plugin']['icalevents']['locationUrlPrefix']"
+    value: "''"
+  - name: "['plugin']['icalevents']['template:default']"
+    value: |
+      '
+      === {date}: {summary} ===
+      **Location**: {location_link}\\\\
+      {description}'
+  - name: "['plugin']['icalevents']['template:list']"
+    value: |
+      '
+      === {date}: {summary} ===
+      **<sup>Location: {location}</sup>**\\\\
+      {description}'
+  - name: "['plugin']['icalevents']['template:custom1']"
+    value: |
+      '
+      === {date}: {summary} ===
+      {description}\\\\
+      **Wo?**: {location_link}'
 
 postgresql_python_library: python3-psycopg2
 postgresql_users:
