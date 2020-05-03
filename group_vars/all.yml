@@ -115,7 +115,7 @@ nginx_vhosts:
         include fastcgi_params;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         fastcgi_param REDIRECT_STATUS 200;
-        fastcgi_pass unix:/var/run/php/php{{ php_default_version_debian }}-fpm.sock;
+        fastcgi_pass 127.0.0.1:9000;
       }
 
 
@@ -134,6 +134,8 @@ dokuwiki_plugins:
   src: https://github.com/dokufreaks/plugin-pagelist/tarball/master
 - name: smtp
   src: https://github.com/splitbrain/dokuwiki-plugin-smtp/tarball/master
+- name: sqlite
+  src: https://github.com/cosmocode/sqlite/tarball/master
 dokuwiki_plugins_remove:
   - name: authad
   - name: authldap
