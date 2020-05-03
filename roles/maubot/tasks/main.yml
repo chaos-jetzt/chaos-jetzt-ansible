@@ -21,7 +21,7 @@
   become: yes
   become_user: "maubot"
   notify:
-    - run database migration
+#    - run database migration
     - restart maubot
 
 - name: Upload maubot config

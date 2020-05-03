@@ -62,7 +62,7 @@
         name: "ssl-cert"
         system: yes
 
-    - name: Make private cert folder readable for certs group
+    - name: Make private cert folder readable for ssl-cert group
       file:
         path: "/etc/ssl/private"
         group: "ssl-cert"
@@ -99,7 +99,11 @@
   - compose
 
 - hosts: web
-  pre_tasks:
+  roles:
+  - geerlingguy.nginx
+  - geerlingguy.php
+  - n0emis.dokuwiki
+  tasks:
     - name: move old wiki data to new path
       command: mv /var/lib/docker/volumes/root_dokuwiki_data/_data/dokuwiki/data/ {{ dokuwiki_savedir }}
       ignore_errors: yes
@@ -107,11 +111,6 @@
     - name: move old wiki users to new path
       command: mv /var/lib/docker/volumes/root_dokuwiki_data/_data/dokuwiki/conf/users.auth.php {{ dokuwiki_base }}/conf/users.auth.php
       ignore_errors: yes
-  roles:
-  - geerlingguy.nginx
-  - geerlingguy.php
-  - n0emis.dokuwiki
-  tasks:
     - name: Add traefik config
       template:
         src: ../templates/traefik/dokuwiki.yml
