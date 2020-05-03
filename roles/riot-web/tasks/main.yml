@@ -18,7 +18,7 @@
 - name: Create Riot custom configuration
   template:
     src: config.json.j2
-    dest: "{{ riot_installation_path }}/riot-v{{ riot_version }}/config.json"
+    dest: "{{ riot_installation_path }}/config.json"
     owner: root
     group: root
     mode: 0664

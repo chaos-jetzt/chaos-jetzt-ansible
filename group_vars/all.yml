@@ -46,6 +46,9 @@ synapse_email_client_base_url: "https://chat.{{ base_url }}"
 synapse_http_listener_port: '85'
 synapse_federation_listener_port: '86'
 
+synapse_app_service_config_files:
+  - /etc/matrix-appservice-irc/appservice-registration-irc.yaml
+
 riot_installation_path: "/var/www/riot-web"
 riot_version: "1.5.15"
 
@@ -207,6 +210,7 @@ redis_requirepass: "{{ lookup('passwordstore', 'infra/redis') }}"
 pretix_version: "3.7.0"
 pretix_bind_address: "0.0.0.0:83" # TODO: Change to 127.0.0.1 when traefik is not running in docker anymore
 pretix_base_path: "/opt/pretix"
+pretix_config_path: "/etc/traefik"
 pretix_gunicorn_worker: 2
 pretix_celery_concurrency: 4
 pretix_pretix_instance_name: "{{ base_url }} Pretix"

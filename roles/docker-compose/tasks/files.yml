@@ -6,7 +6,7 @@
 
 - name: make sure config-directories exist
   file:
-    path: '/root/{{ item }}'
+    path: '/etc/{{ item }}'
     state: directory
     recurse: yes
     owner: root
@@ -14,12 +14,11 @@
     mode: 0755
   with_items:
   - matrix-appservice-irc/
-  - maubot/
 
 
 - name: mass-copy config files
   template:
-    dest: '/root/{{ item }}'
+    dest: '/etc/{{ item }}'
     src: '{{ item }}'
     owner: root
     group: root

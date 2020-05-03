@@ -3,7 +3,7 @@
   args:
     chdir: "/opt/venvs/maubot"
 
-- name: restart systemd service
+- name: restart maubot
   systemd:
     name: "maubot.service"
     state: restarted

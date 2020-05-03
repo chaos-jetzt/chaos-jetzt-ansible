@@ -22,7 +22,7 @@
   become_user: "maubot"
   notify:
     - run database migration
-    - restart systemd service
+    - restart maubot
 
 - name: Upload maubot config
   template:
@@ -30,7 +30,7 @@
     dest: "/etc/maubot.yaml"
     owner: "maubot"
     group: "maubot"
-  notify: restart systemd service
+  notify: restart maubot
 
 - name: Create maubot logging file
   file:
