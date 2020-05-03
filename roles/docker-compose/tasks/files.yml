@@ -14,7 +14,6 @@
     mode: 0755
   with_items:
   - matrix-appservice-irc/
-  - riot/
   - maubot/
 
 
@@ -28,5 +27,4 @@
   with_items:
   - matrix-appservice-irc/appservice-registration-irc.yaml
   - matrix-appservice-irc/config.yaml
-  - riot/config.json
 

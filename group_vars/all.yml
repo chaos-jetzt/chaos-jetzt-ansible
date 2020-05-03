@@ -46,6 +46,9 @@ synapse_email_client_base_url: "https://chat.{{ base_url }}"
 synapse_http_listener_port: '85'
 synapse_federation_listener_port: '86'
 
+riot_installation_path: "/var/www/riot-web"
+riot_version: "1.5.15"
+
 # TODO: setup appservices
 #synapse_app_service_config_files:
 
@@ -116,6 +119,18 @@ nginx_vhosts:
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         fastcgi_param REDIRECT_STATUS 200;
         fastcgi_pass 127.0.0.1:9000;
+      }
+  - listen: "88"  # Wiki
+    server_name: "_"
+    root: "/var/www/riot-web"
+    index: "doku.php"
+    state: "present"
+    template: "{{ nginx_vhost_template }}"
+    filename: "riot-web.conf"
+    extra_parameters: |
+      location / {
+          root   /var/www/riot-web;
+          index  index.html index.htm;
       }
 
 

@@ -130,33 +130,6 @@
 
 - hosts: web
   roles:
-    - maubot
-  tasks:
-    - name: move old data
-      command: "mv {{ item }} /var/lib/maubot"
-      with_items:
-        - /var/lib/docker/volumes/root_maubot-data/_data/dbs
-        - /var/lib/docker/volumes/root_maubot-data/_data/maubot.db
-        - /var/lib/docker/volumes/root_maubot-data/_data/plugins
-        - /var/lib/docker/volumes/root_maubot-data/_data/trash
-      ignore_errors: yes
-
-    - name: Change ownership of new data
-      file:
-        path: "/var/lib/maubot"
-        recurse: yes
-        owner: "maubot"
-        group: "maubot"
-        state: directory
-
-    - name: Add traefik config
-      template:
-        src: ../templates/traefik/maubot.yml
-        dest: /etc/traefik/dynamic/maubot.yml
-  tags: maubot
-
-- hosts: web
-  roles:
     - geerlingguy.postgresql
   tags: pretix,matrix
 
@@ -182,6 +155,44 @@
       template:
         src: ../templates/traefik/synapse.yml
         dest: /etc/traefik/dynamic/synapse.yml
+  tags: matrix
+
+- hosts: web
+  roles:
+    - maubot
+  tasks:
+    - name: move old data
+      command: "mv {{ item }} /var/lib/maubot"
+      with_items:
+        - /var/lib/docker/volumes/root_maubot-data/_data/dbs
+        - /var/lib/docker/volumes/root_maubot-data/_data/maubot.db
+        - /var/lib/docker/volumes/root_maubot-data/_data/plugins
+        - /var/lib/docker/volumes/root_maubot-data/_data/trash
+      ignore_errors: yes
+
+    - name: Change ownership of new data
+      file:
+        path: "/var/lib/maubot"
+        recurse: yes
+        owner: "maubot"
+        group: "maubot"
+        state: directory
+
+    - name: Add traefik config
+      template:
+        src: ../templates/traefik/maubot.yml
+        dest: /etc/traefik/dynamic/maubot.yml
+  tags: matrix
+
+- hosts: web
+  roles:
+    - geerlingguy.nginx
+    - riot-web
+  tasks:
+    - name: Add traefik config
+      template:
+        src: ../templates/traefik/riot-web.yml
+        dest: /etc/traefik/dynamic/riot-web.yml
   tags: matrix
 
 - hosts: web

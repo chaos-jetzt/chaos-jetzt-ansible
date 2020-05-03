@@ -57,7 +57,7 @@
       traefik.http.routers.riot_https.entryPoints: "https"
       traefik.http.routers.riot_https.tls.certresolver: "le_http"
       traefik.http.services.riot-app.loadbalancer.server.port: "80"
-    state: started
+    state: stopped
 
 - name: Create/Start synapse-pgadmin docker container
   docker_container:

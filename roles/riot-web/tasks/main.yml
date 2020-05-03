@@ -1,0 +1,24 @@
+- name: Create installation directory for Riot Web
+  file:
+    path: "{{ riot_installation_path }}"
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: 0755
+
+- name: Download and unarchive Riot Web
+  unarchive:
+    remote_src: yes
+    src: https://github.com/vector-im/riot-web/releases/download/v{{ riot_version }}/riot-v{{ riot_version }}.tar.gz
+    extra_opts: --strip-components=1
+    dest: "{{ riot_installation_path }}"
+    owner: www-data
+    group: www-data
+
+- name: Create Riot custom configuration
+  template:
+    src: config.json.j2
+    dest: "{{ riot_installation_path }}/riot-v{{ riot_version }}/config.json"
+    owner: root
+    group: root
+    mode: 0664
