@@ -54,7 +54,44 @@
 
 - hosts: web
   roles:
-  - traefik
+    - traefik
+    - em0lar.traefik
+  tasks:
+    - name: Create ssl-cert group
+      group:
+        name: "ssl-cert"
+        system: yes
+
+    - name: Make private cert folder readable for certs group
+      file:
+        path: "/etc/ssl/private"
+        group: "ssl-cert"
+        mode: "0750"
+        state: directory
+
+    - name: copy certificate export script
+      template:
+        dest: "{{ traefik_config_directory }}/dumpcerts.sh"
+        src: "../templates/traefik/dumpcerts.sh"
+        owner: "root"
+        group: "root"
+        mode: 0744
+
+    - name: setup traefik certificate-exporter cronjob
+      cron:
+        name: "traefik certificate-exporter"
+        hour: "2"
+        user: "root"
+        job: "{{ traefik_config_directory }}/dumpcerts.sh {{ traefik_config_directory }}/acme.json /etc/ssl/"
+
+    - name: run traefik certificate-exporter
+      command: '{{ traefik_config_directory }}/dumpcerts.sh {{ traefik_config_directory }}/acme.json /etc/ssl/'
+      become: true
+  tags:
+    - traefik
+
+- hosts: web
+  roles:
   - docker-compose
   tags:
   - docker

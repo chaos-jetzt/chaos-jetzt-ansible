@@ -34,3 +34,6 @@
 [submodule "roles/n0emis.synapse"]
 	path = roles/n0emis.synapse
 	url = https://github.com/n0emis/ansible-role-synapse
+[submodule "roles/em0lar.traefik"]
+	path = roles/em0lar.traefik
+	url = https://github.com/em0lar/ansible-role-traefik.git
