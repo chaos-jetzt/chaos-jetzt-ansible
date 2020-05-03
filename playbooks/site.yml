@@ -234,24 +234,21 @@
       file:
         path: "{{ pretix_base_path }}/data"
         recurse: yes
-        owner: "pretix"
-        group: "pretix"
         state: directory
 
     - name: move old media directory
       command: mv /var/lib/docker/volumes/root_pretix-data/_data/media {{ pretix_base_path }}/data/
       ignore_errors: yes
-
-    - name: chown new media directory
-      file:
-        path: "{{ pretix_base_path }}/data/media"
-        owner: "pretix"
-        group: "pretix"
-        recurse: yes
   roles:
     - geerlingguy.redis
     - em0lar.pretix
   tasks:
+    - name: chown new data directory
+      file:
+        path: "{{ pretix_base_path }}/data"
+        owner: "pretix"
+        group: "pretix"
+        recurse: yes
     - name: Add traefik config
       template:
         src: ../templates/traefik/pretix.yml
