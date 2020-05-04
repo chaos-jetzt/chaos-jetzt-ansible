@@ -111,6 +111,11 @@
   - compose
 
 - hosts: web
+  pre_tasks:
+    - name: add php repository
+      apt_repository:
+        repo: "ppa:ondrej/php"
+        state: present
   roles:
   - geerlingguy.nginx
   - geerlingguy.php

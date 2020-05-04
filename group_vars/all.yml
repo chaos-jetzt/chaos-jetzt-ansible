@@ -138,11 +138,11 @@ nginx_vhosts:
           index  index.html index.htm;
       }
 
-
+php_date_timezone: "Europe/Berlin"
 php_webserver_daemon: nginx
 php_enable_php_fpm: true
 php_use_managed_ini: true
-php_default_version_debian: "7.2"
+php_default_version_debian: "7.4"
 
 dokuwiki_title: "{{ base_url }} Wiki"
 dokuwiki_base: /var/www/dokuwiki
@@ -202,23 +202,11 @@ dokuwiki_local:
   - name: "['plugin']['icalevents']['locationUrlPrefix']"
     value: "''"
   - name: "['plugin']['icalevents']['template:default']"
-    value: |
-      '
-      === {date}: {summary} ===
-      **Location**: {location_link}\\\\
-      {description}'
+    value: "'=== {date}: {summary} ===\n**Location**: {location_link}\n{description}'"
   - name: "['plugin']['icalevents']['template:list']"
-    value: |
-      '
-      === {date}: {summary} ===
-      **<sup>Location: {location}</sup>**\\\\
-      {description}'
+    value: "'=== {date}: {summary} ===\n**<sup>Location: {location}</sup>**\n{description}'"
   - name: "['plugin']['icalevents']['template:custom1']"
-    value: |
-      '
-      === {date}: {summary} ===
-      {description}\\\\
-      **Wo?**: {location_link}'
+    value: "'=== {date}: {summary} ===\n{description}\n**Wo?**: {location_link}'"
 
 redis_requirepass: "{{ lookup('passwordstore', 'infra/redis') }}"
 
