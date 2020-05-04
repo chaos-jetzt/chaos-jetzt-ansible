@@ -249,15 +249,15 @@ pretix_celery_backend: "redis://:{{ lookup('passwordstore', 'infra/redis') }}@lo
 
 postgresql_python_library: python3-psycopg2
 postgresql_users:
-  - name: {{ pretix_database_user }}
+  - name: "{{ pretix_database_user }}"
     password: "{{ lookup('passwordstore', 'infra/pretix/db') }}"
   - name: "{{ synapse_database_user }}"
     password: "{{ synapse_database_password }}"
 postgresql_databases:
-  - name: {{ pretix_database_name }}
-    owner: {{ pretix_database_user }}
-  - name: {{ synapse_database_database }}
-    owner: {{ synapse_database_user }}
+  - name: "{{ pretix_database_name }}"
+    owner: "{{ pretix_database_user }}"
+  - name: "{{ synapse_database_database }}"
+    owner: "{{ synapse_database_user }}"
     lc_collate: 'C'
     lc_ctype: 'C'
 

@@ -83,8 +83,8 @@
     image: "tulir/matrix-appservice-irc:latest"
     restart_policy: unless-stopped
     command: "node app.js -c config.yaml -p 9995 -f appservice-registration-irc.yaml -u http://0.0.0.0:9995"
-    exposed_ports:
-      - "9995"
+    ports:
+      - "9995:9995"
     volumes:
       - root_irc-appservice:/app/data
       - /etc/matrix-appservice-irc/appservice-registration-irc.yaml:/app/appservice-registration-irc.yaml

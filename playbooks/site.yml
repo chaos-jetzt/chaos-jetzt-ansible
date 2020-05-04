@@ -40,7 +40,7 @@
     - name: stop synapse docker container
       docker_container:
         name: "synapse"
-        state: stopped
+        state: absent
 
     - name: create dump of old synapse database
       shell: docker exec synapse-postgres pg_dump synapse -U synapse >> /root/synapse-dump.sql
