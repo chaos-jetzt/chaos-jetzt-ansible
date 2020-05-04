@@ -1,33 +1,20 @@
 ---
-- name: do compose magic
+- name: remove compose magic
   docker_compose:
+    state: absent
     pull: yes
     project_name: root
+    remove_volumes: no
     definition:
       version:                        "3"
       services:
-        traefik:
-          image:                      traefik:2.1
-          restart:                    always
-          ports:
-            - 80:80
-            - 443:443
-          networks:
-            - web
-          volumes:
-            - /var/run/docker.sock:/var/run/docker.sock
-            - /root/traefik:/etc/traefik/
-            - /root/traefik/letsencrypt:/letsencrypt
-          container_name:             traefik
         synapse-postgres:
           image:                      postgres:11
           restart:                    unless-stopped
-          networks:
-            - web
           volumes:
             - postgres-data:/var/lib/postgresql/data
           environment:
-            - POSTGRES_PASSWORD={{ synapse_db_password }}
+#            - POSTGRES_PASSWORD={{ synapse_db_password }}
             - POSTGRES_USER=synapse
             - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --lc-collate=C --lc-ctype=C
           container_name:             synapse-postgres
@@ -37,8 +24,6 @@
           restart:                    unless-stopped
           depends_on:
             - synapse-postgres
-          networks:
-            - web
           expose:
             - 8008
           volumes:
@@ -62,8 +47,6 @@
           restart:                    unless-stopped
           depends_on:
             - synapse
-          networks:
-            - web
           expose:
             - 80
           volumes:
@@ -87,8 +70,6 @@
             - /root/nginx/html:/usr/share/nginx/html
             - /root/nginx/html_known:/usr/share/nginx/html_known
             - /root/nginx/default.conf:/etc/nginx/conf.d/default.conf
-          networks:
-            - web
           labels:
             - "traefik.enable=true"
             - "traefik.http.routers.homepage_http.rule=Host(`{{ base_url }}`)"
@@ -105,8 +86,6 @@
           image:                      rankenstein/mumble-web
           expose:
             - 80
-          networks:
-            - web
           environment:
             MUMBLE_SERVER: "{{ base_url }}:64738"
           labels:
@@ -130,8 +109,6 @@
             PGADMIN_DEFAULT_PASSWORD: "{{ pgadmin_password }}"
           depends_on:
             - synapse-postgres
-          networks:
-            - web
           labels:
             - "traefik.enable=true"
             - "traefik.http.routers.pgadmin_http.rule=Host(`pgadmin.{{ base_url }}`)"
@@ -151,8 +128,6 @@
             - 9995
           depends_on:
             - synapse
-          networks:
-            - web
           volumes:
             - irc-appservice:/app/data
             - /root/matrix-appservice-irc/appservice-registration-irc.yaml:/app/appservice-registration-irc.yaml
@@ -166,8 +141,6 @@
             - 80
           volumes:
             - /root/down/html:/usr/share/nginx/html
-          networks:
-            - web
           container_name:             down
           restart:                    unless-stopped
 
@@ -199,8 +172,6 @@
           volumes:
             - /root/pretix:/etc/pretix
             - pretix-data:/data
-          networks:
-            - web
           labels:
             - "traefik.enable=true"
             - "traefik.http.routers.pretix_http.rule=Host(`pretix.{{ base_url }}`) || Host(`tickets.{{ base_url }}`)"
@@ -231,8 +202,6 @@
           image:                      dock.mau.dev/maubot/maubot:latest
           expose:
             - 8080
-          networks:
-            - web
           volumes:
             - maubot-data:/data
             - /root/maubot/config.yaml:/data/config.yaml
@@ -250,14 +219,11 @@
 
         dokuwiki:
           image:                    bitnami/dokuwiki:0
-          networks:
-            - web
           volumes:
             - dokuwiki_data:/bitnami
           environment:
             DOKUWIKI_USERNAME: "admin"
             DOKUWIKI_FULL_NAME: "admin"
-            DOKUWIKI_PASSWORD: "{{ dokuwiki_password }}"
             DOKUWIKI_EMAIL: "dokuwiki-admin@chaos.jetzt"
             DOKUWIKI_WIKI_NAME: "{{ base_url }} Wiki"
           restart:                    unless-stopped

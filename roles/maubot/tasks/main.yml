@@ -1,0 +1,63 @@
+---
+- name: Create user
+  user:
+    name: "maubot"
+    create_home: yes
+    home: "/var/lib/maubot"
+    system: yes
+
+- name: Create venv directory
+  file:
+    path: "/opt/venvs/maubot"
+    owner: "maubot"
+    group: "maubot"
+    state: directory
+
+- name: Make sure maubot is installed to the venv
+  pip:
+    name: "maubot==0.1.0b1"
+    virtualenv: "/opt/venvs/maubot"
+    virtualenv_command: "/usr/bin/python3 -m venv"
+  become: yes
+  become_user: "maubot"
+  notify:
+#    - run database migration
+    - restart maubot
+
+- name: Upload maubot config
+  template:
+    src: "config.yaml"
+    dest: "/etc/maubot.yaml"
+    owner: "maubot"
+    group: "maubot"
+  notify: restart maubot
+
+- name: Create maubot logging file
+  file:
+    path: "/var/log/maubot.log"
+    owner: "maubot"
+    group: "maubot"
+    state: touch
+
+- name: Create required folders
+  file:
+    path: "{{ item }}"
+    owner: "maubot"
+    group: "maubot"
+    state: directory
+  with_items:
+    - "/var/lib/maubot/trash"
+    - "/var/lib/maubot/dbs"
+    - "/var/lib/maubot/plugins"
+
+- name: Upload systemd service file
+  copy:
+    src: "maubot.service"
+    dest: "/etc/systemd/system/maubot.service"
+
+- name: Enable systemd service
+  systemd:
+    name: "maubot.service"
+    daemon_reload: yes
+    enabled: yes
+    state: started

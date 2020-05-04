@@ -8,7 +8,7 @@ namespaces:
   aliases:
     - exclusive: true
       regex: '#irc_.*:{{ base_url }}' # localhost should be your homeserver's server_name
-url: 'http://matrix-appservice-irc:9995'
+url: 'http://localhost:9995'
 sender_localpart: irc_bot
 rate_limited: false
 protocols:

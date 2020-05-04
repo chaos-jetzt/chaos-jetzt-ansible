@@ -1,0 +1,9 @@
+- name: run database migration
+  command: "/opt/venvs/maubot/bin/alembic -c /opt/venvs/maubot/alembic.ini -x config=/etc/maubot.yaml upgrade head"
+  args:
+    chdir: "/opt/venvs/maubot"
+
+- name: restart maubot
+  systemd:
+    name: "maubot.service"
+    state: restarted

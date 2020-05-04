@@ -1,0 +1,21 @@
+http:
+  routers:
+    dokuwiki_http:
+      rule: "Host(`wiki.{{ base_url }}`)"
+      service: "dokuwiki-app@file"
+      entryPoints:
+        - "http"
+      middlewares:
+        - "https_redirect"
+    dokuwiki_https:
+      rule: "Host(`wiki.{{ base_url }}`)"
+      service: "dokuwiki-app@file"
+      entryPoints:
+        - "https"
+      tls:
+        certResolver: "le_http"
+  services:
+    dokuwiki-app:
+      loadBalancer:
+        servers:
+          - url: "http://{{ ansible_fqdn }}:82"

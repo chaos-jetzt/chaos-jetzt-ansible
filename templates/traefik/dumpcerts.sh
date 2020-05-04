@@ -158,6 +158,7 @@ for domain in $domains; do
 	cert=$(jq -e -r --arg domain "$domain" '.le_http.Certificates[] |
          	select (.domain.main == $domain )| .certificate' ${acmefile}) || bad_acme
 	echo "${cert}" | ${CMD_DECODE_BASE64} > "${cdir}/${domain}.crt"
+	chmod 644 "${cdir}/${domain}.crt"
 
 	echo "Extracting private key for ${domain}"
 	key=$(jq -e -r --arg domain "$domain" '.le_http.Certificates[] |

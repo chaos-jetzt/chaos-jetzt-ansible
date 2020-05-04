@@ -6,7 +6,7 @@
 
 - name: make sure config-directories exist
   file:
-    path: '/root/{{ item }}'
+    path: '/etc/{{ item }}'
     state: directory
     recurse: yes
     owner: root
@@ -14,29 +14,11 @@
     mode: 0755
   with_items:
   - matrix-appservice-irc/
-  - murmur/
-  - nginx/html_known/.well-known/matrix/
-  - pretix/
-  - riot/
-  - synapse/
-  - traefik/dynamic
-  - maubot/
 
-- name: change owner of synapse media-directories
-  file:
-    path: '/root/{{ item }}'
-    state: directory
-    recurse: yes
-    owner: '991'
-    group: '991'
-    mode: 0755
-  with_items:
-  - synapse/media_store/
-  - synapse/uploads/
 
 - name: mass-copy config files
   template:
-    dest: '/root/{{ item }}'
+    dest: '/etc/{{ item }}'
     src: '{{ item }}'
     owner: root
     group: root
@@ -44,42 +26,4 @@
   with_items:
   - matrix-appservice-irc/appservice-registration-irc.yaml
   - matrix-appservice-irc/config.yaml
-  - murmur/murmur.ini
-  - nginx/default.conf
-  - nginx/html_known/.well-known/matrix/server
-  - pretix/pretix.cfg
-  - riot/config.json
-  - synapse/homeserver.yaml
-  - synapse/synapse.log.config
-  - synapse/synapse.signing.key
-  - traefik/traefik.yml
-  - traefik/dynamic/middlewares.yml
-  - traefik/dynamic/dashboard.yml
-  - traefik/dynamic/tls.yml
-  - maubot/config.yaml
 
-- name: mass-copy scripts
-  template:
-    dest: '/root/{{ item }}'
-    src: '{{ item }}'
-    owner: root
-    group: root
-    mode: 0744
-  with_items:
-  - traefik/dumpcerts.sh
-
-- name: change permissions for certificate storage
-  file:
-    path: '/root/{{ item }}'
-    owner: root
-    group: root
-    mode: 0600
-  with_items:
-  - traefik/letsencrypt/acme.json
-
-- name: clone website repo
-  git:
-    repo: 'https://github.com/chaos-jetzt/jetztstatic/'
-    dest: /root/nginx/html
-    clone: yes
-    update: yes

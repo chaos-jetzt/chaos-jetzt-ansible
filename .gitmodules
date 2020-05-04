@@ -7,3 +7,33 @@
 [submodule "roles/base"]
 	path = roles/base
 	url = https://github.com/n0emis/ansible-role-base
+[submodule "roles/geerlingguy.php"]
+	path = roles/geerlingguy.php
+	url = https://github.com/geerlingguy/ansible-role-php
+[submodule "roles/geerlingguy.nginx"]
+	path = roles/geerlingguy.nginx
+	url = https://github.com/geerlingguy/ansible-role-nginx
+[submodule "roles/n0emis.dokuwiki"]
+	path = roles/n0emis.dokuwiki
+	url = https://github.com/n0emis/ansible-role-dokuwiki/
+[submodule "roles/em0lar.pretix"]
+	path = roles/em0lar.pretix
+	url = https://github.com/em0lar/ansible-role-pretix.git
+[submodule "roles/geerlingguy.postgresql"]
+	path = roles/geerlingguy.postgresql
+	url = https://github.com/geerlingguy/ansible-role-postgresql.git
+[submodule "roles/geerlingguy.redis"]
+	path = roles/geerlingguy.redis
+	url = https://github.com/geerlingguy/ansible-role-redis.git
+[submodule "roles/systemli.mumble"]
+	path = roles/systemli.mumble
+	url = https://github.com/systemli/ansible-role-mumble.git
+[submodule "roles/geerlingguy.nodejs"]
+	path = roles/geerlingguy.nodejs
+	url = https://github.com/geerlingguy/ansible-role-nodejs.git
+[submodule "roles/n0emis.synapse"]
+	path = roles/n0emis.synapse
+	url = https://github.com/n0emis/ansible-role-synapse
+[submodule "roles/em0lar.traefik"]
+	path = roles/em0lar.traefik
+	url = https://github.com/em0lar/ansible-role-traefik.git

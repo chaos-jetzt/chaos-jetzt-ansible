@@ -36,11 +36,178 @@
   tags: docker
 
 - hosts: web
+  tasks:
+    - name: stop synapse docker container
+      docker_container:
+        name: "synapse"
+        state: stopped
+
+    - name: create dump of old synapse database
+      shell: docker exec synapse-postgres pg_dump synapse -U synapse >> /root/synapse-dump.sql
+      args:
+        creates: /root/synapse-dump.sql
+      register: synapse_postgresql_dump
+  tags: matrix
+
+- hosts: web
+  tasks:
+    - name: stop pretix docker container
+      docker_container:
+        name: "pretix"
+        image: "registry.git.desti.io/n0emis/pretix:latest"
+        state: stopped
+
+    - name: create dump of old postgresql database
+      shell: docker exec pretix-database pg_dump pretix -U pretix >> /root/pretix-dump.sql
+      args:
+        creates: /root/pretix-dump.sql
+      register: pretix_postgresql_dump
+  tags: pretix
+
+- hosts: web
+  roles:
+    - traefik
+    - em0lar.traefik
+  tasks:
+    - name: Create ssl-cert group
+      group:
+        name: "ssl-cert"
+        system: yes
+
+    - name: Make private cert folder readable for ssl-cert group
+      file:
+        path: "/etc/ssl/private"
+        group: "ssl-cert"
+        mode: "0750"
+        state: directory
+
+    - name: copy certificate export script
+      template:
+        dest: "{{ traefik_config_directory }}/dumpcerts.sh"
+        src: "../templates/traefik/dumpcerts.sh"
+        owner: "root"
+        group: "root"
+        mode: 0744
+
+    - name: setup traefik certificate-exporter cronjob
+      cron:
+        name: "traefik certificate-exporter"
+        hour: "2"
+        user: "root"
+        job: "{{ traefik_config_directory }}/dumpcerts.sh {{ traefik_config_directory }}/acme.json /etc/ssl/"
+
+    - name: run traefik certificate-exporter
+      command: '{{ traefik_config_directory }}/dumpcerts.sh {{ traefik_config_directory }}/acme.json /etc/ssl/'
+      become: true
+      ignore_errors: yes
+  tags:
+    - traefik
+
+- hosts: web
   roles:
   - docker-compose
   tags:
   - docker
   - compose
+
+- hosts: web
+  roles:
+  - geerlingguy.nginx
+  - geerlingguy.php
+  - n0emis.dokuwiki
+  tasks:
+    - name: move old wiki data to new path
+      command: mv /var/lib/docker/volumes/root_dokuwiki_data/_data/dokuwiki/data/ {{ dokuwiki_savedir }}
+      ignore_errors: yes
+
+    - name: move old wiki users to new path
+      command: mv /var/lib/docker/volumes/root_dokuwiki_data/_data/dokuwiki/conf/users.auth.php {{ dokuwiki_base }}/conf/users.auth.php
+      ignore_errors: yes
+    - name: Add traefik config
+      template:
+        src: ../templates/traefik/dokuwiki.yml
+        dest: /etc/traefik/dynamic/dokuwiki.yml
+  tags: wiki
+
+- hosts: web
+  roles:
+  - geerlingguy.nginx
+  - website
+  tasks:
+    - name: Add traefik config
+      template:
+        src: ../templates/traefik/website.yml
+        dest: /etc/traefik/dynamic/website.yml
+  tags: website
+
+- hosts: web
+  roles:
+    - geerlingguy.postgresql
+  tags: pretix,matrix
+
+- hosts: web
+  pre_tasks:
+    - name: restore dump of old synapse postgresql database
+      postgresql_db:
+        name: "{{ synapse_database_database }}"
+        state: restore
+        target: "/root/synapse-dump.sql"
+        login_host: "localhost"
+        login_user: "{{ synapse_database_user }}"
+        login_password: "{{ synapse_database_password }}"
+      when: synapse_postgresql_dump.changed
+  roles:
+  - n0emis.synapse
+  tasks:
+    - name: move media directory
+      shell: mv /root/synapse/media_store/* {{ synapse_data_directory }}/media-store
+      ignore_errors: yes
+
+    - name: Add traefik config
+      template:
+        src: ../templates/traefik/synapse.yml
+        dest: /etc/traefik/dynamic/synapse.yml
+  tags: matrix
+
+- hosts: web
+  roles:
+    - maubot
+  tasks:
+    - name: move old data
+      command: "mv {{ item }} /var/lib/maubot"
+      with_items:
+        - /var/lib/docker/volumes/root_maubot-data/_data/dbs
+        - /var/lib/docker/volumes/root_maubot-data/_data/maubot.db
+        - /var/lib/docker/volumes/root_maubot-data/_data/plugins
+        - /var/lib/docker/volumes/root_maubot-data/_data/trash
+      ignore_errors: yes
+      notify: restart maubot
+
+    - name: Change ownership of new data
+      file:
+        path: "/var/lib/maubot"
+        recurse: yes
+        owner: "maubot"
+        group: "maubot"
+        state: directory
+      notify: restart maubot
+
+    - name: Add traefik config
+      template:
+        src: ../templates/traefik/maubot.yml
+        dest: /etc/traefik/dynamic/maubot.yml
+  tags: matrix, maubot
+
+- hosts: web
+  roles:
+    - geerlingguy.nginx
+    - riot-web
+  tasks:
+    - name: Add traefik config
+      template:
+        src: ../templates/traefik/riot-web.yml
+        dest: /etc/traefik/dynamic/riot-web.yml
+  tags: matrix
 
 - hosts: web
   tasks:
@@ -61,3 +228,85 @@
       with_items:
       - "{{ users + password_users }}"
       when: item.state == 'absent' and item.public_key is defined and item.public_key != ''
+
+- hosts: web
+  pre_tasks:
+    - name: restore dump of old pretix postgresql database
+      postgresql_db:
+        name: "{{ pretix_database_name }}"
+        state: restore
+        target: "/root/pretix-dump.sql"
+        login_host: "localhost"
+        login_user: "{{ pretix_database_user }}"
+        login_password: "{{ pretix_database_password }}"
+      when: pretix_postgresql_dump.changed
+
+    - name: create parents for media directory
+      file:
+        path: "{{ pretix_base_path }}/data"
+        recurse: yes
+        state: directory
+
+    - name: move old media directory
+      command: mv /var/lib/docker/volumes/root_pretix-data/_data/media {{ pretix_base_path }}/data/
+      ignore_errors: yes
+  roles:
+    - geerlingguy.redis
+    - em0lar.pretix
+  tasks:
+    - name: chown new data directory
+      file:
+        path: "{{ pretix_base_path }}/data"
+        owner: "pretix"
+        group: "pretix"
+        recurse: yes
+    - name: Add traefik config
+      template:
+        src: ../templates/traefik/pretix.yml
+        dest: /etc/traefik/dynamic/pretix.yml
+  tags: pretix
+
+- hosts: web
+  pre_tasks:
+    - name: Create sqlite database directory
+      file:
+        path: "{{ murmur_database | dirname }}"
+        state: directory
+
+    - name: Move old sqlite database
+      command: "mv /var/lib/docker/volumes/root_murmur-data/_data/murmur.sqlite {{ murmur_database }}"
+      args:
+        creates: "{{ murmur_database }}"
+  roles:
+    - geerlingguy.nodejs
+    - systemli.mumble
+  tasks:
+    - name: Make database readable by mumble group
+      file:
+        path: "{{ murmur_database }}"
+        owner: "mumble-server"
+        group: "mumble-server"
+        mode: "0660"
+      notify:
+        - restart murmur
+
+    - name: Make mumble certificate readable by ssl-cert group
+      file:
+        path: "/etc/ssl/private/{{ base_url }}.key"
+        group: "ssl-cert"
+        mode: "0640"
+      notify:
+        - restart murmur
+        - restart mumble-web
+
+    - name: Add user mumble-server to ssl-cert group
+      user:
+        name: "mumble-server"
+        groups: "ssl-cert"
+        append: yes
+
+    - name: Add traefik config
+      template:
+        src: ../templates/traefik/mumble-web.yml
+        dest: /etc/traefik/dynamic/mumble-web.yml
+  tags: mumble

@@ -1,0 +1,21 @@
+http:
+  routers:
+    mumble-web_http:
+      rule: "Host(`mumble.{{ base_url }}`)"
+      service: "mumble-web-app@file"
+      entryPoints:
+        - "http"
+      middlewares:
+        - "https_redirect"
+    mumble-web_https:
+      rule: "Host(`mumble.{{ base_url }}`) || (Host(`{{ base_url }}`) && PathPrefix(`/mumble-web/`))"
+      service: "mumble-web-app@file"
+      entryPoints:
+        - "https"
+      tls:
+        certResolver: "le_http"
+  services:
+    mumble-web-app:
+      loadBalancer:
+        servers:
+          - url: "http://{{ ansible_fqdn }}:{{ mumble_web_listen }}"

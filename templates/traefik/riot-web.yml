@@ -1,0 +1,21 @@
+http:
+  routers:
+    riot-web_http:
+      rule: "Host(`chat.{{ base_url }}`)"
+      service: "riot-web-app@file"
+      entryPoints:
+        - "http"
+      middlewares:
+        - "https_redirect"
+    riot-web_https:
+      rule: "Host(`chat.{{ base_url }}`)"
+      service: "riot-web-app@file"
+      entryPoints:
+        - "https"
+      tls:
+        certResolver: "le_http"
+  services:
+    riot-web-app:
+      loadBalancer:
+        servers:
+          - url: "http://{{ ansible_fqdn }}:88"

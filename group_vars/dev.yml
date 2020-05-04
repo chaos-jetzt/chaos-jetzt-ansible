@@ -1,2 +1,6 @@
 ---
 base_url: dev.chaos.jetzt
+
+synapse_log_level: "DEBUG"
+synapse_root_log_level: "DEBUG"
+synapse_storage_sql_log_level: "DEBUG"

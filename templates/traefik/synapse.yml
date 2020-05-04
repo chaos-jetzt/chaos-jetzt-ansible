@@ -1,0 +1,21 @@
+http:
+  routers:
+    synapse_http:
+      rule: "Host(`matrix.{{ base_url }}`)"
+      service: "synapse-app@file"
+      entryPoints:
+        - "http"
+      middlewares:
+        - "https_redirect"
+    synapse_https:
+      rule: "Host(`matrix.{{ base_url }}`)"
+      service: "synapse-app@file"
+      entryPoints:
+        - "https"
+      tls:
+        certResolver: "le_http"
+  services:
+    synapse-app:
+      loadBalancer:
+        servers:
+          - url: "http://{{ ansible_fqdn }}:85"

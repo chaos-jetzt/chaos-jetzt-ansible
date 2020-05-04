@@ -3,27 +3,27 @@
 # Format examples:
 #   SQLite:   sqlite:///filename.db
 #   Postgres: postgres://username:password@hostname/dbname
-database: sqlite:////data/maubot.db
+database: sqlite:////var/lib/maubot/maubot.db
 
 plugin_directories:
     # The directory where uploaded new plugins should be stored.
-    upload: /data/plugins
+    upload: /var/lib/maubot/plugins
     # The directories from which plugins should be loaded.
     # Duplicate plugin IDs will be moved to the trash.
     load:
-    - /data/plugins
+    - /var/lib/maubot/plugins
     # The directory where old plugin versions and conflicting plugins should be moved.
     # Set to "delete" to delete files immediately.
-    trash: /data/trash
+    trash: /var/lib/maubot/trash
     # The directory where plugin databases should be stored.
-    db: /data/plugins
+    db: /var/lib/maubot/plugins
 
 server:
     # The IP and port to listen to.
     hostname: 0.0.0.0
-    port: 8080
+    port: 87
     # Public base URL where the server is visible.
-    public_url: https://bot.{{ base_url }}
+    public_url: https://maubot.{{ base_url }}
     # The base management API path.
     base_path: /_matrix/maubot/v1
     # The base path for the UI.
@@ -32,7 +32,7 @@ server:
     plugin_base_path: /_matrix/maubot/plugin/
     # Override path from where to load UI resources.
     # Set to false to using pkg_resources to find the path.
-    override_resource_path: /opt/maubot/frontend
+    override_resource_path: false
     # The base appservice API path. Use / for legacy appservice API and /_matrix/app/v1 for v1.
     appservice_base_path: /_matrix/app/v1
     # The shared secret to sign API access tokens.
@@ -45,13 +45,13 @@ registration_secrets:
         # Client-server API URL
         url: https://matrix.{{ base_url }}
         # registration_shared_secret from synapse config
-        secret: {{ synapse_registration_secret }}
+        secret: {{ synapse_registration_shared_secret }}
 
 # List of administrator users. Plaintext passwords will be bcrypted on startup. Set empty password
 # to prevent normal login. Root is a special user that can't have a password and will always exist.
 admins:
     root: ''
-    n0emis: '{{ maubot_admin_password }}'
+    admin: '{{ maubot_admin_password }}'
 
 # API feature switches.
 api_features:
@@ -87,11 +87,11 @@ logging:
             formatter: precise
     loggers:
         maubot:
-            level: DEBUG
+            level: INFO
         mautrix:
-            level: DEBUG
+            level: INFO
         aiohttp:
             level: INFO
     root:
-        level: DEBUG
+        level: INFO
         handlers: [file, console]

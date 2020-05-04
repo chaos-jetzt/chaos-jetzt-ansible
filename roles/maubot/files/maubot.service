@@ -1,0 +1,14 @@
+[Unit]
+Description=maubot service
+After=network.target
+
+[Service]
+User=maubot
+Group=maubot
+ExecStart=/opt/venvs/maubot/bin/python -m maubot -c /etc/maubot.yaml -b /opt/venvs/maubot/example-config.yaml
+WorkingDirectory=/var/lib/maubot
+Restart=on-failure
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+
+[Install]
+WantedBy=multi-user.target
