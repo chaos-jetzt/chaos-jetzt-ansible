@@ -220,20 +220,6 @@ dokuwiki_local:
       {description}\\\\
       **Wo?**: {location_link}'
 
-postgresql_python_library: python3-psycopg2
-postgresql_users:
-  - name: pretix
-    password: "{{ lookup('passwordstore', 'infra/pretix/db') }}"
-  - name: "{{ synapse_database_user }}"
-    password: "{{ synapse_database_password }}"
-postgresql_databases:
-  - name: pretix
-    owner: pretix
-  - name: synapse
-    owner: synapse
-    lc_collate: 'C'
-    lc_ctype: 'C'
-
 redis_requirepass: "{{ lookup('passwordstore', 'infra/redis') }}"
 
 pretix_version: "3.7.0"
@@ -260,6 +246,20 @@ pretix_django_secret: "{{ lookup('passwordstore', 'infra/pretix/secret') }}"
 pretix_redis_location: "redis://:{{ lookup('passwordstore', 'infra/redis') }}@localhost:6379/0"
 pretix_celery_broker: "redis://:{{ lookup('passwordstore', 'infra/redis') }}@localhost:6379/1"
 pretix_celery_backend: "redis://:{{ lookup('passwordstore', 'infra/redis') }}@localhost:6379/2"
+
+postgresql_python_library: python3-psycopg2
+postgresql_users:
+  - name: {{ pretix_database_user }}
+    password: "{{ lookup('passwordstore', 'infra/pretix/db') }}"
+  - name: "{{ synapse_database_user }}"
+    password: "{{ synapse_database_password }}"
+postgresql_databases:
+  - name: {{ pretix_database_name }}
+    owner: {{ pretix_database_user }}
+  - name: {{ synapse_database_database }}
+    owner: {{ synapse_database_user }}
+    lc_collate: 'C'
+    lc_ctype: 'C'
 
 nodejs_install_npm_user: "root"
 murmur_icesecretread: "secret"
