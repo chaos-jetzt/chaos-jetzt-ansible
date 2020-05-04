@@ -80,6 +80,7 @@
             - "traefik.http.routers.homepage_https.tls.certresolver=le_http"
             - "traefik.http.services.homepage-app.loadbalancer.server.port=80"
           container_name:             website
+          restart:                    unless-stopped
 
         mumble-web:
           image:                      rankenstein/mumble-web
@@ -97,6 +98,7 @@
             - "traefik.http.routers.mumble_https.tls.certresolver=le_http"
             - "traefik.http.services.mumble-app.loadbalancer.server.port=80"
           container_name:             mumble-web
+          restart:                    unless-stopped
 
         pgadmin:
           image:                      dpage/pgadmin4:latest
@@ -117,6 +119,7 @@
             - "traefik.http.routers.pgadmin_https.tls.certresolver=le_http"
             - "traefik.http.services.pgadmin-app.loadbalancer.server.port=80"
           container_name:             pgadmin
+          restart:                    unless-stopped
 
         matrix-appservice-irc:
           image:                      tulir/matrix-appservice-irc:latest
@@ -130,6 +133,7 @@
             - /root/matrix-appservice-irc/appservice-registration-irc.yaml:/app/appservice-registration-irc.yaml
             - /root/matrix-appservice-irc/config.yaml:/app/config.yaml
           container_name:             matrix-appservice-irc
+          restart:                    unless-stopped
 
         down:
           image:                      nginx:latest
@@ -138,6 +142,7 @@
           volumes:
             - /root/down/html:/usr/share/nginx/html
           container_name:             down
+          restart:                    unless-stopped
 
         pretix-database:
           image:                      postgres:9.6-alpine
@@ -147,10 +152,16 @@
             - "POSTGRES_PASSWORD={{pretix_db_password}}"
           volumes:
             - pretix-postgres:/var/lib/postgresql/data
+          networks:
+            - web
+          restart:                    unless-stopped
 
         redis:
           image:                      redis:latest
           container_name:             redis
+          networks:
+            - web
+          restart:                    unless-stopped
 
         pretix:
           image:                      registry.git.desti.io/n0emis/pretix:latest
@@ -170,6 +181,7 @@
             - "traefik.http.routers.pretix_https.entryPoints=https"
             - "traefik.http.routers.pretix_https.tls.certresolver=le_http"
             - "traefik.http.services.pretix-app.loadbalancer.server.port=80"
+          restart:                    unless-stopped
 
         murmur:
           image:                      mattikus/murmur:latest
@@ -182,6 +194,9 @@
             - /root/murmur/murmur.ini:/etc/murmur.ini
             - /etc/ssl:/etc/ssl
             - murmur-data:/data
+          networks:
+            - web
+          restart:                    unless-stopped
 
         maubot:
           image:                      dock.mau.dev/maubot/maubot:latest
@@ -200,6 +215,7 @@
             - "traefik.http.routers.maubot_https.tls.certresolver=le_http"
             - "traefik.http.services.maubot-app.loadbalancer.server.port=8080"
           container_name:             maubot
+          restart:                    unless-stopped
 
         dokuwiki:
           image:                    bitnami/dokuwiki:0
@@ -210,6 +226,7 @@
             DOKUWIKI_FULL_NAME: "admin"
             DOKUWIKI_EMAIL: "dokuwiki-admin@chaos.jetzt"
             DOKUWIKI_WIKI_NAME: "{{ base_url }} Wiki"
+          restart:                    unless-stopped
           container_name:             dokuwiki
           labels:
             - "traefik.enable=true"

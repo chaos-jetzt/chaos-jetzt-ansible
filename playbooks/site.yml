@@ -3,6 +3,18 @@
   roles:
   - base
   - jnv.unattended-upgrades
+  handlers:
+    - name: restart systemd-journald
+      systemd:
+        name: systemd-journald.service
+        state: restarted
+  tasks:
+    - name: Change SystemMaxUse in systemd-journald
+      replace:
+        path: "/etc/systemd/journald.conf"
+        regexp: "^#SystemMaxUse="
+        replace: "SystemMaxUse=50M"
+      notify: restart systemd-journald
   tags: base
 
 - hosts: web
