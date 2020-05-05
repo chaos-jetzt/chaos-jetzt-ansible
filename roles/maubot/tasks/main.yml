@@ -15,13 +15,14 @@
 
 - name: Make sure maubot is installed to the venv
   pip:
-    name: "maubot==0.1.0b1"
+    name: "maubot"
+    extra_args: "--upgrade"
     virtualenv: "/opt/venvs/maubot"
     virtualenv_command: "/usr/bin/python3 -m venv"
   become: yes
   become_user: "maubot"
   notify:
-#    - run database migration
+    - run database migration
     - restart maubot
 
 - name: Upload maubot config
