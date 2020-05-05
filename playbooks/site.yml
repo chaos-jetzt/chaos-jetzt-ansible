@@ -282,6 +282,11 @@
       command: "mv /var/lib/docker/volumes/root_murmur-data/_data/murmur.sqlite {{ murmur_database }}"
       args:
         creates: "{{ murmur_database }}"
+
+    - name: add mumble repository
+      apt_repository:
+        repo: "ppa:mumble/release"
+        state: present
   roles:
     - geerlingguy.nodejs
     - systemli.mumble
