@@ -1,0 +1,63 @@
+dokuwiki_title: "{{ base_url }} Wiki"
+dokuwiki_base: /var/www/dokuwiki
+dokuwiki_savedir: "{{ dokuwiki_base }}/data"
+dokuwiki_plugins:
+  - name: tag
+    src: https://github.com/dokufreaks/plugin-tag/tarball/master
+  - name: pagelist
+    src: https://github.com/dokufreaks/plugin-pagelist/tarball/master
+  - name: smtp
+    src: https://github.com/splitbrain/dokuwiki-plugin-smtp/tarball/master
+  - name: sqlite
+    src: https://github.com/cosmocode/sqlite/tarball/master
+  - name: nspages
+    src: https://github.com/gturri/nspages/tarball/master
+  - name: move
+    src: https://github.com/michitux/dokuwiki-plugin-move/tarball/master
+  - name: icalevents
+    src: https://github.com/real-or-random/dokuwiki-plugin-icalevents/releases/download/2017-06-16/dokuwiki-plugin-icalevents-2017-06-16.zip
+    direct: yes
+
+dokuwiki_plugins_remove:
+  - name: authad
+  - name: authldap
+  - name: authmysql
+  - name: authpdo
+  - name: authpgsql
+  - name: popularity
+dokuwiki_provision: true
+dokuwiki_disableactions:
+dokuwiki_acl_all: 1
+dokuwiki_acl_user: 8
+dokuwiki_language: de-informal
+dokuwiki_local:
+  - name: "['userewrite']"
+    value: 1
+  - name: "['subscribers']"
+    value: 1
+  - name: "['useslash']"
+    value: 1
+  - name: "['mailfrom']"
+    value: "'wiki@chaos.jetzt'"
+  - name: "['plugin']['smtp']['smtp_host']"
+    value: "'{{ lookup('passwordstore', 'infra/mail subkey=url') }}'"
+  - name: "['plugin']['smtp']['smtp_port']"
+    value: 465
+  - name: "['plugin']['smtp']['smtp_ssl']"
+    value: "'ssl'"
+  - name: "['plugin']['smtp']['auth_user']"
+    value: "'{{ lookup('passwordstore', 'infra/mail subkey=user') }}'"
+  - name: "['plugin']['smtp']['auth_pass']"
+    value: "'{{ lookup('passwordstore', 'infra/mail') }}'"
+  - name: "['plugin']['smtp']['localdomain']"
+    value: "'chaos.jetzt'"
+  - name: "['plugin']['tag']['toolbar_icon']"
+    value: 1
+  - name: "['plugin']['icalevents']['locationUrlPrefix']"
+    value: "''"
+  - name: "['plugin']['icalevents']['template:default']"
+    value: "'=== {date}: {summary} ===\n**Location**: {location_link}\n{description}'"
+  - name: "['plugin']['icalevents']['template:list']"
+    value: "'=== {date}: {summary} ===\n**<sup>Location: {location}</sup>**\n{description}'"
+  - name: "['plugin']['icalevents']['template:custom1']"
+    value: "'=== {date}: {summary} ===\n{description}\n**Wo?**: {location_link}'"

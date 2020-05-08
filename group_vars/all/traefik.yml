@@ -1,0 +1,19 @@
+traefik_version: "v2.2.1"
+traefik_base_path: "/var/lib/traefik"
+traefik_config_directory: "/etc/traefik"
+traefik_tls_letsencrypt_challenges_http:
+  enable: yes
+  email: "mail@{{ base_url }}"
+  name: "le_http" # Name of the certificate resolver
+  entryPoint: "http"
+  storage: "{{ traefik_config_directory }}/acme.json"
+traefik_default_cert_resovler: "le_http"
+traefik_middlewares_dashboard_authentication:
+  enable: yes
+  name: "dashboard_authentication"
+  realm: "Traefik Dashboard"
+  remove_header: yes
+  users:
+    - "admin:$apr1$ZOeQE6bE$NXEahNWS962G8.lTh0P180"
+    - "simeon:$apr1$c7/V5Mhy$vzozg29TxnYXfzZ1deqm1/"
+    - "em0lar:$apr1$h8hfBKva$F/yHCivbn8V3tIahYaNQE/"
