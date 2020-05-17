@@ -212,7 +212,7 @@
       template:
         src: ../templates/traefik/riot-web.yml
         dest: /etc/traefik/dynamic/riot-web.yml
-  tags: matrix
+  tags: matrix,riot
 
 - hosts: web
   tasks:

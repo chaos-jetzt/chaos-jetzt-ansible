@@ -52,7 +52,7 @@ synapse_app_service_config_files:
   - /etc/matrix-appservice-irc/appservice-registration-irc.yaml
 
 riot_installation_path: "/var/www/riot-web"
-riot_version: "1.5.15"
+riot_version: "1.6.0"
 
 # TODO: setup appservices
 #synapse_app_service_config_files:
