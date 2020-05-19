@@ -71,6 +71,9 @@ mail_password: "{{ lookup('passwordstore', 'infra/mail') }}"
 maubot_unshared_secret: "{{ lookup('passwordstore', 'infra/maubot/unshared') }}"
 maubot_admin_password: "{{ lookup('passwordstore', 'infra/maubot/admin') }}"
 
+website_path: '/var/www/website'
+website_repo: 'https://github.com/chaos-jetzt/website_pelican.git'
+
 nginx_remove_default_vhost: true
 nginx_user: www-data
 nginx_vhosts:
@@ -80,7 +83,7 @@ nginx_vhosts:
     filename: "default.conf"
     extra_parameters: |
       location / {
-          root   /var/www/website;
+          root   {{ website_path }}/public;
           index  index.html index.htm;
       }
 

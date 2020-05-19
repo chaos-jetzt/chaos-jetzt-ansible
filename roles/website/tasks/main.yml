@@ -1,10 +1,35 @@
 ---
+- name: check if old website is still present
+  lineinfile:
+    path: '{{ website_path }}/.git/config'
+    regexp: 'url = https://github\.com/chaos-jetzt/jetztstatic'
+    state: present
+  register: website_old_present
+
+- name: delete old website if present
+  file:
+    state: absent
+    path: '{{ website_path }}'
+  when: website_old_present
+
 - name: clone website repository
   git:
-    repo: 'https://github.com/chaos-jetzt/jetztstatic/'
-    dest: /var/www/website
+    repo: '{{ website_repo }}'
+    dest: '{{ website_path }}'
+    version: 'master'
     clone: yes
     update: yes
+  register: website_changed
+
+- name: install pip requirements for website
+  pip:
+    requirements: '{{ website_path }}/requirements.txt'
+
+- name: make html on website
+  command:
+    cmd: make html
+    chdir: '{{ website_path }}'
+  when: website_changed
 
 - name: Ensure well-known matrix dir exists
   file:
