@@ -3,14 +3,16 @@
   lineinfile:
     path: '{{ website_path }}/.git/config'
     regexp: 'url = https://github\.com/chaos-jetzt/jetztstatic'
-    state: present
+    state: absent
+  check_mode: yes
   register: website_old_present
+
 
 - name: delete old website if present
   file:
     state: absent
     path: '{{ website_path }}'
-  when: website_old_present
+  when: website_old_present.found
 
 - name: clone website repository
   git:
