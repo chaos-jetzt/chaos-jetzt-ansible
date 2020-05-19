@@ -26,8 +26,8 @@
     requirements: '{{ website_path }}/requirements.txt'
 
 - name: make html on website
-  command:
-    cmd: make html
+  make:
+    target: html
     chdir: '{{ website_path }}'
   when: website_changed
 
