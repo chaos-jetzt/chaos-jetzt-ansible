@@ -89,6 +89,12 @@ nginx_vhosts:
           root   /var/www;
       }
 
+      location ^~/.well-known/matrix {
+          default_type "application/json";
+          root   /var/www;
+      }
+
+
   - listen: "82"  # Wiki
     server_name: "_"
     root: "/var/www/dokuwiki"

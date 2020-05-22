@@ -11,7 +11,10 @@
     path: /var/www/.well-known/matrix/
     state: directory
 
-- name: copy matrix discovery file
+- name: copy matrix discovery files
   template:
-    src: matrix/server.j2
-    dest: /var/www/.well-known/matrix/server
+    src: "matrix/{{ item }}.j2"
+    dest: "/var/www/.well-known/matrix/{{ item }}"
+  loop:
+    - server
+    - client
