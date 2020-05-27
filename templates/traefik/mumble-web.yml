@@ -8,12 +8,16 @@ http:
       middlewares:
         - "https_redirect"
     mumble-web_https:
-      rule: "Host(`mumble.{{ base_url }}`) || (Host(`{{ base_url }}`) && PathPrefix(`/mumble-web/`))"
+      rule: "Host(`mumble.{{ base_url }}`)"
       service: "mumble-web-app@file"
       entryPoints:
         - "https"
       tls:
         certResolver: "le_http"
+        domains:
+          - main: "mumble.{{ base_url }}"
+            sans:
+              - "{{ base_url }}"
   services:
     mumble-web-app:
       loadBalancer:
