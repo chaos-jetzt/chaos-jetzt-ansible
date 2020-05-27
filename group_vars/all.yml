@@ -259,8 +259,8 @@ nodejs_install_npm_user: "root"
 murmur_icesecretread: "secret"
 murmur_welcometext: "Welcome on the {{ base_url }}-mumble server running murmur. Enjoy your stay!"
 murmur_bandwidth: "128000"
-murmur_sslcert: "/etc/ssl/certs/{{ base_url }}.crt"
-murmur_sslkey: "/etc/ssl/private/{{ base_url }}.key"
+murmur_sslcert: "/etc/ssl/certs/mumble.{{ base_url }}.crt"
+murmur_sslkey: "/etc/ssl/private/mumble.{{ base_url }}.key"
 murmur_registername: no
 
 

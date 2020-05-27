@@ -302,7 +302,7 @@
 
     - name: Make mumble certificate readable by ssl-cert group
       file:
-        path: "/etc/ssl/private/{{ base_url }}.key"
+        path: "{{ murmur_sslkey }}"
         group: "ssl-cert"
         mode: "0640"
       notify:
