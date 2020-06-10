@@ -255,6 +255,7 @@ ircService:
         "#chaos-jetzt_random": ["!UPtrDrUkWTdXogEXBz:{{ base_url }}"]
         "#chaos-jetzt_administration": ["!hyuCMEtcsPzkxnOmYB:{{ base_url }}"]
         "#chaos-jetzt_alte-leute-lounge": ["!bzDCiULXRPjUwoMapO:{{ base_url }}"]
+        "#chaos-jetzt_cmh": ["!qBFIozLwHADqXiyktO:{{ base_url }}"]
         "#voc-lounge": ["!hXGwzNSSDRfpjpQocD:{{ base_url }}"]
         "#regio": ["!foNvGrpipDkRyUTgxu:{{ base_url }}"]
 
