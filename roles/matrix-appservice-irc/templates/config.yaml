@@ -208,7 +208,7 @@ ircService:
         # can have a significant effect on performance on startup as the lists are
         # synced. This must be enabled for anything else in this section to take
         # effect. Default: false.
-        enabled: false
+        enabled: true
 
         # Syncing membership lists at startup can result in hundreds of members to
         # process all at once. This timer drip feeds membership entries at the
@@ -234,11 +234,15 @@ ircService:
             incremental: false
 
         # Apply specific rules to Matrix rooms. Only matrix-to-IRC takes effect.
-        #rooms:
-        #  - room: "!fuasirouddJoxtwfge:localhost"
-        #    matrixToIrc:
-        #      initial: false
-        #      incremental: false
+        rooms:
+          - room: "!foNvGrpipDkRyUTgxu:{{ base_url }}"
+            matrixToIrc:
+              # The `initial` seems to have no effect at the moment.
+              # This appears to be a bug and has already been reported.
+              # https://github.com/matrix-org/matrix-appservice-irc/issues/1063
+              # ~e1mo
+              initial: true
+              incremental: true
 
         # Apply specific rules to IRC channels. Only IRC-to-matrix takes effect.
         #channels:
@@ -298,7 +302,7 @@ ircService:
         # reached, the client that spoke the longest time ago will be
         # disconnected and replaced.
         # Optional. Default: 30.
-        maxClients: 30
+        maxClients: 150
         # IPv6 configuration.
         ipv6:
           # Optional. Set to true to force IPv6 for outgoing connections.
