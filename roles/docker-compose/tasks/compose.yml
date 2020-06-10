@@ -122,7 +122,7 @@
           restart:                    unless-stopped
 
         matrix-appservice-irc:
-          image:                      tulir/matrix-appservice-irc:latest
+          image:                      matrixdotorg/matrix-appservice-irc:latest
           command:                    node app.js -c config.yaml -p 9995 -f appservice-registration-irc.yaml -u http://0.0.0.0:9995
           expose:
             - 9995
