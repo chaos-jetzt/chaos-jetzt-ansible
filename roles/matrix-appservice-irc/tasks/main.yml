@@ -22,7 +22,7 @@
 - name: Create/Start matrix-appservice-irc docker container
   docker_container:
     name: "matrix-appservice-irc"
-    image: "tulir/matrix-appservice-irc:latest"
+    image: "matrixdotorg/matrix-appservice-irc:latest"
     restart_policy: unless-stopped
     command: "node app.js -c config.yaml -p 9995 -f appservice-registration-irc.yaml -u http://0.0.0.0:9995"
     ports:
