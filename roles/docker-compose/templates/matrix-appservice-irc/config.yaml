@@ -234,15 +234,11 @@ ircService:
             incremental: false
 
         # Apply specific rules to Matrix rooms. Only matrix-to-IRC takes effect.
-        rooms:
-          - room: "!foNvGrpipDkRyUTgxu:{{ base_url }}"
-            matrixToIrc:
-              # The `initial` seems to have no effect at the moment.
-              # This appears to be a bug and has already been reported.
-              # https://github.com/matrix-org/matrix-appservice-irc/issues/1063
-              # ~e1mo
-              initial: true
-              incremental: true
+        #rooms:
+          #- room: "!477ACaB3RRbxDdA8KZ78:{{ base_url }}"
+            #matrixToIrc:
+              #initial: true
+              #incremental: true
 
         # Apply specific rules to IRC channels. Only IRC-to-matrix takes effect.
         #channels:
@@ -261,7 +257,6 @@ ircService:
         "#chaos-jetzt_alte-leute-lounge": ["!bzDCiULXRPjUwoMapO:{{ base_url }}"]
         "#chaos-jetzt_cmh": ["!qBFIozLwHADqXiyktO:{{ base_url }}"]
         "#voc-lounge": ["!hXGwzNSSDRfpjpQocD:{{ base_url }}"]
-        "#regio": ["!foNvGrpipDkRyUTgxu:{{ base_url }}"]
 
       # Configuration for virtual matrix users. The following variables are
       # exposed:
