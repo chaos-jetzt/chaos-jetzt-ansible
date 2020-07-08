@@ -55,8 +55,7 @@
     - name: stop pretix docker container
       docker_container:
         name: "pretix"
-        image: "registry.git.desti.io/n0emis/pretix:latest"
-        state: stopped
+        state: absent
 
     - name: create dump of old postgresql database
       shell: docker exec pretix-database pg_dump pretix -U pretix >> /root/pretix-dump.sql
