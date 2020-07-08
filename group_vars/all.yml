@@ -55,7 +55,7 @@ synapse_enable_group_creation: true
 synapse_enable_registration: true
 synapse_domain: "{{ base_url }}"
 synapse_server_fqdn_matrix: "matrix.{{ synapse_domain }}"
-synapse_pip_version: "1.15.2"
+synapse_pip_version: "1.16.0"
 synapse_auto_join_rooms:
   - "#grosse_halle:{{ base_url }}"
   - "#allgemein:{{ base_url }}"
