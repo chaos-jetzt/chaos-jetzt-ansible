@@ -18,3 +18,4 @@ traefik_middlewares_dashboard_authentication:
     - "admin:$apr1$ZOeQE6bE$NXEahNWS962G8.lTh0P180"
     - "simeon:$apr1$c7/V5Mhy$vzozg29TxnYXfzZ1deqm1/"
     - "em0lar:$apr1$h8hfBKva$F/yHCivbn8V3tIahYaNQE/"
+    - "e1mo:$apr1$3Wq5CWcc$qpJ6NcCwVGoiGOfc1rclT0"
