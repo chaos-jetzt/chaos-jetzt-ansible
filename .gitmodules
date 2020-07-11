@@ -37,3 +37,6 @@
 [submodule "roles/em0lar.traefik"]
 	path = roles/em0lar.traefik
 	url = https://github.com/em0lar/ansible-role-traefik.git
+[submodule "roles/em0lar.oh-my-zsh"]
+	path = roles/em0lar.oh-my-zsh
+	url = https://git.labcode.dev/ansible_roles/oh-my-zsh.git

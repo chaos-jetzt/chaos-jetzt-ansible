@@ -1,1 +1,2 @@
+---
 redis_requirepass: "{{ lookup('passwordstore', 'infra/redis') }}"

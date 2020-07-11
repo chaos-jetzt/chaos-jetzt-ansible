@@ -1,5 +1,6 @@
-pretix_version: "3.7.0"
-pretix_bind_address: "0.0.0.0:83" # TODO: Change to 127.0.0.1 when traefik is not running in docker anymore
+---
+pretix_version: "3.9.0"
+pretix_bind_address: "0.0.0.0:83"
 pretix_base_path: "/opt/pretix"
 pretix_config_path: "/etc/traefik"
 pretix_gunicorn_worker: 2

@@ -1,3 +1,4 @@
+---
 dokuwiki_title: "{{ base_url }} Wiki"
 dokuwiki_base: /var/www/dokuwiki
 dokuwiki_savedir: "{{ dokuwiki_base }}/data"

@@ -1,4 +1,4 @@
-nodejs_install_npm_user: "root"
+---
 murmur_icesecretread: "secret"
 murmur_welcometext: "Welcome on the {{ base_url }}-mumble server running murmur. Enjoy your stay!"
 murmur_bandwidth: "128000"

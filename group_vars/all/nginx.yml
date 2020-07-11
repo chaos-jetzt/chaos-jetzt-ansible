@@ -1,3 +1,4 @@
+---
 nginx_remove_default_vhost: true
 nginx_user: www-data
 nginx_vhosts:

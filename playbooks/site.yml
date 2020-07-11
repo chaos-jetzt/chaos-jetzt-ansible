@@ -3,6 +3,7 @@
   roles:
     - base
     - jnv.unattended-upgrades
+    - em0lar.oh-my-zsh
   handlers:
     - name: restart systemd-journald
       systemd:
