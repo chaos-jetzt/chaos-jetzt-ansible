@@ -2,7 +2,7 @@
 pretix_version: "3.9.0"
 pretix_bind_address: "0.0.0.0:83"
 pretix_base_path: "/opt/pretix"
-pretix_config_path: "/etc/traefik"
+pretix_config_path: "/etc/pretix"
 pretix_gunicorn_worker: 2
 pretix_celery_concurrency: 4
 pretix_pretix_instance_name: "{{ base_url }} Pretix"

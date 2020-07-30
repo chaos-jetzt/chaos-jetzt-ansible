@@ -10,7 +10,7 @@
 
 - name: Upload appserivce-regirstration and config file
   template:
-    dest: '/etc/{{ item }}'
+    dest: '/etc/matrix-appservice-irc/{{ item }}'
     src: '{{ item }}'
     owner: root
     group: root

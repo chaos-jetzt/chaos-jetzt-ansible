@@ -58,6 +58,7 @@
     - name: setup traefik certificate-exporter cronjob
       cron:
         name: "traefik certificate-exporter"
+        minute: "1"
         hour: "2"
         user: "root"
         job: "{{ traefik_config_directory }}/dumpcerts.sh {{ traefik_config_directory }}/acme.json /etc/ssl/"
