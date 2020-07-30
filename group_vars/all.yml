@@ -55,7 +55,7 @@ synapse_enable_group_creation: true
 synapse_enable_registration: true
 synapse_domain: "{{ base_url }}"
 synapse_server_fqdn_matrix: "matrix.{{ synapse_domain }}"
-synapse_pip_version: "1.16.0"
+synapse_pip_version: "1.18.0"
 synapse_auto_join_rooms:
   - "#grosse_halle:{{ base_url }}"
   - "#allgemein:{{ base_url }}"
@@ -73,8 +73,18 @@ synapse_federation_listener_port: '86'
 synapse_app_service_config_files:
   - /etc/matrix-appservice-irc/appservice-registration-irc.yaml
 
+synapse_turn_uris:
+  - "turn:turn.chaos.jetzt:3479?transport=udp"
+  - "turn:turn.chaos.jetzt:3479?transport=tcp"
+
+synapse_turn_shared_secret: "{{ coturn_static_auth_secret }}"
+synapse_turn_allow_guests: True
+
+coturn_static_auth_secret: "{{ lookup('passwordstore', 'infra/coturn') }}"
+coturn_realm: "turn.chaos.jetzt"
+
 riot_installation_path: "/var/www/riot-web"
-riot_version: "1.6.8"
+riot_version: "1.7.2"
 
 # TODO: setup appservices
 #synapse_app_service_config_files:
@@ -295,7 +305,7 @@ mumble_web_listen: "84"
 mumble_web_ssl_activated: False
 mumble_web_ssl_target: True
 
-traefik_version: "v2.2.1"
+traefik_version: "v2.2.8"
 traefik_base_path: "/var/lib/traefik"
 traefik_config_directory: "/etc/traefik"
 traefik_tls_letsencrypt_challenges_http:

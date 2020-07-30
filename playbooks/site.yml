@@ -163,6 +163,7 @@
       when: synapse_postgresql_dump.changed
   roles:
   - n0emis.synapse
+  - systemli.coturn
   tasks:
     - name: move media directory
       shell: mv /root/synapse/media_store/* {{ synapse_data_directory }}/media-store
