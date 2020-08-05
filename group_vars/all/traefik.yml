@@ -4,7 +4,7 @@ traefik_base_path: "/var/lib/traefik"
 traefik_config_directory: "/etc/traefik"
 traefik_tls_letsencrypt_challenges_http:
   enable: yes
-  email: "mail@{{ base_url }}"
+  email: "mail@{{ mail_base_domain }}"
   name: "le_http" # Name of the certificate resolver
   entryPoint: "http"
   storage: "{{ traefik_config_directory }}/acme.json"

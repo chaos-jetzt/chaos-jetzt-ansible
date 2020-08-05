@@ -13,9 +13,9 @@ pretix_database_user: "pretix"
 pretix_database_password: "{{ lookup('passwordstore', 'infra/pretix/db') }}"
 pretix_database_host: "localhost"
 pretix_database_port: 5432
-pretix_mail_from: "pretix@{{ base_url }}"
+pretix_mail_from: "pretix@{{ mail_base_domain }}"
 pretix_mail_host: "smtp.mailbox.org"
-pretix_mail_user: "mail@{{ base_url }}"
+pretix_mail_user: "mail@{{ mail_base_domain }}"
 pretix_mail_password: "{{ lookup('passwordstore', 'infra/mail') }}"
 pretix_mail_port: 465
 pretix_mail_ssl: on
