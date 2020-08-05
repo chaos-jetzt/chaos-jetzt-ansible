@@ -2,71 +2,12 @@
 nginx_remove_default_vhost: true
 nginx_user: www-data
 nginx_vhosts:
-  - listen: "81"  # Website
+  - filename: "website.conf"
     server_name: "_"
-    state: "present"
-    filename: "default.conf"
-    extra_parameters: |
-      location / {
-          root   /var/www/website;
-          index  index.html index.htm;
-      }
-
-      location ^~/.well-known/ {
-          default_type "text/plain";
-          root   /var/www;
-      }
-
-      location ^~/.well-known/matrix {
-          default_type "application/json";
-          root   /var/www;
-      }
-
-  - listen: "82"  # Wiki
+    template: "{{ playbook_dir }}/../templates/nginx/website.conf.j2"
+  - filename: "dokuwiki.conf"
     server_name: "_"
-    root: "/var/www/dokuwiki"
-    index: "doku.php"
-    state: "present"
-    template: "{{ nginx_vhost_template }}"
-    filename: "dokuwiki.conf"
-    extra_parameters: |
-      client_max_body_size 4M;
-      client_body_buffer_size 128k;
-
-      location ~ /(conf/|bin/|inc/|install.php) { deny all; }
-
-      location ~ ^/data/ { internal ; }
-
-      location ~ ^/lib.*\.(js|css|gif|png|ico|jpg|jpeg)$ {
-        expires 365d;
-      }
-
-      location / { try_files $uri $uri/ @dokuwiki; }
-
-      location @dokuwiki {
-        # rewrites "doku.php/" out of the URLs if you set the userwrite setting to .htaccess in dokuwiki config page
-        rewrite ^/_media/(.*) /lib/exe/fetch.php?media=$1 last;
-        rewrite ^/_detail/(.*) /lib/exe/detail.php?media=$1 last;
-        rewrite ^/_export/([^/]+)/(.*) /doku.php?do=export_$1&id=$2 last;
-        rewrite ^/(.*) /doku.php?id=$1&$args last;
-      }
-
-      location ~ \.php$ {
-        try_files $uri $uri/ /doku.php;
-        include fastcgi_params;
-        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-        fastcgi_param REDIRECT_STATUS 200;
-        fastcgi_pass 127.0.0.1:9000;
-      }
-  - listen: "88"  # Wiki
+    template: "{{ playbook_dir }}/../templates/nginx/dokuwiki.conf.j2"
+  - filename: "riot-web.conf"
     server_name: "_"
-    root: "/var/www/riot-web"
-    index: "doku.php"
-    state: "present"
-    template: "{{ nginx_vhost_template }}"
-    filename: "riot-web.conf"
-    extra_parameters: |
-      location / {
-          root   /var/www/riot-web;
-          index  index.html index.htm;
-      }
+    template: "{{ playbook_dir }}/../templates/nginx/element.conf.j2"

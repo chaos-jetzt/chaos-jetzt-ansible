@@ -1,0 +1,22 @@
+server {
+
+    listen 81;
+
+    server_name _;
+
+    index index.html index.htm;
+
+    location / {
+        root   /var/www/website;
+    }
+
+    location ^~/.well-known/ {
+        default_type "text/plain";
+        root   /var/www;
+    }
+
+    location ^~/.well-known/matrix {
+        default_type "application/json";
+        root   /var/www;
+    }
+}
