@@ -39,7 +39,7 @@ dokuwiki_local:
   - name: "['useslash']"
     value: 1
   - name: "['mailfrom']"
-    value: "'wiki@chaos.jetzt'"
+    value: "'wiki@{{ mail_base_domain }}'"
   - name: "['plugin']['smtp']['smtp_host']"
     value: "'{{ lookup('passwordstore', 'infra/mail subkey=url') }}'"
   - name: "['plugin']['smtp']['smtp_port']"
@@ -51,7 +51,7 @@ dokuwiki_local:
   - name: "['plugin']['smtp']['auth_pass']"
     value: "'{{ lookup('passwordstore', 'infra/mail') }}'"
   - name: "['plugin']['smtp']['localdomain']"
-    value: "'chaos.jetzt'"
+    value: "'{{ mail_base_domain }}'"
   - name: "['plugin']['tag']['toolbar_icon']"
     value: 1
   - name: "['plugin']['icalevents']['locationUrlPrefix']"
