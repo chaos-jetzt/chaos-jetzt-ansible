@@ -3,6 +3,5 @@ firewall_services:
   - http
   - https
 firewall_ports:
-  - 8080/tcp
   - 64738/udp
   - 64738/tcp
