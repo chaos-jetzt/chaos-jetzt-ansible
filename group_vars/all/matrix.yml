@@ -13,7 +13,7 @@ synapse_enable_group_creation: true
 synapse_enable_registration: true
 synapse_domain: "{{ base_url }}"
 synapse_server_fqdn_matrix: "matrix.{{ synapse_domain }}"
-synapse_pip_version: "1.16.0"
+synapse_pip_version: "1.18.0"
 synapse_auto_join_rooms:
   - "#grosse_halle:{{ base_url }}"
   - "#allgemein:{{ base_url }}"
@@ -40,7 +40,7 @@ synapse_turn_allow_guests: True
 
 # Riot
 riot_installation_path: "/var/www/riot-web"
-riot_version: "1.6.8"
+riot_version: "1.7.3"
 
 # Matrix-Appservice-IRC
 irc_hs_token: "{{ lookup('passwordstore', 'infra/irc-bridge subkey=hs_token') }}"
