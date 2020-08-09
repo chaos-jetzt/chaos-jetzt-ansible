@@ -1,0 +1,2 @@
+coturn_static_auth_secret: "{{ lookup('passwordstore', 'infra/coturn') }}"
+coturn_realm: "turn.{{ base_url }}"
