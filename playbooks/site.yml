@@ -79,22 +79,12 @@
     - geerlingguy.nginx
     - geerlingguy.php
     - n0emis.dokuwiki
-  tasks:
-    - name: Add traefik config
-      template:
-        src: ../templates/traefik/dokuwiki.yml
-        dest: /etc/traefik/dynamic/dokuwiki.yml
   tags: wiki
 
 - hosts: web
   roles:
     - geerlingguy.nginx
     - website
-  tasks:
-    - name: Add traefik config
-      template:
-        src: ../templates/traefik/website.yml
-        dest: /etc/traefik/dynamic/website.yml
   tags: website
 
 - hosts: web
@@ -105,32 +95,17 @@
 - hosts: web
   roles:
     - n0emis.synapse
-  tasks:
-    - name: Add traefik config
-      template:
-        src: ../templates/traefik/synapse.yml
-        dest: /etc/traefik/dynamic/synapse.yml
   tags: matrix
 
 - hosts: web
   roles:
     - maubot
-  tasks:
-    - name: Add traefik config
-      template:
-        src: ../templates/traefik/maubot.yml
-        dest: /etc/traefik/dynamic/maubot.yml
   tags: matrix, maubot
 
 - hosts: web
   roles:
     - geerlingguy.nginx
     - riot-web
-  tasks:
-    - name: Add traefik config
-      template:
-        src: ../templates/traefik/riot-web.yml
-        dest: /etc/traefik/dynamic/riot-web.yml
   tags: matrix,riot
 
 - hosts: web
@@ -165,11 +140,6 @@
   roles:
     - geerlingguy.redis
     - em0lar.pretix
-  tasks:
-    - name: Add traefik config
-      template:
-        src: ../templates/traefik/pretix.yml
-        dest: /etc/traefik/dynamic/pretix.yml
   tags: pretix
 
 - hosts: web
@@ -205,9 +175,4 @@
         name: "mumble-server"
         groups: "ssl-cert"
         append: yes
-
-    - name: Add traefik config
-      template:
-        src: ../templates/traefik/mumble-web.yml
-        dest: /etc/traefik/dynamic/mumble-web.yml
   tags: mumble
