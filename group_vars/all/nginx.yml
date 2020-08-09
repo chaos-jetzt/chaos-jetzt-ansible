@@ -1,0 +1,13 @@
+---
+nginx_remove_default_vhost: true
+nginx_user: www-data
+nginx_vhosts:
+  - filename: "website.conf"
+    server_name: "_"
+    template: "{{ playbook_dir }}/../templates/nginx/website.conf.j2"
+  - filename: "dokuwiki.conf"
+    server_name: "_"
+    template: "{{ playbook_dir }}/../templates/nginx/dokuwiki.conf.j2"
+  - filename: "riot-web.conf"
+    server_name: "_"
+    template: "{{ playbook_dir }}/../templates/nginx/element.conf.j2"

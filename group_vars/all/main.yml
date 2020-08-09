@@ -1,0 +1,5 @@
+---
+ansible_python_interpreter: "/usr/bin/python3"
+nodejs_install_npm_user: "root"
+
+mail_base_domain: "chaos.jetzt"

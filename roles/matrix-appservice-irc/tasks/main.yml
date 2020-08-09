@@ -1,0 +1,34 @@
+---
+- name: make sure config-directory exist
+  file:
+    path: '/etc/matrix-appservice-irc'
+    state: directory
+    recurse: yes
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Upload appserivce-regirstration and config file
+  template:
+    dest: '/etc/matrix-appservice-irc/{{ item }}'
+    src: '{{ item }}'
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - appservice-registration-irc.yaml
+    - config.yaml
+
+- name: Create/Start matrix-appservice-irc docker container
+  docker_container:
+    name: "matrix-appservice-irc"
+    image: "matrixdotorg/matrix-appservice-irc:latest"
+    restart_policy: unless-stopped
+    command: "node app.js -c config.yaml -p 9995 -f appservice-registration-irc.yaml -u http://0.0.0.0:9995"
+    ports:
+      - "9995:9995"
+    volumes:
+      - root_irc-appservice:/app/data
+      - /etc/matrix-appservice-irc/appservice-registration-irc.yaml:/app/appservice-registration-irc.yaml
+      - /etc/matrix-appservice-irc/config.yaml:/app/config.yaml
+    state: started

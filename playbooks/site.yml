@@ -1,9 +1,9 @@
 ---
 - hosts: all
   roles:
-  - base
-  - jnv.unattended-upgrades
-  - em0lar.oh-my-zsh
+    - base
+    - jnv.unattended-upgrades
+    - em0lar.oh-my-zsh
   handlers:
     - name: restart systemd-journald
       systemd:
@@ -20,7 +20,7 @@
 
 - hosts: web
   roles:
-  - firewalld
+    - firewalld
   vars:
     firewall_services:
     - http
@@ -33,40 +33,6 @@
 
 - hosts: web
   roles:
-  - docker
-  tags: docker
-
-- hosts: web
-  tasks:
-    - name: stop synapse docker container
-      docker_container:
-        name: "synapse"
-        state: absent
-
-    - name: create dump of old synapse database
-      shell: docker exec synapse-postgres pg_dump synapse -U synapse >> /root/synapse-dump.sql
-      args:
-        creates: /root/synapse-dump.sql
-      register: synapse_postgresql_dump
-  tags: matrix
-
-- hosts: web
-  tasks:
-    - name: stop pretix docker container
-      docker_container:
-        name: "pretix"
-        state: absent
-
-    - name: create dump of old postgresql database
-      shell: docker exec pretix-database pg_dump pretix -U pretix >> /root/pretix-dump.sql
-      args:
-        creates: /root/pretix-dump.sql
-      register: pretix_postgresql_dump
-  tags: pretix
-
-- hosts: web
-  roles:
-    - traefik
     - em0lar.traefik
   tasks:
     - name: Create ssl-cert group
@@ -92,6 +58,7 @@
     - name: setup traefik certificate-exporter cronjob
       cron:
         name: "traefik certificate-exporter"
+        minute: "1"
         hour: "2"
         user: "root"
         job: "{{ traefik_config_directory }}/dumpcerts.sh {{ traefik_config_directory }}/acme.json /etc/ssl/"
@@ -105,10 +72,10 @@
 
 - hosts: web
   roles:
-  - docker-compose
+    - docker
+    - matrix-appservice-irc
   tags:
-  - docker
-  - compose
+    - matrix
 
 - hosts: web
   pre_tasks:
@@ -117,17 +84,10 @@
         repo: "ppa:ondrej/php"
         state: present
   roles:
-  - geerlingguy.nginx
-  - geerlingguy.php
-  - n0emis.dokuwiki
+    - geerlingguy.nginx
+    - geerlingguy.php
+    - n0emis.dokuwiki
   tasks:
-    - name: move old wiki data to new path
-      command: mv /var/lib/docker/volumes/root_dokuwiki_data/_data/dokuwiki/data/ {{ dokuwiki_savedir }}
-      ignore_errors: yes
-
-    - name: move old wiki users to new path
-      command: mv /var/lib/docker/volumes/root_dokuwiki_data/_data/dokuwiki/conf/users.auth.php {{ dokuwiki_base }}/conf/users.auth.php
-      ignore_errors: yes
     - name: Add traefik config
       template:
         src: ../templates/traefik/dokuwiki.yml
@@ -136,8 +96,8 @@
 
 - hosts: web
   roles:
-  - geerlingguy.nginx
-  - website
+    - geerlingguy.nginx
+    - website
   tasks:
     - name: Add traefik config
       template:
@@ -151,23 +111,9 @@
   tags: pretix,matrix
 
 - hosts: web
-  pre_tasks:
-    - name: restore dump of old synapse postgresql database
-      postgresql_db:
-        name: "{{ synapse_database_database }}"
-        state: restore
-        target: "/root/synapse-dump.sql"
-        login_host: "localhost"
-        login_user: "{{ synapse_database_user }}"
-        login_password: "{{ synapse_database_password }}"
-      when: synapse_postgresql_dump.changed
   roles:
-  - n0emis.synapse
+    - n0emis.synapse
   tasks:
-    - name: move media directory
-      shell: mv /root/synapse/media_store/* {{ synapse_data_directory }}/media-store
-      ignore_errors: yes
-
     - name: Add traefik config
       template:
         src: ../templates/traefik/synapse.yml
@@ -178,25 +124,6 @@
   roles:
     - maubot
   tasks:
-    - name: move old data
-      command: "mv {{ item }} /var/lib/maubot"
-      with_items:
-        - /var/lib/docker/volumes/root_maubot-data/_data/dbs
-        - /var/lib/docker/volumes/root_maubot-data/_data/maubot.db
-        - /var/lib/docker/volumes/root_maubot-data/_data/plugins
-        - /var/lib/docker/volumes/root_maubot-data/_data/trash
-      ignore_errors: yes
-      notify: restart maubot
-
-    - name: Change ownership of new data
-      file:
-        path: "/var/lib/maubot"
-        recurse: yes
-        owner: "maubot"
-        group: "maubot"
-        state: directory
-      notify: restart maubot
-
     - name: Add traefik config
       template:
         src: ../templates/traefik/maubot.yml
@@ -217,54 +144,36 @@
 - hosts: web
   tasks:
     - name: create password-user
-      user: state=present
-            name="pass"
+      user:
+        name: "pass"
+        state: present
 
-    - name: add user to pass's authorized_keys
-      authorized_key: user="pass" manage_dir=true key="{{ item.public_key }}"
-                      state=present
+    - name: "add user to pass's authorized_keys"
+      authorized_key:
+        user: "pass"
+        manage_dir: true
+        key: "{{ item.public_key }}"
+        state: present
       with_items:
-      - "{{ users + password_users }}"
+        - "{{ users + password_users }}"
       when: item.state != 'absent' and item.public_key is defined and item.public_key != ''
 
-    - name: remove user from pass's authorized_keys
-      authorized_key: user="pass" manage_dir=true key="{{ item.public_key }}"
-                    state=absent
+    - name: "remove user from pass's authorized_keys"
+      authorized_key:
+        user: "pass"
+        manage_dir: true
+        key: "{{ item.public_key }}"
+        state: absent
       with_items:
-      - "{{ users + password_users }}"
+        - "{{ users + password_users }}"
       when: item.state == 'absent' and item.public_key is defined and item.public_key != ''
+  tags: password_store
 
 - hosts: web
-  pre_tasks:
-    - name: restore dump of old pretix postgresql database
-      postgresql_db:
-        name: "{{ pretix_database_name }}"
-        state: restore
-        target: "/root/pretix-dump.sql"
-        login_host: "localhost"
-        login_user: "{{ pretix_database_user }}"
-        login_password: "{{ pretix_database_password }}"
-      when: pretix_postgresql_dump.changed
-
-    - name: create parents for media directory
-      file:
-        path: "{{ pretix_base_path }}/data"
-        recurse: yes
-        state: directory
-
-    - name: move old media directory
-      command: mv /var/lib/docker/volumes/root_pretix-data/_data/media {{ pretix_base_path }}/data/
-      ignore_errors: yes
   roles:
     - geerlingguy.redis
     - em0lar.pretix
   tasks:
-    - name: chown new data directory
-      file:
-        path: "{{ pretix_base_path }}/data"
-        owner: "pretix"
-        group: "pretix"
-        recurse: yes
     - name: Add traefik config
       template:
         src: ../templates/traefik/pretix.yml
@@ -273,16 +182,6 @@
 
 - hosts: web
   pre_tasks:
-    - name: Create sqlite database directory
-      file:
-        path: "{{ murmur_database | dirname }}"
-        state: directory
-
-    - name: Move old sqlite database
-      command: "mv /var/lib/docker/volumes/root_murmur-data/_data/murmur.sqlite {{ murmur_database }}"
-      args:
-        creates: "{{ murmur_database }}"
-
     - name: add mumble repository
       apt_repository:
         repo: "ppa:mumble/release"
