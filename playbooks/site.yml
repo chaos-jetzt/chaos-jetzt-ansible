@@ -64,6 +64,18 @@
 
 - hosts: web
   roles:
+    - geerlingguy.postgresql
+  tags: pretix,matrix,keycloak
+
+
+- hosts: web
+  roles:
+    - geerlingguy.java
+    - em0lar.keycloak
+  tags: keycloak
+
+- hosts: web
+  roles:
     - docker
     - matrix-appservice-irc
   tags:
@@ -86,11 +98,6 @@
     - geerlingguy.nginx
     - website
   tags: website
-
-- hosts: web
-  roles:
-    - geerlingguy.postgresql
-  tags: pretix,matrix
 
 - hosts: web
   roles:

@@ -5,6 +5,8 @@ postgresql_users:
     password: "{{ lookup('passwordstore', 'infra/pretix/db') }}"
   - name: "{{ synapse_database_user }}"
     password: "{{ synapse_database_password }}"
+  - name: "{{ keycloak_postgresql_username }}"
+    password: "{{ keycloak_postgresql_password }}"
 postgresql_databases:
   - name: "{{ pretix_database_name }}"
     owner: "{{ pretix_database_user }}"
@@ -12,3 +14,5 @@ postgresql_databases:
     owner: "{{ synapse_database_user }}"
     lc_collate: 'C'
     lc_ctype: 'C'
+  - name: "{{ keycloak_postgresql_database }}"
+    owner: "{{ keycloak_postgresql_username }}"
