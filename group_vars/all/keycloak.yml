@@ -4,6 +4,8 @@ keycloak_postgresql_database: "keycloak"
 
 keycloak_configure_firewall: false
 keycloak_http_port: 8081
+keycloak_welcome_theme: "cj-keycloak-theme"
+keycloak_profile_preview: true
 keycloak_version: 11.0.0
 
 keycloak_admin_password: "{{ lookup('passwordstore', 'infra/keycloak/admin') }}"
