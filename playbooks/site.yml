@@ -72,6 +72,7 @@
   roles:
     - geerlingguy.java
     - em0lar.keycloak
+    - mrlesmithjr.openldap
   tags: keycloak
 
 - hosts: web

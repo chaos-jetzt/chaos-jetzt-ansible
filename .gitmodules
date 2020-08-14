@@ -43,6 +43,9 @@
 [submodule "roles/systemli.coturn"]
 	path = roles/systemli.coturn
 	url = https://github.com/systemli/ansible-role-coturn
+[submodule "roles/mrlesmithjr.openldap"]
+	path = roles/mrlesmithjr.openldap
+	url = https://github.com/mrlesmithjr/ansible-openldap
 [submodule "roles/em0lar.keycloak"]
 	path = roles/em0lar.keycloak
 	url = https://github.com/em0lar/ansible-role-keycloak-postgres
