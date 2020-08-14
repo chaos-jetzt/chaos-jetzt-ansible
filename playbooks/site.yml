@@ -70,20 +70,25 @@
     - matrix
 
 - hosts: web
+  roles:
+    - geerlingguy.nginx
+  tags:
+    - wiki
+    - website
+
+- hosts: web
   pre_tasks:
     - name: add php repository
       apt_repository:
         repo: "ppa:ondrej/php"
         state: present
   roles:
-    - geerlingguy.nginx
     - geerlingguy.php
-    - n0emis.dokuwiki
+    - chaos-jetzt.dokuwiki
   tags: wiki
 
 - hosts: web
   roles:
-    - geerlingguy.nginx
     - website
   tags: website
 

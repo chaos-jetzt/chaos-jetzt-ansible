@@ -13,9 +13,6 @@
 [submodule "roles/geerlingguy.nginx"]
 	path = roles/geerlingguy.nginx
 	url = https://github.com/geerlingguy/ansible-role-nginx
-[submodule "roles/n0emis.dokuwiki"]
-	path = roles/n0emis.dokuwiki
-	url = https://github.com/n0emis/ansible-role-dokuwiki/
 [submodule "roles/em0lar.pretix"]
 	path = roles/em0lar.pretix
 	url = https://github.com/em0lar/ansible-role-pretix.git
@@ -43,3 +40,6 @@
 [submodule "roles/systemli.coturn"]
 	path = roles/systemli.coturn
 	url = https://github.com/systemli/ansible-role-coturn
+[submodule "roles/chaos-jetzt.dokuwiki"]
+	path = roles/chaos-jetzt.dokuwiki
+	url = https://github.com/chaos-jetzt/ansible-role-dokuwiki.git
