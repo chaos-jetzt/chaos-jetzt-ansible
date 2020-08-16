@@ -1,5 +1,5 @@
 ---
-mysql_root_password:
+mysql_root_password: "{{ lookup('passwordstore', 'infra/mysql/root') }}"
 mysql_databases:
   - name: "{{ freescout_db_database }}"
     collation: utf8_general_ci
