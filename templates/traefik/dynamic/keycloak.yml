@@ -1,14 +1,14 @@
 http:
   routers:
     keycloak-http:
-      rule: "Host(`sso.{{ base_url }}`)"
+      rule: "Host(`{{ keycloak_url }}`)"
       service: "keycloak@file"
       entryPoints:
         - "http"
       middlewares:
         - "https_redirect"
     keycloak-https:
-      rule: "Host(`sso.{{ base_url }}`)"
+      rule: "Host(`{{ keycloak_url }}`)"
       service: "keycloak@file"
       entryPoints:
         - "https"
