@@ -1,0 +1,11 @@
+---
+mysql_root_password:
+mysql_databases:
+  - name: "{{ freescout_db_database }}"
+    collation: utf8_general_ci
+    encoding: utf8
+
+mysql_users:
+  - name: "{{ freescout_db_username }}"
+    password: "{{ freescout_db_password}}"
+    priv: "{{ freescout_db_database }}.*:all"

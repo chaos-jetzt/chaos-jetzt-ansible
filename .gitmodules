@@ -43,3 +43,9 @@
 [submodule "roles/systemli.coturn"]
 	path = roles/systemli.coturn
 	url = https://github.com/systemli/ansible-role-coturn
+[submodule "roles/geerlingguy.mysql"]
+	path = roles/geerlingguy.mysql
+	url = https://github.com/geerlingguy/ansible-role-mysql.git
+[submodule "roles/chaos-jetzt.freescout"]
+	path = roles/chaos-jetzt.freescout
+	url = https://github.com/chaos-jetzt/ansible-role-freescout.git

@@ -11,3 +11,6 @@ nginx_vhosts:
   - filename: "riot-web.conf"
     server_name: "_"
     template: "{{ playbook_dir }}/../templates/nginx/element.conf.j2"
+  - filename: "freescout.conf"
+    server_name: "_"
+    template: "{{ playbook_dir }}/../templates/nginx/freescout.conf.j2"

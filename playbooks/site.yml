@@ -78,12 +78,24 @@
   roles:
     - geerlingguy.nginx
     - geerlingguy.php
+  tags:
+    - wiki
+    - freescout
+    - website
+
+- hosts: web
+  roles:
     - n0emis.dokuwiki
   tags: wiki
 
 - hosts: web
   roles:
-    - geerlingguy.nginx
+    - geerlingguy.mysql
+    - chaos-jetzt.freescout
+  tags: freescout
+
+- hosts: web
+  roles:
     - website
   tags: website
 
