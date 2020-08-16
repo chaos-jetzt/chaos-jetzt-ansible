@@ -65,8 +65,10 @@
 - hosts: web
   roles:
     - geerlingguy.postgresql
-  tags: pretix,matrix,keycloak
-
+  tags:
+    - pretix
+    - matrix
+    - keycloak
 
 - hosts: web
   roles:
