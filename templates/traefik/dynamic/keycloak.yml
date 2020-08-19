@@ -1,0 +1,21 @@
+http:
+  routers:
+    keycloak-http:
+      rule: "Host(`{{ keycloak_url }}`)"
+      service: "keycloak@file"
+      entryPoints:
+        - "http"
+      middlewares:
+        - "https_redirect"
+    keycloak-https:
+      rule: "Host(`{{ keycloak_url }}`)"
+      service: "keycloak@file"
+      entryPoints:
+        - "https"
+      tls:
+        certResolver: "le_http"
+  services:
+    keycloak:
+      loadBalancer:
+        servers:
+          - url: "http://localhost:{{ keycloak_http_port }}"

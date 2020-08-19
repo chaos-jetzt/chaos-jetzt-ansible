@@ -1,0 +1,13 @@
+openldap_debian_packages:
+  - slapd
+  - ldap-utils
+
+openldap_admin_password: "{{ lookup('passwordstore', 'infra/ldap/admin') }}"
+openldap_domain_name: "{{ base_url }}"
+openldap_org: "{{ base_url }}"
+openldap_base: "{{ 'dc=' + (base_url.split('.') | join(',dc=')) }}"
+
+openldap_config: true
+openldap_populate: true
+openldap_posixgroups: []
+openldap_users: []

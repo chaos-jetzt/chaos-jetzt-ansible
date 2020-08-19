@@ -64,6 +64,27 @@
 
 - hosts: web
   roles:
+    - geerlingguy.postgresql
+  tags:
+    - pretix
+    - matrix
+    - keycloak
+
+- hosts: web
+  roles:
+    - geerlingguy.java
+    - em0lar.keycloak
+    - mrlesmithjr.openldap
+  tasks:
+    - name: deploy custom keycloak-theme
+      git:
+        repo: 'https://github.com/chaos-jetzt/cj-keycloak-theme.git'
+        dest: "{{ keycloak_jboss_home }}/themes/cj-keycloak-theme"
+      notify: restart keycloak
+  tags: keycloak
+
+- hosts: web
+  roles:
     - docker
     - matrix-appservice-irc
   tags:
@@ -91,11 +112,6 @@
   roles:
     - website
   tags: website
-
-- hosts: web
-  roles:
-    - geerlingguy.postgresql
-  tags: pretix,matrix
 
 - hosts: web
   roles:

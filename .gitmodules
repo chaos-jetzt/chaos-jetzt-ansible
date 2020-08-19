@@ -43,3 +43,13 @@
 [submodule "roles/chaos-jetzt.dokuwiki"]
 	path = roles/chaos-jetzt.dokuwiki
 	url = https://github.com/chaos-jetzt/ansible-role-dokuwiki.git
+[submodule "roles/mrlesmithjr.openldap"]
+	path = roles/mrlesmithjr.openldap
+	url = https://github.com/mrlesmithjr/ansible-openldap
+[submodule "roles/em0lar.keycloak"]
+	path = roles/em0lar.keycloak
+	url = https://github.com/em0lar/ansible-role-keycloak-postgres
+[submodule "roles/geerlingguy.java"]
+	path = roles/geerlingguy.java
+	url = https://github.com/geerlingguy/ansible-role-java.git
+
