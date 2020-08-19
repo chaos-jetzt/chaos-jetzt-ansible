@@ -115,6 +115,7 @@
 
 - hosts: web
   roles:
+    - systemli.coturn
     - n0emis.synapse
   tags: matrix
 
