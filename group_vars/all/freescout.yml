@@ -4,6 +4,12 @@ freescout_db_database: "freescout"
 freescout_db_username: "{{ lookup('passwordstore', 'infra/freescout/db subkey=user') }}"
 freescout_db_password: "{{ lookup('passwordstore', 'infra/freescout/db') }}"
 
+freescout_admin_user:
+  email: info@chaos.jetzt
+  firstName: Chaos
+  lastName: Jetzt
+  password: "{{ lookup('passwordstore', 'infra/freescout/admin') }}"
+
 freescout_basedir: /var/www/freescout
 freescout_source: git
 freescout_source_git_version: 1.5.11
@@ -25,3 +31,4 @@ freescout_config:
     value: "{{ freescout_db_username }}"
   - name: db_password
     value: "{{ freescout_db_password }}"
+
