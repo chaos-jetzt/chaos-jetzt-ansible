@@ -1,0 +1,21 @@
+http:
+  routers:
+    freescout_http:
+      rule: "Host(`{{ freescout_url }}`)"
+      service: "freescout-app@file"
+      entryPoints:
+        - "http"
+      middlewares:
+        - "https_redirect"
+    freescout_https:
+      rule: "Host(`{{ freescout_url }}`)"
+      service: "freescout-app@file"
+      entryPoints:
+        - "https"
+      tls:
+        certResolver: "le_http"
+  services:
+    freescout-app:
+      loadBalancer:
+        servers:
+          - url: "http://localhost:89"

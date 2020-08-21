@@ -105,8 +105,21 @@
         state: present
   roles:
     - geerlingguy.php
+  tags:
+    - wiki
+    - freescout
+    - website
+
+- hosts: web
+  roles:
     - chaos-jetzt.dokuwiki
   tags: wiki
+
+- hosts: web
+  roles:
+    - geerlingguy.mysql
+    - chaos-jetzt.freescout
+  tags: freescout
 
 - hosts: web
   roles:

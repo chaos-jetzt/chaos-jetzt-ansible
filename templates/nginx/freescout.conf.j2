@@ -1,0 +1,56 @@
+server {
+	listen 89;
+	listen [::]:89;
+
+	server_name _;
+	set $base {{ freescout_basedir }};
+	root $base/public;
+
+	# index.php
+	index index.php;
+
+	# index.php fallback
+	location / {
+		try_files $uri $uri/ /index.php?$query_string;
+	}
+
+	# handle .php
+	location ~ \.php$ {
+				fastcgi_split_path_info ^(.+\.php)(/.+)$;
+				include fastcgi_params;
+				fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_pass 127.0.0.1:9000;
+
+	}
+
+	location ~* ^/storage/attachment/ {
+		expires 1M;
+		access_log off;
+		try_files $uri $uri/ /index.php?$query_string;
+	}
+	
+	location ~* ^/(?:css|js)/.*\.(?:css|js)$ {
+		expires 2d;
+		access_log off;
+		add_header Cache-Control "public, must-revalidate";
+	}
+
+	location ~* ^/(?:css|fonts|img|installer|js|modules|[^\\\]+\..*)$ {
+		expires 1M;
+		access_log off;
+		add_header Cache-Control "public";
+	}
+	
+	location ~ /\. {
+		deny  all;
+	}
+
+	add_header X-XSS-Protection "1; mode=block" always;
+	add_header X-Content-Type-Options "nosniff" always;
+	add_header Referrer-Policy "no-referrer-when-downgrade" always;
+	add_header Content-Security-Policy "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'";
+
+	include mime.types;
+}
+
