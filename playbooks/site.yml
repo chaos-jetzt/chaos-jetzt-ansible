@@ -94,6 +94,7 @@
   roles:
     - geerlingguy.nginx
   tags:
+    - freescout
     - wiki
     - website
 
