@@ -6,3 +6,4 @@ php_use_managed_ini: true
 php_default_version_debian: "7.4"
 php_packages_extra:
   - php7.4-mysql
+  - php7.4-zip
