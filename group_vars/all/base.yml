@@ -24,7 +24,9 @@ users:
   - username: "e1mo"
     state: present
     sudo: yes
-    public_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBfbb4m4o89EumFjE8ichX03CC/mWry0JYaz91HKVJPb e1mo"
+    public_key: |
+      ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID9x/kL2fFqQSEyFvdEgiM2UKYAZyV1oct9alS6mweVa openpgp:0x6D617FD0A85BAADA
+      ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBfbb4m4o89EumFjE8ichX03CC/mWry0JYaz91HKVJPb e1mo
 
   - username: "ruru"
     state: present
