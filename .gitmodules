@@ -41,7 +41,7 @@
 	path = roles/systemli.coturn
 	url = https://github.com/systemli/ansible-role-coturn
 [submodule "roles/chaos-jetzt.dokuwiki"]
-	path = roles/chaos-jetzt.dokuwiki
+	path = roles/chaos_jetzt.dokuwiki
 	url = https://github.com/chaos-jetzt/ansible-role-dokuwiki.git
 [submodule "roles/mrlesmithjr.openldap"]
 	path = roles/mrlesmithjr.openldap
@@ -56,5 +56,5 @@
 	path = roles/geerlingguy.mysql
 	url = https://github.com/geerlingguy/ansible-role-mysql.git
 [submodule "roles/chaos-jetzt.freescout"]
-	path = roles/chaos-jetzt.freescout
+	path = roles/chaos_jetzt.freescout
 	url = https://github.com/chaos-jetzt/ansible-role-freescout.git
