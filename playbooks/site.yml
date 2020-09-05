@@ -85,7 +85,7 @@
 
 - hosts: web
   roles:
-    - docker
+    - geerlingguy.docker
     - matrix-appservice-irc
   tags:
     - matrix
@@ -212,3 +212,21 @@
         groups: "ssl-cert"
         append: yes
   tags: mumble
+
+- hosts: web
+  pre_tasks:
+    - name: Install docker pip package
+      pip:
+        name: "docker"
+  roles:
+    - geerlingguy.docker
+    - geerlingguy.postgresql
+    - geerlingguy.redis
+    - chaos_jetzt.venueless
+    - em0lar.traefik
+  tags: venueless
+
+- hosts: bbb
+  roles:
+    - n0emis.bigbluebutton
+  tags: bbb
