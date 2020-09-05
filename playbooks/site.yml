@@ -113,13 +113,13 @@
 
 - hosts: web
   roles:
-    - chaos-jetzt.dokuwiki
+    - chaos_jetzt.dokuwiki
   tags: wiki
 
 - hosts: web
   roles:
     - geerlingguy.mysql
-    - chaos-jetzt.freescout
+    - chaos_jetzt.freescout
   tags: freescout
 
 - hosts: web
