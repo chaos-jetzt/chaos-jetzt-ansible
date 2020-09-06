@@ -37,3 +37,6 @@ users:
 
 oh_my_zsh_theme: "agnoster"
 motd_path: ../../../templates/motd_knot
+
+base_additional_packages:
+  - jq
