@@ -197,6 +197,17 @@
       notify:
         - restart murmur
 
+    - name: Register if mumble certificate is present
+      stat:
+        path: "{{ murmur_sslkey }}"
+      register: murmur_sslkey_present
+
+    - name: run traefik certificate-exporter for missing mumble cert
+      command: '{{ traefik_config_directory }}/dumpcerts.sh {{ traefik_config_directory }}/acme.json /etc/ssl/'
+      become: true
+      ignore_errors: yes
+      when: not murmur_sslkey_present.stat.exists
+
     - name: Make mumble certificate readable by ssl-cert group
       file:
         path: "{{ murmur_sslkey }}"
