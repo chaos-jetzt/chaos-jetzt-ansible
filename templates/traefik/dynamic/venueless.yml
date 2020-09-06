@@ -1,14 +1,14 @@
 http:
   routers:
     venueless_http:
-      rule: "Host(`{{ inventory_hostname }}`)"
+      rule: "Host(`venue.{{ base_url }}`)"
       service: "venueless-app@file"
       entryPoints:
         - "http"
       middlewares:
         - "https_redirect"
     venueless_https:
-      rule: "Host(`{{ inventory_hostname }}`)"
+      rule: "Host(`venue.{{ base_url }}`)"
       service: "venueless-app@file"
       entryPoints:
         - "https"

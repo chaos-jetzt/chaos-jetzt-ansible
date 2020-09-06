@@ -8,8 +8,5 @@ dev.chaos.jetzt
 [prod]
 chaos.jetzt
 
-[venueless]
-venueless-test.het.nue.de.n0emis.eu
-
 [bbb]
 bbb-test.het.nue.de.n0emis.eu ansible_user=root

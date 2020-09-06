@@ -69,6 +69,7 @@
     - pretix
     - matrix
     - keycloak
+    - venueless
 
 - hosts: web
   roles:
@@ -86,6 +87,12 @@
 - hosts: web
   roles:
     - geerlingguy.docker
+  tags:
+    - matrix
+    - venueless
+
+- hosts: web
+  roles:
     - matrix-appservice-irc
   tags:
     - matrix
@@ -175,6 +182,12 @@
 - hosts: web
   roles:
     - geerlingguy.redis
+  tags:
+    - pretix
+    - venueless
+
+- hosts: web
+  roles:
     - em0lar.pretix
   tags: pretix
 
@@ -214,16 +227,8 @@
   tags: mumble
 
 - hosts: web
-  pre_tasks:
-    - name: Install docker pip package
-      pip:
-        name: "docker"
   roles:
-    - geerlingguy.docker
-    - geerlingguy.postgresql
-    - geerlingguy.redis
     - chaos_jetzt.venueless
-    - em0lar.traefik
   tags: venueless
 
 - hosts: bbb
