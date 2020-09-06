@@ -1,4 +1,4 @@
 ---
 bbb_hostname: "{{ inventory_hostname }}"
-bbb_coturn_secret: "ae5382037b25252ca791a84c6e11f305"
+bbb_coturn_secret: "{{ lookup('passwordstore', 'infra/coturn') }}"
 bbb_greenlight_enable: no
