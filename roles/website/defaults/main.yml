@@ -1,0 +1,3 @@
+website_repo_version: master
+website_venv: "{{ website_basedir }}/.venv"
+website_venv_command: "/usr/bin/python3 -m venv"

@@ -1,0 +1,2 @@
+website_basedir: /var/www/website
+website_repo: https://github.com/chaos-jetzt/website_pelican.git

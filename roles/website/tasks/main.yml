@@ -1,10 +1,41 @@
 ---
+- name: Check if old website is still present
+  lineinfile:
+    path: "{{ website_basedir }}/.git/config"
+    regexp: 'url = https://github\.com/chaos-jetzt/jetztstatic'
+    state: absent
+  check_mode: yes
+  register: website_old_present
+
+- name: delete old website if present
+  file:
+    state: absent
+    path: "{{ website_basedir }}"
+  when: website_old_present.found
+
 - name: clone website repository
   git:
-    repo: 'https://github.com/chaos-jetzt/jetztstatic/'
-    dest: /var/www/website
+    repo: "{{ website_repo }}"
+    dest: "{{ website_basedir }}"
+    version: "{{ website_repo_version }}"
     clone: yes
     update: yes
+  register: website_changed
+
+- name: Install pip requirements to venv
+  pip:
+    requirements: '{{ website_basedir }}/requirements.txt'
+    virtualenv: "{{ website_venv }}"
+    virtualenv_command: "{{ website_venv_command }}"
+  register: pip_changed
+
+- name: Build website
+  make:
+    chdir: "{{ website_basedir }}"
+    target: html
+    params:
+      PELICAN: "{{ website_venv }}/bin/pelican"
+  when: website_changed.changed or pip_changed.changed
 
 - name: Ensure well-known matrix dir exists
   file:

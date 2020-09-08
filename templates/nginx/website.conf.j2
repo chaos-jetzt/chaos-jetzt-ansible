@@ -7,7 +7,7 @@ server {
     index index.html index.htm;
 
     location / {
-        root   /var/www/website;
+        root   {{ website_basedir }}/public;
     }
 
     location ^~/.well-known/ {
