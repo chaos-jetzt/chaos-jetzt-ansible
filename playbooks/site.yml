@@ -109,7 +109,6 @@
   tags:
     - wiki
     - freescout
-    - website
 
 - hosts: web
   roles:
