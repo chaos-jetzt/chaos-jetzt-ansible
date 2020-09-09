@@ -204,7 +204,6 @@
 
     - name: run traefik certificate-exporter for missing mumble cert
       command: '{{ traefik_config_directory }}/dumpcerts.sh {{ traefik_config_directory }}/acme.json /etc/ssl/'
-      become: true
       ignore_errors: yes
       when: not murmur_sslkey_present.stat.exists
 
