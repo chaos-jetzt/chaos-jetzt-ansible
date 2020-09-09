@@ -1,9 +1,9 @@
 ---
-- name: Install python3.7
+- name: Install python3
   apt:
     name:
-      - "python3.7"
-      - "python3.7-venv"
+      - "python3"
+      - "python3-venv"
 
 - name: Create user
   user:
@@ -24,7 +24,7 @@
     name: "maubot"
     extra_args: "--upgrade"
     virtualenv: "/opt/venvs/maubot"
-    virtualenv_command: "/usr/bin/python3.7 -m venv"
+    virtualenv_command: "/usr/bin/python3 -m venv"
   become: yes
   become_user: "maubot"
   notify:
