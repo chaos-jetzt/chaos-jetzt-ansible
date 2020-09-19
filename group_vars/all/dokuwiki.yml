@@ -9,6 +9,9 @@ dokuwiki_plugins:
   - nspages
   - move
   - icalevents
+  - name: "oauth"
+    source: https://github.com/wintamute/dokuwiki-plugin-oauth
+    source_type: git
   - name: popularity
     state: absent
   - name: authad
@@ -35,6 +38,8 @@ dokuwiki_additonal_configuration:
     value: 1
   - name: useslash
     value: 1
+  - name: "authtype"
+    value: "'oauth'"
   - name: mailfrom
     value: "'wiki@{{ mail_base_domain }}'"
   - name: "plugin>smtp>smtp_host"
@@ -59,6 +64,16 @@ dokuwiki_additonal_configuration:
     value: "'=== {date}: {summary} ===\n**<sup>Location: {location}</sup>**\n{description}'"
   - name: "plugin>icalevents>template:custom1"
     value: "'=== {date}: {summary} ===\n{description}\n**Wo?**: {location_link}'"
+  - name: "plugin>oauth>keycloak-key"
+    value: "wiki"
+  - name: "plugin>oauth>keycloak-authurl"
+    value: "'https://sso.chaos.jetzt/auth/realms/chaos-jetzt/protocol/openid-connect/auth'"
+  - name: "plugin>oauth>keycloak-tokenurl"
+    value: "'https://sso.chaos.jetzt/auth/realms/chaos-jetzt/protocol/openid-connect/token'"
+  - name: "plugin>oauth>keycloak-userinfourl"
+    value: "'https://sso.chaos.jetzt/auth/realms/chaos-jetzt/protocol/openid-connect/userinfo'"
+#  - name: "plugin>oauth>singleService"
+#    value: "'Keycloak'"
 
 dokuwiki_addional_acronyms:
   - short: CCC
