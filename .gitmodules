@@ -58,3 +58,6 @@
 [submodule "roles/chaos-jetzt.freescout"]
 	path = roles/chaos_jetzt.freescout
 	url = https://github.com/chaos-jetzt/ansible-role-freescout.git
+[submodule "roles/n0emis.louketo"]
+	path = roles/n0emis.louketo
+	url = https://git.n0emis.eu/ansible_roles/louketo

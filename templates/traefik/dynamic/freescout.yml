@@ -18,4 +18,4 @@ http:
     freescout-app:
       loadBalancer:
         servers:
-          - url: "http://localhost:89"
+          - url: "http://localhost:{{ freescout_louketo_port }}"

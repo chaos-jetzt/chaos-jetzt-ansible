@@ -85,6 +85,11 @@
 
 - hosts: web
   roles:
+    - n0emis.louketo
+  tags: louketo
+
+- hosts: web
+  roles:
     - docker
     - matrix-appservice-irc
   tags:
@@ -120,6 +125,23 @@
   roles:
     - geerlingguy.mysql
     - chaos_jetzt.freescout
+  tasks:
+    - name: clone the httpheaderauth-module
+      git:
+        repo: 'https://github.com/chaos-jetzt/freescout-module-httpheaderauth.git'
+        dest: "{{ freescout_basedir }}/Modules/HttpHeaderAuth"
+    - name: enable the HttpHeaderAuth module
+      become: yes
+      become_user: "{{ freescout_user }}"
+      command:
+        cmd: "php artisan module:enable HttpHeaderAuth"
+        chdir: "{{ freescout_basedir }}"
+    - name: migrate the HttpHeaderAuth module
+      become: yes
+      become_user: "{{ freescout_user }}"
+      command:
+        cmd: "php artisan module:migrate HttpHeaderAuth -n --force"
+        chdir: "{{ freescout_basedir }}"
   tags: freescout
 
 - hosts: web

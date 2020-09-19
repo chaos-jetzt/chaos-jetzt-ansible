@@ -1,6 +1,6 @@
 server {
-	listen 89;
-	listen [::]:89;
+	listen {{ freescout_nginx_port }};
+	listen [::]:{{ freescout_nginx_port }};
 
 	server_name _;
 	set $base {{ freescout_basedir }};

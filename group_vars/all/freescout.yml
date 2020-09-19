@@ -10,6 +10,9 @@ freescout_admin_user:
   lastName: Jetzt
   password: "{{ lookup('passwordstore', 'infra/freescout/admin') }}"
 
+freescout_nginx_port: 89
+freescout_louketo_port: 8089
+
 freescout_basedir: /var/www/freescout
 freescout_source: git
 freescout_source_git_version: 1.5.11
