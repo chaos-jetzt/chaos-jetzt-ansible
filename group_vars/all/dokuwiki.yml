@@ -40,6 +40,8 @@ dokuwiki_additonal_configuration:
     value: 1
   - name: "authtype"
     value: "'oauth'"
+  - name: "disableactions"
+    value: "'register'"
   - name: mailfrom
     value: "'wiki@{{ mail_base_domain }}'"
   - name: "plugin>smtp>smtp_host"
@@ -72,6 +74,8 @@ dokuwiki_additonal_configuration:
     value: "'https://sso.chaos.jetzt/auth/realms/chaos-jetzt/protocol/openid-connect/token'"
   - name: "plugin>oauth>keycloak-userinfourl"
     value: "'https://sso.chaos.jetzt/auth/realms/chaos-jetzt/protocol/openid-connect/userinfo'"
+  - name: "plugin>oauth>register-on-auth"
+    value: "1"
 #  - name: "plugin>oauth>singleService"
 #    value: "'Keycloak'"
 
