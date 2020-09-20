@@ -9,6 +9,7 @@ dokuwiki_plugins:
   - nspages
   - move
   - icalevents
+  - legalnotice
   - name: "oauth"
     source: https://github.com/wintamute/dokuwiki-plugin-oauth
     source_type: git
@@ -76,6 +77,11 @@ dokuwiki_additonal_configuration:
     value: "'https://sso.chaos.jetzt/auth/realms/chaos-jetzt/protocol/openid-connect/userinfo'"
   - name: "plugin>oauth>register-on-auth"
     value: "1"
+  - name: "plugin>legalnotice>text"
+    value: |
+      'Ab dem 10.10. ist der Login nur noch über Kecloak möglich. Bis dahin müssen alle bestehnden Accounts umgezogen werden.
+  
+      Erstellt euch dafür einen Account auf [[https://sso.chaos.jetzt]], meldet euch mit euren alten Zugansdaten hier an, navigiert in euer **Benutzerprofil** und aktiviert unter **Mit anderen Services anmelden:** keykloak. Nun könnt ihr euch abmelden und via Keykloak anmelden.'
 #  - name: "plugin>oauth>singleService"
 #    value: "'Keycloak'"
 
