@@ -12,6 +12,8 @@ http:
       service: "freescout-app@file"
       entryPoints:
         - "https"
+      middlewares:
+        - "removeAuthHeaders"
       tls:
         certResolver: "le_http"
   services:
@@ -19,3 +21,16 @@ http:
       loadBalancer:
         servers:
           - url: "http://localhost:{{ freescout_louketo_port }}"
+  middlewares:
+    removeAuthHeaders:
+      headers:
+        customRequestHeaders:
+          X-Auth-Email: ""
+          X-Auth-Audience: ""
+          X-Auth-ExpiresIn: ""
+          X-Auth-Groups: ""
+          X-Auth-Roles: ""
+          X-Auth-Subject: ""
+          X-Auth-Token: ""
+          X-Auth-UserID: ""
+          X-Auth-Username: ""
