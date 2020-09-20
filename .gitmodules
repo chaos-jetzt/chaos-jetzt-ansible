@@ -58,9 +58,6 @@
 [submodule "roles/geerlingguy.docker"]
 	path = roles/geerlingguy.docker
 	url = https://github.com/geerlingguy/ansible-role-docker
-[submodule "roles/n0emis.bigbluebutton"]
-	path = roles/n0emis.bigbluebutton
-	url = https://github.com/n0emis/ansible-role-bigbluebutton
 [submodule "roles/chaos_jetzt.venueless"]
 	path = roles/chaos_jetzt.venueless
 	url = https://github.com/chaos-jetzt/ansible-role-venueless

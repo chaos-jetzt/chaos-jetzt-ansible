@@ -7,6 +7,3 @@ dev.chaos.jetzt
 
 [prod]
 chaos.jetzt
-
-[bbb]
-bbb-test.het.nue.de.n0emis.eu ansible_user=root

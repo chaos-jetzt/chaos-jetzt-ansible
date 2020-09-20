@@ -230,8 +230,3 @@
   roles:
     - chaos_jetzt.venueless
   tags: venueless
-
-- hosts: bbb
-  roles:
-    - n0emis.bigbluebutton
-  tags: bbb
