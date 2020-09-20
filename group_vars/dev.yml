@@ -1,5 +1,6 @@
 ---
 base_url: dev.chaos.jetzt
+sso_base_url: "https://sso.chaos.jetzt/auth/realms/dev"
 
 synapse_log_level: "DEBUG"
 synapse_root_log_level: "DEBUG"

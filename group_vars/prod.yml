@@ -1,2 +1,3 @@
 ---
 base_url: chaos.jetzt
+sso_base_url: "https://sso.chaos.jetzt/auth/realms/chaos-jetzt"
