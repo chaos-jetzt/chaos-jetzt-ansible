@@ -63,3 +63,19 @@ dokuwiki_additonal_configuration:
 dokuwiki_addional_acronyms:
   - short: CCC
     long: Chaos Computer Club e.V.
+  - short: PR
+    long: Pull Request
+  - short: pr
+    long: Pull Request
+  - short: GH
+    long: GitHub
+  - short: gh
+    long: GitHub
+  - short: SSO
+    long: Single Sign-on
+  - short: sso
+    long: Single Sign-on
+  - short: CTFL
+    long: Chaostreff Flensburg e.V.
+  - short: ctfl
+    long: Chaostreff Flensburg e.V.
