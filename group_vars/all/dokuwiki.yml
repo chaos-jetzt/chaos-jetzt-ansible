@@ -67,7 +67,7 @@ dokuwiki_additonal_configuration:
   - name: "plugin>icalevents>template:custom1"
     value: "'=== {date}: {summary} ===\n{description}\n**Wo?**: {location_link}'"
   - name: "plugin>oauth>keycloak-key"
-    value: "wiki"
+    value: "'wiki'"
   - name: "plugin>oauth>keycloak-authurl"
     value: "'https://sso.chaos.jetzt/auth/realms/chaos-jetzt/protocol/openid-connect/auth'"
   - name: "plugin>oauth>keycloak-tokenurl"
