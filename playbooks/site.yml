@@ -132,11 +132,17 @@
       git:
         repo: 'https://github.com/chaos-jetzt/freescout-module-httpheaderauth.git'
         dest: "{{ freescout_basedir }}/Modules/HttpHeaderAuth"
+    - name: install the HttpHeaderAuth module
+      become: yes
+      become_user: "{{ freescout_user }}"
+      command:
+        cmd: "php artisan freescout:module-install httpheaderauth"
+        chdir: "{{ freescout_basedir }}"
     - name: enable the HttpHeaderAuth module
       become: yes
       become_user: "{{ freescout_user }}"
       command:
-        cmd: "php artisan module:enable HttpHeaderAuth"
+        cmd: "php artisan module:enable httpheaderauth"
         chdir: "{{ freescout_basedir }}"
     - name: migrate the HttpHeaderAuth module
       become: yes
