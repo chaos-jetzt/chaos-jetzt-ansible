@@ -4,21 +4,24 @@
     name: firewalld
     state: present
 
-- firewalld:
+- name: Open SSH-Port in firewall
+  firewalld:
     service: ssh
     permanent: yes
     state: enabled
     immediate: yes
 #this is seperate so you don't accidentally remove it
 
-- firewalld:
+- name: Open services in firewall
+  firewalld:
     service: "{{ item }}"
     permanent: yes
     state: enabled
     immediate: yes
   with_items: "{{ firewall_services }}"
 
-- firewalld:
+- name: Open ports in firewall
+  firewalld:
     port: "{{ item }}"
     permanent: yes
     state: enabled
@@ -30,3 +33,11 @@
     name: firewalld
     enabled: yes
     state: started
+
+- name: Add docker ips to trusted zone
+  firewalld:
+    source: 172.17.0.0/16
+    zone: trusted
+    permanent: yes
+    state: enabled
+  notify: reload firewalld
