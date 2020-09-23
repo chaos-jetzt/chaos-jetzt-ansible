@@ -9,6 +9,8 @@ postgresql_users:
     password: "{{ keycloak_postgresql_password }}"
   - name: "{{ venueless_database_user }}"
     password: "{{ venueless_database_password }}"
+  - name: "{{ freescout_db_username }}"
+    password: "{{ freescout_db_password }}"
 postgresql_databases:
   - name: "{{ pretix_database_name }}"
     owner: "{{ pretix_database_user }}"
@@ -20,6 +22,8 @@ postgresql_databases:
     owner: "{{ keycloak_postgresql_username }}"
   - name: "{{ venueless_database_name }}"
     owner: "{{ venueless_database_user }}"
+  - name: "{{ freescout_db_database }}"
+    owner: "{{ freescout_db_username }}"
 
 postgresql_global_config_options:
   - option: unix_socket_directories

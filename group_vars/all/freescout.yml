@@ -15,7 +15,7 @@ freescout_louketo_port: 8089
 
 freescout_basedir: /var/www/freescout
 freescout_source: git
-freescout_source_git_version: 1.5.11
+freescout_source_git_version: 1.6.0
 freescout_user: www-data
 freescout_config:
   - name: app_url
@@ -23,11 +23,11 @@ freescout_config:
   - name: app_force_https
     value: "true"
   - name: db_connection
-    value: mysql
+    value: pgsql
   - name: db_host
     value: localhost
   - name: db_port
-    value: 3306
+    value: 5432
   - name: db_database
     value: "{{ freescout_db_database }}"
   - name: db_username
