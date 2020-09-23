@@ -52,9 +52,6 @@
 [submodule "roles/geerlingguy.java"]
 	path = roles/geerlingguy.java
 	url = https://github.com/geerlingguy/ansible-role-java.git
-[submodule "roles/geerlingguy.mysql"]
-	path = roles/geerlingguy.mysql
-	url = https://github.com/geerlingguy/ansible-role-mysql.git
 [submodule "roles/chaos-jetzt.freescout"]
 	path = roles/chaos_jetzt.freescout
 	url = https://github.com/chaos-jetzt/ansible-role-freescout.git

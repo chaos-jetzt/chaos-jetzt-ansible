@@ -123,7 +123,6 @@
 
 - hosts: web
   roles:
-    - geerlingguy.mysql
     - chaos_jetzt.freescout
   tasks:
     - name: clone the httpheaderauth-module
