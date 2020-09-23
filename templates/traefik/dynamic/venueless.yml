@@ -1,0 +1,21 @@
+http:
+  routers:
+    venueless_http:
+      rule: "Host(`venue.{{ base_url }}`)"
+      service: "venueless-app@file"
+      entryPoints:
+        - "http"
+      middlewares:
+        - "https_redirect"
+    venueless_https:
+      rule: "Host(`venue.{{ base_url }}`)"
+      service: "venueless-app@file"
+      entryPoints:
+        - "https"
+      tls:
+        certResolver: "le_http"
+  services:
+    venueless-app:
+      loadBalancer:
+        servers:
+          - url: "http://localhost:{{ venueless_port }}"

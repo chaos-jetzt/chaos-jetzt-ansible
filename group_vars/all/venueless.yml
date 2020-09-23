@@ -1,0 +1,8 @@
+---
+venueless_database_name: "venueless"
+venueless_database_user: "{{ lookup('passwordstore', 'infra/venueless/db subkey=user') }}"
+venueless_database_password: "{{ lookup('passwordstore', 'infra/venueless/db') }}"
+venueless_redis_password: "{{ redis_requirepass }}"
+
+venueless_port: "8002"
+venueless_listen: "127.0.0.1:{{ venueless_port }}"

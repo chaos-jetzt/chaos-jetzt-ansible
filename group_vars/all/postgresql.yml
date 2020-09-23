@@ -7,6 +7,8 @@ postgresql_users:
     password: "{{ synapse_database_password }}"
   - name: "{{ keycloak_postgresql_username }}"
     password: "{{ keycloak_postgresql_password }}"
+  - name: "{{ venueless_database_user }}"
+    password: "{{ venueless_database_password }}"
 postgresql_databases:
   - name: "{{ pretix_database_name }}"
     owner: "{{ pretix_database_user }}"
@@ -16,3 +18,18 @@ postgresql_databases:
     lc_ctype: 'C'
   - name: "{{ keycloak_postgresql_database }}"
     owner: "{{ keycloak_postgresql_username }}"
+  - name: "{{ venueless_database_name }}"
+    owner: "{{ venueless_database_user }}"
+
+postgresql_global_config_options:
+  - option: unix_socket_directories
+    value: '{{ postgresql_unix_socket_directories | join(",") }}'
+  - option: listen_addresses
+    value: 'localhost,172.17.0.1'
+
+postgresql_hba_entries:
+  - { type: local, database: all, user: postgres, auth_method: peer }
+  - { type: local, database: all, user: all, auth_method: peer }
+  - { type: host, database: all, user: all, address: '127.0.0.1/32', auth_method: md5 }
+  - { type: host, database: all, user: all, address: '::1/128', auth_method: md5 }
+  - { type: host, database: "{{ venueless_database_name }}", user: "{{ venueless_database_user }}", address: '172.17.0.1/16', auth_method: md5 }

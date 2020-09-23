@@ -69,6 +69,7 @@
     - pretix
     - matrix
     - keycloak
+    - venueless
 
 - hosts: web
   roles:
@@ -90,7 +91,13 @@
 
 - hosts: web
   roles:
-    - docker
+    - geerlingguy.docker
+  tags:
+    - matrix
+    - venueless
+
+- hosts: web
+  roles:
     - matrix-appservice-irc
   tags:
     - matrix
@@ -197,6 +204,12 @@
 - hosts: web
   roles:
     - geerlingguy.redis
+  tags:
+    - pretix
+    - venueless
+
+- hosts: web
+  roles:
     - em0lar.pretix
   tags: pretix
 
@@ -244,3 +257,8 @@
         groups: "ssl-cert"
         append: yes
   tags: mumble
+
+- hosts: web
+  roles:
+    - chaos_jetzt.venueless
+  tags: venueless
