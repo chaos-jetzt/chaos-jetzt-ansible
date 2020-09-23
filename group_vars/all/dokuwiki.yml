@@ -9,6 +9,10 @@ dokuwiki_plugins:
   - nspages
   - move
   - icalevents
+  - legalnotice
+  - name: "oauth"
+    source: https://github.com/wintamute/dokuwiki-plugin-oauth
+    source_type: git
   - name: popularity
     state: absent
   - name: authad
@@ -35,6 +39,10 @@ dokuwiki_additonal_configuration:
     value: 1
   - name: useslash
     value: 1
+  - name: "authtype"
+    value: "'oauth'"
+  - name: "disableactions"
+    value: "'register'"
   - name: mailfrom
     value: "'wiki@{{ mail_base_domain }}'"
   - name: "plugin>smtp>smtp_host"
@@ -59,6 +67,23 @@ dokuwiki_additonal_configuration:
     value: "'=== {date}: {summary} ===\n**<sup>Location: {location}</sup>**\n{description}'"
   - name: "plugin>icalevents>template:custom1"
     value: "'=== {date}: {summary} ===\n{description}\n**Wo?**: {location_link}'"
+  - name: "plugin>oauth>keycloak-key"
+    value: "'wiki'"
+  - name: "plugin>oauth>keycloak-authurl"
+    value: "'{{ sso_base_url }}/protocol/openid-connect/auth'"
+  - name: "plugin>oauth>keycloak-tokenurl"
+    value: "'{{ sso_base_url }}/protocol/openid-connect/token'"
+  - name: "plugin>oauth>keycloak-userinfourl"
+    value: "'{{ sso_base_url }}/protocol/openid-connect/userinfo'"
+  - name: "plugin>oauth>register-on-auth"
+    value: "1"
+  - name: "plugin>legalnotice>text"
+    value: |
+      'Ab dem 21.10.2020 ist der Login nur noch über Keycloak möglich. Bis dahin müssen alle bestehenden Accounts umgezogen werden.
+  
+      Erstellt euch dafür einen Account auf [[https://sso.chaos.jetzt]], meldet euch mit euren alten Zugangsdaten hier an, navigiert in euer **Benutzerprofil** und aktiviert unter **Mit anderen Services anmelden:** Keycloak. Ab dann könnt ihr euch mit Keycloak anmelden.'
+#  - name: "plugin>oauth>singleService"
+#    value: "'Keycloak'"
 
 dokuwiki_addional_acronyms:
   - short: CCC
