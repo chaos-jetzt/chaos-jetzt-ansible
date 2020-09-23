@@ -127,6 +127,8 @@
     - chaos_jetzt.freescout
   tasks:
     - name: clone the httpheaderauth-module
+      become: yes
+      become_user: "{{ freescout_user }}"
       git:
         repo: 'https://github.com/chaos-jetzt/freescout-module-httpheaderauth.git'
         dest: "{{ freescout_basedir }}/Modules/HttpHeaderAuth"
