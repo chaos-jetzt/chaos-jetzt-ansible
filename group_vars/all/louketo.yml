@@ -1,0 +1,12 @@
+---
+louketo_instances:
+  - name: freescout
+    config: |
+      client-id: freescout
+      discovery-url: {{ sso_base_url }}
+      enable-default-deny: false
+      listen: 127.0.0.1:{{ freescout_louketo_port }}
+      upstream-url: http://localhost:{{ freescout_nginx_port }}
+      resources:
+        - uri: /login*
+    state: present
