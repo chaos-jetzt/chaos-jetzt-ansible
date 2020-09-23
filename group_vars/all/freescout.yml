@@ -23,11 +23,11 @@ freescout_config:
   - name: app_force_https
     value: "true"
   - name: db_connection
-    value: mysql
+    value: pgsql
   - name: db_host
     value: localhost
   - name: db_port
-    value: 3306
+    value: 5432
   - name: db_database
     value: "{{ freescout_db_database }}"
   - name: db_username

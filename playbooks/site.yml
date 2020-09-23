@@ -69,6 +69,7 @@
     - pretix
     - matrix
     - keycloak
+    - freescout
 
 - hosts: web
   roles:

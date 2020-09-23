@@ -7,6 +7,8 @@ postgresql_users:
     password: "{{ synapse_database_password }}"
   - name: "{{ keycloak_postgresql_username }}"
     password: "{{ keycloak_postgresql_password }}"
+  - name: "{{ freescout_db_username }}"
+    password: "{{ freescout_db_password }}"
 postgresql_databases:
   - name: "{{ pretix_database_name }}"
     owner: "{{ pretix_database_user }}"
@@ -16,3 +18,5 @@ postgresql_databases:
     lc_ctype: 'C'
   - name: "{{ keycloak_postgresql_database }}"
     owner: "{{ keycloak_postgresql_username }}"
+  - name: "{{ freescout_db_database }}"
+    owner: "{{ freescout_db_username }}"
