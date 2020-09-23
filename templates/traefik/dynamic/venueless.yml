@@ -18,4 +18,4 @@ http:
     venueless-app:
       loadBalancer:
         servers:
-          - url: "http://localhost:8002"
+          - url: "http://localhost:{{ venueless_port }}"
