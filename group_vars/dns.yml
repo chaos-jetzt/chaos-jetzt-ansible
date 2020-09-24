@@ -1,0 +1,29 @@
+---
+powerdns_base_directory: "/var/lib/powerdns"
+
+pdns_install_repo: "{{ pdns_auth_powerdns_repo_43 }}"
+pdns_config:
+  master: yes
+  allow-axfr-ips: "216.218.133.2,2001:470:600::2,127.0.0.1,::1"
+  expand-alias: yes
+  resolver: "2606:4700:4700::1111,2606:4700:4700::1001,1.1.1.1,8.8.8.8"
+
+pdns_backends:
+  bind:
+    config: "{{ powerdns_base_directory }}/bind/named.conf"
+    check-interval: 60
+
+pdns_backends_packages:
+  bind: pdns-backend-bind
+  geo: pdns-backend-geo
+  geoip: pdns-backend-geoip
+  gmysql: pdns-backend-mysql
+  gpgsql: pdns-backend-pgsql
+  gsqlite3: pdns-backend-sqlite3
+  ldap: pdns-backend-ldap
+  lmdb: pdns-backend-lmdb
+  lua: pdns-backend-lua
+  mydns: pdns-backend-mydns
+  pipe: pdns-backend-pipe
+  remote: pdns-backend-remote
+  tinydns: pdns-backend-tinydns

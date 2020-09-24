@@ -1,0 +1,8 @@
+options {
+    directory "{{ powerdns_base_directory }}/bind";
+};
+
+zone "chaos.jetzt" IN {
+	type master;
+	file "zones/chaos.jetzt";
+};

@@ -1,0 +1,54 @@
+$ORIGIN chaos.jetzt.
+@ 3600 IN SOA ns.chaos.jetzt. administration.chaos.jetzt.  (
+    2020091401 ; serial ;;; UPDATE THIS AFTER EACH EDIT!
+    3600       ; refresh (1 hour)
+    1800       ; retry (30 min)
+    604800     ; expire (168 days)
+    3600       ; minimum (1 hour)
+)
+
+@ 3600 IN NS ns1.he.net.
+@ 3600 IN NS ns2.he.net.
+@ 3600 IN NS ns3.he.net.
+@ 3600 IN NS ns4.he.net.
+@ 3600 IN NS ns5.he.net.
+
+ns IN A {{ ansible_default_ipv4.address }}
+ns IN AAAA {{ ansible_default_ipv6.address }}
+
+;; MAIL
+;;;; MX
+@ 3600 IN MX 20 mxext3.mailbox.org.
+@ 3600 IN MX 10 mxext1.mailbox.org.
+@ 3600 IN MX 10 mxext2.mailbox.org.
+
+;;;; SPF
+@ 3600 IN TXT "v=spf1 include:mailbox.org ~all"
+
+;;;; DKIM
+MBO0001._domainkey 3600 IN TXT "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2K4PavXoNY8eGK2u61LIQlOHS8f5sWsCK5b+HMOfo0M+aNHwfqlVdzi/IwmYnuDKuXYuCllrgnxZ4fG4yVaux58v9grVsFHdzdjPlAQfp5rkiETYpCMZwgsmdseJ4CoZaosPHLjPumFE/Ua2WAQQljnunsM9TONM9L6KxrO9t5IISD1XtJb0bq1lVI/e72k3mnPd/q77qzhTDmwN4TSNJZN8sxzUJx9HNSMRRoEIHSDLTIJUK+Up8IeCx0B7CiOzG5w/cHyZ3AM5V8lkqBaTDK46AwTkTVGJf59QxUZArG3FEH5vy9HzDmy0tGG+053/x4RqkhqMg5/ClDm+lpZqWwIDAQAB"
+MBO0002._domainkey 3600 IN TXT "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqxEKIg2c48ecfmy/+rj35sBOhdfIYGNDCMeHy0b36DX6MNtS7zA/VDR2q5ubtHzraL5uUGas8kb/33wtrWFYxierLRXy12qj8ItdYCRugu9tXTByEED05WdBtRzJmrb8YBMfeK0E0K3wwoWfhIk/wzKbjMkbqYBOTYLlIcVGQWzOfN7/n3n+VChfu6sGFK3k2qrJNnw22iFy4C8Ks7j77+tCpm0PoUwA2hOdLrRw3ldx2E9PH0GVwIMJRgekY6cS7DrbHrj/AeGlwfwwCSi9T23mYvc79nVrh2+82ZqmkpZSTD2qq+ukOkyjdRuUPck6e2b+x141Nzd81dIZVfOEiwIDAQAB"
+
+;; TXT - Verify
+_github-challenge-chaos-jetzt.chaos.jetzt. 3600 IN TXT "db12da3d46"
+{{ lookup('passwordstore', 'infra/dns/mailbox.org subkey=record') }} 3600 IN TXT "{{ lookup('passwordstore', 'infra/dns/mailbox.org') }}"
+
+;; Pages
+@ 3600 IN A 116.203.213.151
+@ 3600 IN AAAA 2a01:4f8:c2c:893c::1
+wiki 3600 IN CNAME chaos.jetzt.
+support 3600 IN CNAME chaos.jetzt.
+sso 3600 IN CNAME chaos.jetzt.
+bot 3600 IN CNAME chaos.jetzt.
+mumble 3600 IN CNAME chaos.jetzt.
+pretix 3600 IN CNAME chaos.jetzt.
+tickets 3600 IN CNAME chaos.jetzt.
+chat 3600 IN CNAME chaos.jetzt.
+matrix 3600 IN CNAME chaos.jetzt.
+venue 3600 IN CNAME chaos.jetzt.
+
+altes 3600 IN CNAME ccc.de
+
+dev 3600 IN A 94.130.107.245
+dev 3600 IN AAAA 2a01:4f8:c0c:83eb::1
+*.dev 3600 IN CNAME dev

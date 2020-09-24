@@ -270,3 +270,33 @@
   roles:
     - chaos_jetzt.venueless
   tags: venueless
+
+- hosts: dns
+  roles:
+    - powerdns.pdns
+  tasks:
+    - name: Create Bind-Zones directory
+      file:
+        path: "{{ powerdns_base_directory }}/bind/zones"
+        mode: 0755
+        owner: pdns
+        group: pdns
+        recurse: yes
+        state: directory
+
+    - name: Upload named.conf
+      template:
+        src: "../files/powerdns/named.conf.j2"
+        dest: "{{ powerdns_base_directory }}/bind/named.conf"
+        mode: 0644
+      notify: restart powerdns
+
+    - name: Copy zone files
+      template:
+        src: "{{ item }}"
+        dest: "{{ powerdns_base_directory }}/bind/zones"
+        owner: pdns
+        group: pdns
+        mode: 0755
+      with_fileglob: "../files/powerdns/zones/*"
+  tags: dns

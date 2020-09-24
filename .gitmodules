@@ -61,3 +61,6 @@
 [submodule "roles/chaos_jetzt.venueless"]
 	path = roles/chaos_jetzt.venueless
 	url = https://github.com/chaos-jetzt/ansible-role-venueless
+[submodule "roles/powerdns.pdns"]
+	path = roles/powerdns.pdns
+	url = https://github.com/PowerDNS/pdns-ansible.git
