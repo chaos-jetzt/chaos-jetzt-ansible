@@ -23,7 +23,7 @@
     - firewalld
   tags: firewall
 
-- hosts: web
+- hosts: web,matrix
   roles:
     - em0lar.traefik
   tasks:
@@ -62,7 +62,7 @@
   tags:
     - traefik
 
-- hosts: web
+- hosts: web,matrix
   roles:
     - geerlingguy.postgresql
   tags:
@@ -90,14 +90,14 @@
     - n0emis.louketo
   tags: louketo
 
-- hosts: web
+- hosts: web,matrix
   roles:
     - geerlingguy.docker
   tags:
     - matrix
     - venueless
 
-- hosts: web
+- hosts: matrix
   roles:
     - matrix-appservice-irc
   tags:
@@ -164,18 +164,18 @@
     - website
   tags: website
 
-- hosts: web
+- hosts: matrix
   roles:
     - systemli.coturn
     - n0emis.synapse
   tags: matrix
 
-- hosts: web
+- hosts: matrix
   roles:
     - maubot
   tags: matrix, maubot
 
-- hosts: web
+- hosts: matrix
   roles:
     - geerlingguy.nginx
     - riot-web
