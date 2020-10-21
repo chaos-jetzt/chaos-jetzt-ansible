@@ -77,9 +77,6 @@ dokuwiki_additonal_configuration:
     value: "'{{ sso_base_url }}/protocol/openid-connect/userinfo'"
   - name: "plugin>oauth>register-on-auth"
     value: "1"
-  - name: "plugin>legalnotice>text"
-    value: |
-      'Seit dem 21.10.2020 ist der Login nur noch über Keycloak möglich. Wenn du deinen alten Account verknüpfen möchtest, sag uns bitte unter administration <AT> chaos <DOT> jetzt bescheid.'
   - name: "plugin>oauth>singleService"
     value: "'Keycloak'"
 
