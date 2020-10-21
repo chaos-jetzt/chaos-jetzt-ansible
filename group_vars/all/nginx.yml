@@ -1,16 +1,5 @@
 ---
 nginx_remove_default_vhost: true
 nginx_user: www-data
-nginx_vhosts:
-  - filename: "website.conf"
-    server_name: "_"
-    template: "{{ playbook_dir }}/../templates/nginx/website.conf.j2"
-  - filename: "dokuwiki.conf"
-    server_name: "_"
-    template: "{{ playbook_dir }}/../templates/nginx/dokuwiki.conf.j2"
-  - filename: "riot-web.conf"
-    server_name: "_"
-    template: "{{ playbook_dir }}/../templates/nginx/element.conf.j2"
-  - filename: "freescout.conf"
-    server_name: "_"
-    template: "{{ playbook_dir }}/../templates/nginx/freescout.conf.j2"
+nginx_vhosts_paths: "[{% for group in groups %}'../templates/nginx/{{ group }}',{% endfor %}]"
+nginx_vhosts: "[{% for path in nginx_vhosts_paths %}{% for file in lookup('fileglob', path + '/*', wantlist=True) %}{ 'server_name': '_', 'filename': '{{ file.split('/')[-1].replace('.j2', '') }}', 'template': '{{ file }}' },{% endfor %}{% endfor %}]"
