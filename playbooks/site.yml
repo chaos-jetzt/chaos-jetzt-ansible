@@ -69,8 +69,8 @@
 
 - hosts: web
   roles:
-#    - geerlingguy.java
-#    - em0lar.keycloak
+    - geerlingguy.java
+    - em0lar.keycloak
     - mrlesmithjr.openldap
   tasks:
     - name: deploy custom keycloak-theme
