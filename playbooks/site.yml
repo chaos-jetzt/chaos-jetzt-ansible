@@ -89,7 +89,6 @@
         dest: "{{ keycloak_jboss_home }}/standalone/deployments/"
         owner: "{{ keycloak_service_user }}"
         group: "{{ keycloak_service_group }}"
-      notify: restart keycloak
   tags: keycloak
 
 - hosts: web
