@@ -18,4 +18,4 @@ http:
     riot-web-app:
       loadBalancer:
         servers:
-          - url: "http://{{ ansible_fqdn }}:88"
+          - url: "http://127.0.0.1:88"

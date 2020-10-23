@@ -20,7 +20,7 @@ plugin_directories:
 
 server:
     # The IP and port to listen to.
-    hostname: 0.0.0.0
+    hostname: 127.0.0.1
     port: 87
     # Public base URL where the server is visible.
     public_url: https://bot.{{ base_url }}

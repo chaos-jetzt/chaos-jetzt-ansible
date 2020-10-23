@@ -18,4 +18,4 @@ http:
     website-app:
       loadBalancer:
         servers:
-          - url: "http://{{ ansible_fqdn }}:81"
+          - url: "http://127.0.0.1:81"

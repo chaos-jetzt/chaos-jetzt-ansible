@@ -1,6 +1,6 @@
 server {
-	listen {{ freescout_nginx_port }};
-	listen [::]:{{ freescout_nginx_port }};
+	listen 127.0.0.1:{{ freescout_nginx_port }};
+	listen [::1]:{{ freescout_nginx_port }};
 
 	server_name _;
 	set $base {{ freescout_basedir }};
