@@ -7,6 +7,9 @@ keycloak_external_url: "sso.{{ base_url }}"
 keycloak_http_port: 8081
 keycloak_welcome_theme: "cj-keycloak-theme"
 keycloak_profile_preview: true
-keycloak_version: 11.0.0
+keycloak_version: 11.0.2
 
 keycloak_admin_password: "{{ lookup('passwordstore', 'infra/keycloak/admin') }}"
+
+keycloak_registration_captcha_version: "1.1.0"
+keycloak_registration_captcha_url: "https://github.com/chaos-jetzt/keycloak-registration-captcha/releases/download/v{{ keycloak_registration_captcha_version }}/registration-captcha.jar"
