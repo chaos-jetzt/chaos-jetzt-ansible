@@ -11,3 +11,9 @@ openldap_config: true
 openldap_populate: true
 openldap_posixgroups: []
 openldap_users: []
+
+openldap_overlays_and_acls:
+  - name: access
+    ldifs:
+      - path: access.ldif
+        action: add
