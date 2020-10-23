@@ -83,6 +83,13 @@
         repo: 'https://github.com/chaos-jetzt/cj-keycloak-theme.git'
         dest: "{{ keycloak_jboss_home }}/themes/cj-keycloak-theme"
       notify: restart keycloak
+    - name: deploy captcha plugin
+      get_url:
+        url: "{{ keycloak_registration_captcha_url }}"
+        dest: "{{ keycloak_jboss_home }}/standalone/deployments/"
+        owner: "{{ keycloak_service_user }}"
+        group: "{{ keycloak_service_group }}"
+      notify: restart keycloak
   tags: keycloak
 
 - hosts: web
