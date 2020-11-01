@@ -15,7 +15,7 @@ freescout_louketo_port: 8089
 
 freescout_basedir: /var/www/freescout
 freescout_source: git
-freescout_source_git_version: 1.6.0
+freescout_source_git_version: 1.6.6
 freescout_user: www-data
 freescout_config:
   - name: app_url
