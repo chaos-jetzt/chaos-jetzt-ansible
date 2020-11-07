@@ -1,5 +1,5 @@
 ---
-pretix_version: "3.10.0"
+pretix_version: "3.12.0"
 pretix_bind_address: "0.0.0.0:83"
 pretix_base_path: "/opt/pretix"
 pretix_config_path: "/etc/pretix"
