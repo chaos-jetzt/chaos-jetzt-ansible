@@ -18,4 +18,4 @@ http:
     maubot-app:
       loadBalancer:
         servers:
-          - url: "http://{{ ansible_fqdn }}:87"
+          - url: "http://127.0.0.1:87"

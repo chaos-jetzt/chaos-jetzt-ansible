@@ -18,4 +18,4 @@ http:
     pretix-app:
       loadBalancer:
         servers:
-          - url: "http://{{ ansible_fqdn }}:83"
+          - url: "http://{{ pretix_bind_address }}"
