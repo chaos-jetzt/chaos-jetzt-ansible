@@ -1,14 +1,14 @@
 http:
   routers:
     pretix_http:
-      rule: "Host(`pretix.{{ base_url }}`)"
+      rule: "Host(`pretix.{{ base_url }}`) || Host(`tickets.{{ base_url }}`)"
       service: "pretix-app@file"
       entryPoints:
         - "http"
       middlewares:
         - "https_redirect"
     pretix_https:
-      rule: "Host(`pretix.{{ base_url }}`)"
+      rule: "Host(`pretix.{{ base_url }}`) || Host(`tickets.{{ base_url }}`)"
       service: "pretix-app@file"
       entryPoints:
         - "https"
