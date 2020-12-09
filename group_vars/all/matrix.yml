@@ -13,7 +13,7 @@ synapse_enable_group_creation: true
 synapse_enable_registration: true
 synapse_domain: "{{ base_url }}"
 synapse_server_fqdn_matrix: "matrix.{{ synapse_domain }}"
-synapse_pip_version: "1.22.1"
+synapse_pip_version: "1.24.0"
 synapse_pip_packages_additional:
   - "git+https://github.com/chaos-jetzt/matrix-synapse-saml-mapper"
 synapse_auto_join_rooms:
