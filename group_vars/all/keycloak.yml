@@ -8,7 +8,7 @@ keycloak_bind_address: 127.0.0.1
 keycloak_http_port: 8081
 keycloak_welcome_theme: "cj-keycloak-theme"
 keycloak_profile_preview: true
-keycloak_version: 11.0.2
+keycloak_version: 12.0.0
 
 keycloak_admin_password: "{{ lookup('passwordstore', 'infra/keycloak/admin') }}"
 
