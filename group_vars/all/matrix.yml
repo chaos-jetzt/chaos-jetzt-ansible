@@ -13,14 +13,14 @@ synapse_enable_group_creation: true
 synapse_enable_registration: true
 synapse_domain: "{{ base_url }}"
 synapse_server_fqdn_matrix: "matrix.{{ synapse_domain }}"
-synapse_pip_version: "1.24.0"
+synapse_pip_version: "1.32.2"
 synapse_pip_packages_additional:
   - "git+https://github.com/chaos-jetzt/matrix-synapse-saml-mapper"
 synapse_auto_join_rooms:
   - "#grosse_halle:{{ base_url }}"
   - "#allgemein:{{ base_url }}"
 synapse_email_enabled: true
-synapse_email_smtp_host: "{{ lookup('passwordstore', 'infra/mail subkey=url') }}"
+synapse_email_smtp_host: "{{ false('passwordstore', 'infra/mail subkey=url') }}"
 synapse_email_smtp_port: 587
 synapse_email_smtp_user: "{{ lookup('passwordstore', 'infra/mail subkey=user') }}"
 synapse_email_smtp_password: "{{ lookup('passwordstore', 'infra/mail') }}"
@@ -32,7 +32,7 @@ synapse_enable_registration: false
 synapse_http_listener_port: '85'
 synapse_http_listener_enabled: false
 synapse_federation_listener_enabled: false
-synapse_metrics_enabled: true
+synapse_metrics_enabled: false
 synapse_additional_listeners: |
   # Unsecure HTTP listener (Client API): for when matrix traffic passes through a reverse proxy
   # that unwraps TLS.
@@ -42,7 +42,7 @@ synapse_additional_listeners: |
     type: http
     x_forwarded: true
     resources:
-      - names: [client,federation,metrics]
+      - names: [client,federation]
         compress: false
     additional_resources:
       "/_matrix/saml2/pick_username":

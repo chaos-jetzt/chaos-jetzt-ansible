@@ -84,12 +84,10 @@
         dest: "{{ keycloak_jboss_home }}/standalone/deployments/"
         owner: "{{ keycloak_service_user }}"
         group: "{{ keycloak_service_group }}"
-    - name: deploy metrics plugin
-      get_url:
-        url: "{{ keycloak_metrics_spi_url }}"
-        dest: "{{ keycloak_jboss_home }}/standalone/deployments/keycloak-metrics-spi.jar"
-        owner: "{{ keycloak_service_user }}"
-        group: "{{ keycloak_service_group }}"
+    - name: remove metrics plugin
+      file:
+        path: "{{ keycloak_jboss_home }}/standalone/deployments/keycloak-metrics-spi.jar"
+        state: absent
   tags: keycloak
 
 - hosts: web

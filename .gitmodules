@@ -33,7 +33,7 @@
 	url = https://github.com/em0lar/ansible-role-traefik.git
 [submodule "roles/em0lar.oh-my-zsh"]
 	path = roles/em0lar.oh-my-zsh
-	url = https://git.labcode.dev/ansible_roles/oh-my-zsh.git
+	url = https://git.em0lar.dev/ansible_roles/oh-my-zsh.git
 [submodule "roles/systemli.coturn"]
 	path = roles/systemli.coturn
 	url = https://github.com/systemli/ansible-role-coturn
