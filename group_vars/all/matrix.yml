@@ -13,14 +13,14 @@ synapse_enable_group_creation: true
 synapse_enable_registration: true
 synapse_domain: "{{ base_url }}"
 synapse_server_fqdn_matrix: "matrix.{{ synapse_domain }}"
-synapse_pip_version: "1.32.2"
+synapse_pip_version: "v1.39.0"
 synapse_pip_packages_additional:
   - "git+https://github.com/chaos-jetzt/matrix-synapse-saml-mapper"
 synapse_auto_join_rooms:
   - "#grosse_halle:{{ base_url }}"
   - "#allgemein:{{ base_url }}"
 synapse_email_enabled: true
-synapse_email_smtp_host: "{{ false('passwordstore', 'infra/mail subkey=url') }}"
+synapse_email_smtp_host: "{{ lookup('passwordstore', 'infra/mail subkey=url') }}"
 synapse_email_smtp_port: 587
 synapse_email_smtp_user: "{{ lookup('passwordstore', 'infra/mail subkey=user') }}"
 synapse_email_smtp_password: "{{ lookup('passwordstore', 'infra/mail') }}"
