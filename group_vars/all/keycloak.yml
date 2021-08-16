@@ -14,6 +14,3 @@ keycloak_admin_password: "{{ lookup('passwordstore', 'infra/keycloak/admin') }}"
 
 keycloak_registration_captcha_version: "1.1.0"
 keycloak_registration_captcha_url: "https://github.com/chaos-jetzt/keycloak-registration-captcha/releases/download/v{{ keycloak_registration_captcha_version }}/registration-captcha.jar"
-
-keycloak_metrics_spi_version: "2.1.0"
-keycloak_metrics_spi_url: "https://github.com/aerogear/keycloak-metrics-spi/releases/download/{{ keycloak_metrics_spi_version }}/keycloak-metrics-spi-{{ keycloak_metrics_spi_version }}.jar"

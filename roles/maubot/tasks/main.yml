@@ -4,6 +4,7 @@
     name:
       - "python3.7"
       - "python3.7-venv"
+      - "python3.7-dev"
 
 - name: Create user
   user:
@@ -18,6 +19,14 @@
     owner: "maubot"
     group: "maubot"
     state: directory
+
+- name: Create venv and install wheel package
+  pip:
+    name: "wheel"
+    virtualenv: "/opt/venvs/maubot"
+    virtualenv_command: "/usr/bin/python3.7 -m venv"
+  become: yes
+  become_user: "maubot"
 
 - name: Make sure maubot is installed to the venv
   pip:

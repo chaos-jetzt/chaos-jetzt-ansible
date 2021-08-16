@@ -1,9 +1,9 @@
 users:
-  - username: "root"
-    state: present
-    sudo: yes
-    shell: "/bin/zsh"
-    oh_my_zsh: yes
+  #  - username: "root"
+  #    state: present
+  #    sudo: yes
+  #    shell: "/bin/zsh"
+  #    oh_my_zsh: yes
 
   - username: "n0emis"
     state: present
