@@ -13,7 +13,7 @@ synapse_enable_group_creation: true
 synapse_enable_registration: true
 synapse_domain: "{{ base_url }}"
 synapse_server_fqdn_matrix: "matrix.{{ synapse_domain }}"
-synapse_pip_version: "v1.39.0"
+synapse_pip_version: "1.40.0"
 synapse_pip_packages_additional:
   - "git+https://github.com/chaos-jetzt/matrix-synapse-saml-mapper"
 synapse_auto_join_rooms:
@@ -75,9 +75,9 @@ synapse_homeserver_config_extra_options: |
     client_whitelist:
       - "https://chat.{{ base_url }}/"
 
-# Riot
-riot_installation_path: "/var/www/riot-web"
-riot_version: "1.7.12"
+# Element Web
+element_web_installation_path: "/var/www/riot-web"
+element_web_version: "1.8.0"
 
 # Matrix-Appservice-IRC
 irc_hs_token: "{{ lookup('passwordstore', 'infra/irc-bridge subkey=hs_token') }}"

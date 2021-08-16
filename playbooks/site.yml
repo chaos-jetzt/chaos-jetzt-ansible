@@ -173,7 +173,7 @@
   roles:
     - systemli.coturn
     - n0emis.synapse
-  tags: matrix
+  tags: matrix, synapse
 
 - hosts: matrix
   roles:

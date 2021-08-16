@@ -31,4 +31,4 @@
       - root_irc-appservice:/app/data
       - /etc/matrix-appservice-irc/appservice-registration-irc.yaml:/app/appservice-registration-irc.yaml
       - /etc/matrix-appservice-irc/config.yaml:/app/config.yaml
-    state: started
+    state: absent
