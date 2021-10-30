@@ -1,0 +1,4 @@
+---
+website_path: "/var/www/website"
+website_repo: "https://github.com/chaos-jetzt/website_pelican.git"
+website_version: "master"

@@ -12,3 +12,5 @@ firewall_ports:
   - 5349/udp
   - 5349/tcp
   - 49152-65535/udp
+
+website_path: "/var/www/website"
