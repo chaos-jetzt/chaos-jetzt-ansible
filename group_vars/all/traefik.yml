@@ -20,3 +20,9 @@ traefik_middlewares_dashboard_authentication:
     - "em0lar:$apr1$h8hfBKva$F/yHCivbn8V3tIahYaNQE/"
     - "e1mo:$apr1$3Wq5CWcc$qpJ6NcCwVGoiGOfc1rclT0"
 traefik_dynamic_config_files_paths: "[{% for group in groups %}'../templates/traefik/dynamic/{{ group }}/*',{% endfor %}]"
+traefik_metrics_prometheus:
+  addServicesLabels: true
+  manualRouting: true
+  entryPoint: true
+  addServicesLabels: true
+  addEntryPointsLabels: true

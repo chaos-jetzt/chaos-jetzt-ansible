@@ -1,0 +1,144 @@
+---
+
+node_exporter_web_listen_address: "{{ monitoring_own_ip }}:9100"
+
+_monitored_hostnames:
+  #- shirley # No need to alert dev
+  - lovelace
+  - hopper
+
+monitoring_own_ip: "{{ ansible_ens10['ipv4']['address'] }}"
+monitoring_own_hostname: "{{ ansible_nodename }}"
+monitoring_domain: ".mon.net.chaos.jetzt"
+
+# Prometheus
+prometheus_web_listen_address: "{{ monitoring_own_ip }}:9090"
+prometheus_storage_retention: "7d"
+prometheus_storage_retention_size: "1GB"
+prometheus_config_flags_extra:
+  web.enable-admin-api:
+
+
+prometheus_alertmanager_config:
+  - static_configs:
+      - targets:
+          - "{{ monitoring_own_ip }}:9093"
+
+prometheus_scrape_configs:
+  - job_name: node
+    static_configs:
+      - targets: "{{ nodeexporter_targets }}"
+    relabel_configs:
+      - source_labels: [__address__]
+        regex: "(\\w+)\\.mon\\.net\\.chaos\\.jetzt\\:\\d*"
+        target_label: "instance"
+
+  - job_name: traefik
+    metrics_path: "/traefik-metrics"
+    static_configs:
+      - targets: "{{ monitored_hostnames }}"
+    relabel_configs:
+      - source_labels: [__address__]
+        regex: "(\\w+)\\.mon\\.net\\.chaos\\.jetzt(\\:\\d*)?"
+        target_label: "instance"
+
+prometheus_external_labels:
+  environment: "{{ monitoring_own_hostname }}"
+
+alertmanager_web_listen_address: "{{ monitoring_own_ip }}:9093"
+
+alertmanager_smtp:
+  from: "monitoring-{{ monitoring_own_hostname }}@{{ mail_base_domain }}"
+  smarthost: "{{ lookup('passwordstore', 'infra/mail subkey=url') }}:587"
+  auth_username: "{{ lookup('passwordstore', 'infra/mail subkey=user') }}"
+  auth_password: "{{ lookup('passwordstore', 'infra/mail') }}"
+
+alertmanager_receivers:
+  - name: email
+    email_configs:
+      - to: 'chaos-jetzt@e1mo.de'
+        send_resolved: true
+
+alertmanager_route:
+  group_by: ['alertname', 'instance', 'service']
+  group_wait: '15s'
+  repeat_interval: '6h'
+  receiver: email
+
+
+prometheus_alert_rules:
+  - record: traefik_service_requests_total:status_class
+    expr: 'sum by (instance, job, method, service, protocol, status_class) (label_replace(traefik_service_requests_total, "status_class", "${1}xx", "code", "(\\d)\\d{2}"))'
+  - alert: InstanceDown
+    expr: "up == 0"
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      description: "{% raw %}{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 5 minutes.{% endraw %}"
+      summary: "{% raw %}Instance {{ $labels.instance }} down{% endraw %}"
+  - alert: NodeFilesystemAlmostOutOfSpace
+    annotations:
+      description: '{% raw %}Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf "%.2f" $value }}% available space left.{% endraw %}'
+      summary: 'Filesystem has less than 5% space left.'
+    expr: "(\n  node_filesystem_avail_bytes{job=\"node\",fstype!=\"\"} / node_filesystem_size_bytes{job=\"node\",fstype!=\"\"} * 100 < 5\nand\n  node_filesystem_readonly{job=\"node\",fstype!=\"\"} == 0\n)\n"
+    for: 1h
+    labels:
+      severity: warning
+  - alert: NodeFilesystemAlmostOutOfSpace
+    annotations:
+      description: '{% raw %}Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf "%.2f" $value }}% available space left.{% endraw %}'
+      summary: 'Filesystem has less than 3% space left.'
+    expr: "(\n  node_filesystem_avail_bytes{job=\"node\",fstype!=\"\"} / node_filesystem_size_bytes{job=\"node\",fstype!=\"\"} * 100 < 3\nand\n  node_filesystem_readonly{job=\"node\",fstype!=\"\"} == 0\n)\n"
+    for: 1h
+    labels:
+      severity: critical
+  - alert: CriticalCPULoad
+    expr: '100 - (avg by (instance) (irate(node_cpu_seconds_total{job="node",mode="idle"}[5m])) * 100) > 96'
+    for: 2m
+    labels:
+      severity: critical
+    annotations:
+      description: "{% raw %}{{ $labels.instance }} of job {{ $labels.job }} has Critical CPU load for more than 2 minutes.{% endraw %}"
+      summary: "{% raw %}Instance {{ $labels.instance }} - Critical CPU load{% endraw %}"
+  - alert: CriticalRAMUsage
+    expr: '(1 - ((node_memory_MemFree_bytes + node_memory_Buffers_bytes + node_memory_Cached_bytes) / node_memory_MemTotal_bytes)) * 100 > 98'
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      description: "{% raw %}{{ $labels.instance }} has Critical Memory Usage more than 5 minutes.{% endraw %}"
+      summary: "{% raw %}Instance {{ $labels.instance }} has Critical Memory Usage{% endraw %}"
+  - alert: CriticalDiskSpace
+    expr: 'node_filesystem_free_bytes{mountpoint!~"^/run(/.*|$)",fstype!~"(squashfs|fuse.*)",job="node"} / node_filesystem_size_bytes{job="node"} < 0.1'
+    for: 4m
+    labels:
+      severity: critical
+    annotations:
+      description: "{% raw %}{{ $labels.instance }} of job {{ $labels.job }} has less than 10% space remaining.{% endraw %}"
+      summary: "{% raw %}Instance {{ $labels.instance }} - Critical disk space usage{% endraw %}"
+  - alert: HostOomKillDetected
+    expr: increase(node_vmstat_oom_kill[1m]) > 0
+    for: 0m
+    labels:
+      severity: warning
+    annotations:
+      summary: "{%raw %}Host OOM kill detected (instance {{ $labels.instance }}){% endraw %}"
+      description: "OOM kill detected"
+  - alert: HostSystemdServiceCrashed
+    expr: node_systemd_unit_state{state="failed"} == 1
+    for: 5m
+    labels:
+      severity: warning
+      service: systemd
+    annotations:
+      summary: "{%raw %} Systemd service(s) on {{ $labels.instance }} crashed{% endraw %}"
+      description: "SystemD service crashed"
+  - alert: TraefikManyServerErrors
+    expr: '(sum by (instance,service) (irate(traefik_service_requests_total:status_class{status_class="5xx"}[2m])) / sum by (instance,service) (irate(traefik_service_requests_total:status_class[2m]))) > 0.2'
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "{% raw %}Over 20% of requests on {{ $labels.instance }} {{ $labels.service }} Traefik return a 5xx code{% endraw %}"
+

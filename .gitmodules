@@ -61,3 +61,12 @@
 [submodule "roles/chaos_jetzt.venueless"]
 	path = roles/chaos_jetzt.venueless
 	url = https://github.com/chaos-jetzt/ansible-role-venueless
+[submodule "roles/cloudalchemy.node-exporter"]
+	path = roles/cloudalchemy.node-exporter
+	url = https://github.com/cloudalchemy/ansible-node-exporter
+[submodule "roles/cloudalchemy.prometheus"]
+	path = roles/cloudalchemy.prometheus
+	url = https://github.com/cloudalchemy/ansible-prometheus
+[submodule "roles/cloudalchemy.alertmanager"]
+	path = roles/cloudalchemy.alertmanager
+	url = https://github.com/cloudalchemy/ansible-alertmanager

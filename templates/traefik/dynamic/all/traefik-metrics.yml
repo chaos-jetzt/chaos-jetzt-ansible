@@ -1,0 +1,16 @@
+http:
+  routers:
+    traefik-metrics-http:
+      rule: "Host(`{{ ansible_nodename }}{{ monitoring_domain }}`)"
+      entryPoints:
+        - "http"
+      service: "prometheus@internal"
+      middlewares:
+        - "metrics-ipwhitelist"
+  middlewares:
+    metrics-ipwhitelist:
+      ipWhiteList:
+        sourceRange:
+          - "127.0.0.1"
+          - "::1"
+          - "172.16.0.0/24"
