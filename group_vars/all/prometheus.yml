@@ -132,8 +132,8 @@ prometheus_alert_rules:
       severity: warning
       service: systemd
     annotations:
-      summary: "{%raw %} Systemd service(s) on {{ $labels.instance }} crashed{% endraw %}"
-      description: "SystemD service crashed"
+      summary: "{%raw %} systemd service(s) on {{ $labels.instance }} crashed{% endraw %}"
+      description: "systemd service crashed"
   - alert: TraefikManyServerErrors
     expr: '(sum by (instance,service) (irate(traefik_service_requests_total:status_class{status_class="5xx"}[2m])) / sum by (instance,service) (irate(traefik_service_requests_total:status_class[2m]))) > 0.2'
     for: 5m
