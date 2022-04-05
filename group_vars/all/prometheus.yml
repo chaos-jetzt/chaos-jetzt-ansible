@@ -58,6 +58,8 @@ alertmanager_receivers:
     email_configs:
       - to: 'chaos-jetzt@e1mo.de'
         send_resolved: true
+      - to: 'cj@leona.is'
+        send_resolved: true
 
 alertmanager_route:
   group_by: ['alertname', 'instance', 'service']
