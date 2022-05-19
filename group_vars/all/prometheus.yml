@@ -60,6 +60,8 @@ alertmanager_receivers:
         send_resolved: true
       - to: 'cj@leona.is'
         send_resolved: true
+      - to: "cj-mon@n0emis.eu"
+        send_resolved: true
 
 alertmanager_route:
   group_by: ['alertname', 'instance', 'service']
