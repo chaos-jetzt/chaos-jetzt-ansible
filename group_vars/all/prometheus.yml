@@ -10,6 +10,9 @@ _monitored_hostnames:
 monitoring_own_ip: "{{ ansible_ens10['ipv4']['address'] }}"
 monitoring_own_hostname: "{{ ansible_nodename }}"
 monitoring_domain: ".mon.net.chaos.jetzt"
+prometheus_web_external_domain: "{{ ansible_fqdn }}"
+prometheus_web_external_url: "https://{{ prometheus_web_external_domain }}/prometheus/"
+alertmanager_web_external_url: "https://{{ prometheus_web_external_domain }}/alertmanager/"
 
 # Prometheus
 prometheus_web_listen_address: "{{ monitoring_own_ip }}:9090"

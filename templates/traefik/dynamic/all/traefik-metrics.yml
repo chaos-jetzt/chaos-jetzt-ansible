@@ -1,3 +1,5 @@
+{% macro prometheusRule(name) %}Host(`{{ ansible_fqdn }}`) && PathPrefix(`/{{ name }}`){% endmacro %}
+
 http:
   routers:
     traefik-metrics-http:
@@ -7,6 +9,25 @@ http:
       service: "prometheus@internal"
       middlewares:
         - "metrics-ipwhitelist"
+    prometheus_http:
+      rule: "Host(`{{ ansible_fqdn }}`)"
+      service: "prometheus@file"
+      entryPoints: ["http"]
+      middlewares: ["https_redirect"]
+    prometheus_https:
+      rule: "{{ prometheusRule('prometheus') }}"
+      service: "prometheus@file"
+      entryPoints: ["https"]
+      middlewares: ["{{ traefik_middlewares_dashboard_authentication.name }}"]
+      tls:
+        certResolver: "le_http"
+    alertmanager_https:
+      rule: "{{ prometheusRule('alertmanager') }}"
+      service: "alertmanager@file"
+      entryPoints: ["https"]
+      middlewares: ["{{ traefik_middlewares_dashboard_authentication.name }}"]
+      tls:
+        certResolver: "le_http"
   middlewares:
     metrics-ipwhitelist:
       ipWhiteList:
@@ -14,3 +35,15 @@ http:
           - "127.0.0.1"
           - "::1"
           - "172.16.0.0/24"
+    prometheus_auth:
+      basicAuth:
+        realm: "Prometheus"
+        removeHeader: true
+        users: {{traefik_middlewares_dashboard_authentication.users | to_yaml}}
+  services:
+    prometheus:
+      loadBalancer:
+        servers: [{url: "http://{{ prometheus_web_listen_address }}"}]
+    alertmanager:
+      loadBalancer:
+        servers: [{url: "http://{{ alertmanager_web_listen_address }}"}]
