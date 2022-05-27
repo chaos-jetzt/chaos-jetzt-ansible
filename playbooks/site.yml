@@ -275,3 +275,20 @@
   roles:
     - chaos_jetzt.venueless
   tags: venueless
+
+- hosts: all
+  roles:
+    - cloudalchemy.node-exporter
+  tags:
+    - node-exporter
+
+- hosts: all
+  pre_tasks:
+    - set_fact:
+        monitored_hostnames: "{{ _monitored_hostnames | difference([ monitoring_own_hostname ]) | product(['']) | map('join', monitoring_domain) }}"
+    - set_fact:
+        nodeexporter_targets: "{{ monitored_hostnames | product(['9100']) | map('join', ':') }}"
+  roles:
+    - cloudalchemy.prometheus
+    - cloudalchemy.alertmanager
+  tags: prometheus

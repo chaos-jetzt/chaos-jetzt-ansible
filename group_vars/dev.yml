@@ -5,3 +5,7 @@ sso_base_url: "https://sso.chaos.jetzt/auth/realms/dev"
 synapse_log_level: "DEBUG"
 synapse_root_log_level: "DEBUG"
 synapse_storage_sql_log_level: "DEBUG"
+
+prometheus_alertmanager_config:
+  - static_configs:
+      - targets: []
