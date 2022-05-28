@@ -12,7 +12,7 @@ monitoring_own_hostname: "{{ ansible_nodename }}"
 monitoring_domain: ".mon.net.chaos.jetzt"
 prometheus_web_external_domain: "{{ ansible_fqdn }}"
 prometheus_web_external_url: "https://{{ prometheus_web_external_domain }}/prometheus/"
-alertmanager_web_external_url: "https://{{ prometheus_web_external_domain }}/alertmanager/"
+alertmanager_web_external_url: "https://{{ ansible_fqdn }}/alertmanager/"
 
 # Prometheus
 prometheus_web_listen_address: "{{ monitoring_own_ip }}:9090"
@@ -23,7 +23,9 @@ prometheus_config_flags_extra:
 
 
 prometheus_alertmanager_config:
-  - static_configs:
+  - path_prefix: "/alertmanager"
+    scheme: "http"
+    static_configs:
       - targets:
           - "{{ monitoring_own_ip }}:9093"
 
