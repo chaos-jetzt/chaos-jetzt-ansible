@@ -1,0 +1,8 @@
+[Unit]
+Description=Mumble certificate reloader
+
+[Service]
+Type=oneshot
+SyslogIdentifier=mumble-server-certificate-reloader
+ExecStart=/usr/local/bin/mumble-server-certificate-reloader {{ mumble_domain }} {{ murmur_port }}
+User={{ murmur_username }}

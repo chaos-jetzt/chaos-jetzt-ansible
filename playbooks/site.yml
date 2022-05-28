@@ -251,6 +251,15 @@
   tags: pretix
 
 - hosts: web
+  handlers:
+    - name: daemon reload
+      systemd:
+        daemon_reload: true
+    - name: restart certificate reload timer
+      systemd:
+        name: mumble-certificate-reloader.timer
+        state: restarted
+        enabled: true
   pre_tasks:
     - name: add mumble repository
       apt_repository:
@@ -293,6 +302,21 @@
         name: "mumble-server"
         groups: "ssl-cert"
         append: yes
+
+    - name: Copy mumble-server-certificate-reloader.sh
+      template:
+        src: mumble/mumble-server-certificate-reloader.sh
+        dest: /usr/local/bin/mumble-server-certificate-reloader
+        mode: 0755
+
+    - name: Template certificate reloader service and timer
+      template:
+        src: "mumble/mumble-server-certificate-reloader.{{ item }}.j2"
+        dest: "/etc/systemd/system/mumble-certificate-reloader.{{ item }}"
+      notify:
+        - daemon reload
+        - restart certificate reload timer
+      with_items: ["service", "timer"]
   tags: mumble
 
 - hosts: web
