@@ -2,3 +2,5 @@
 *.retry
 .vault_pass
 
+.direnv
+result
