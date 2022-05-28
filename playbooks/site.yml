@@ -16,6 +16,30 @@
         regexp: "^#SystemMaxUse="
         replace: "SystemMaxUse=50M"
       notify: restart systemd-journald
+    - name: Register if alacritty terminfo is present
+      command: infocmp alacritty
+      ignore_errors: true
+      register: alacritty_present
+      check_mode: false
+    - name: Install alacritty terminfo
+      block:
+        - name: Download terminfo file
+          get_url:
+            url: "https://raw.githubusercontent.com/alacritty/alacritty/master/extra/alacritty.info"
+            dest: "/tmp/alacritty.info"
+            mode: 06440
+        - name: Install terminfo file for alacritty
+          command:
+            argv:
+              - tic
+              - "-xe"
+              - alacritty,alacritty-direct
+              - /tmp/alacritty.info
+        - name: Delete temporary alacritty.info
+          file:
+            path: "/tmp/alacritty.info"
+            state: absent
+      when: alacritty_present.rc == 1
   tags: base
 
 - hosts: web,matrix
