@@ -277,6 +277,14 @@
   tags: venueless
 
 - hosts: all
+  pre_tasks:
+    - name: ensure smartd is masked in VMs  # The virtual disks won't support SMART
+      systemd:
+        name: smartd
+        state: stopped
+        enabled: false
+        masked: true
+      when: ansible_virtualization_role == "guest"
   roles:
     - cloudalchemy.node-exporter
   tags:
