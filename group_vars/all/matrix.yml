@@ -77,7 +77,7 @@ synapse_homeserver_config_extra_options: |
 
 # Element Web
 element_web_installation_path: "/var/www/riot-web"
-element_web_version: "1.9.5"
+element_web_version: "1.11.4"
 
 # Matrix-Appservice-IRC
 irc_hs_token: "{{ lookup('passwordstore', 'infra/irc-bridge subkey=hs_token') }}"
