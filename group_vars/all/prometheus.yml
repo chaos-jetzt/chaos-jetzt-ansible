@@ -63,8 +63,6 @@ alertmanager_receivers:
     email_configs:
       - to: 'chaos-jetzt@e1mo.de'
         send_resolved: true
-      - to: 'cj@leona.is'
-        send_resolved: true
       - to: "cj-mon@n0emis.eu"
         send_resolved: true
 

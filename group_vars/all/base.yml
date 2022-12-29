@@ -13,7 +13,7 @@ users:
     public_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEcOPtW5FWNIdlMQFoqeyA1vHw+cA8ft8oXSbXPzQNL9 n0emis@n0emis.eu"
 
   - username: "em0lar"
-    state: present
+    state: absent
     sudo: yes
     shell: /bin/zsh
     oh_my_zsh: yes
