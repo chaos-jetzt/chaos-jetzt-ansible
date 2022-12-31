@@ -18,17 +18,26 @@ http:
       rule: "{{ prometheusRule('prometheus') }}"
       service: "prometheus@file"
       entryPoints: ["https"]
-      middlewares: ["{{ traefik_middlewares_dashboard_authentication.name }}"]
+      middlewares:
+        - "strip-prometheus"
+        - "{{ traefik_middlewares_dashboard_authentication.name }}"
       tls:
         certResolver: "le_http"
     alertmanager_https:
       rule: "{{ prometheusRule('alertmanager') }}"
       service: "alertmanager@file"
       entryPoints: ["https"]
-      middlewares: ["{{ traefik_middlewares_dashboard_authentication.name }}"]
+      middlewares:
+        - "strip-prometheus"
+        - "{{ traefik_middlewares_dashboard_authentication.name }}"
       tls:
         certResolver: "le_http"
   middlewares:
+    strip-prometheus:
+      stripPrefix:
+        prefixes:
+          - "/prometheus"
+          - "/alertmanager"
     metrics-ipwhitelist:
       ipWhiteList:
         sourceRange:

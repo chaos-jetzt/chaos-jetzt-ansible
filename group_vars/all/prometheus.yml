@@ -13,6 +13,8 @@ monitoring_domain: ".mon.net.chaos.jetzt"
 prometheus_web_external_domain: "{{ ansible_fqdn }}"
 prometheus_web_external_url: "https://{{ prometheus_web_external_domain }}/prometheus/"
 alertmanager_web_external_url: "https://{{ ansible_fqdn }}/alertmanager/"
+alertmanager_config_flags_extra:
+  web.route-prefix: "/"
 
 # Prometheus
 prometheus_web_listen_address: "{{ monitoring_own_ip }}:9090"
@@ -20,7 +22,7 @@ prometheus_storage_retention: "7d"
 prometheus_storage_retention_size: "1GB"
 prometheus_config_flags_extra:
   web.enable-admin-api:
-
+  web.route-prefix: /
 
 prometheus_alertmanager_config:
   - path_prefix: "/alertmanager"
@@ -49,6 +51,7 @@ prometheus_scrape_configs:
 
 prometheus_external_labels:
   environment: "{{ monitoring_own_hostname }}"
+
 
 alertmanager_web_listen_address: "{{ monitoring_own_ip }}:9093"
 
@@ -148,4 +151,3 @@ prometheus_alert_rules:
       severity: warning
     annotations:
       summary: "{% raw %}Over 20% of requests on {{ $labels.instance }} {{ $labels.service }} Traefik return a 5xx code{% endraw %}"
-
