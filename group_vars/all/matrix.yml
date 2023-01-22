@@ -12,7 +12,7 @@ synapse_allow_public_rooms_over_federation: true
 synapse_enable_group_creation: true
 synapse_domain: "{{ base_url }}"
 synapse_server_fqdn_matrix: "matrix.{{ synapse_domain }}"
-synapse_pip_version: "1.71.0"
+synapse_pip_version: "1.75.0"
 synapse_pip_packages_additional:
   - "git+https://github.com/chaos-jetzt/matrix-synapse-saml-mapper"
 synapse_auto_join_rooms:
@@ -76,7 +76,7 @@ synapse_homeserver_config_extra_options: |
 
 # Element Web
 element_web_installation_path: "/var/www/riot-web"
-element_web_version: "1.11.14"
+element_web_version: "1.11.20"
 
 # Matrix-Appservice-IRC
 irc_hs_token: "{{ lookup('passwordstore', 'infra/irc-bridge subkey=hs_token') }}"
@@ -85,3 +85,22 @@ irc_as_token: "{{ lookup('passwordstore', 'infra/irc-bridge subkey=as_token') }}
 # Maubot
 maubot_unshared_secret: "{{ lookup('passwordstore', 'infra/maubot/unshared') }}"
 maubot_admin_password: "{{ lookup('passwordstore', 'infra/maubot/admin') }}"
+
+
+synapse_dependencies:
+  - build-essential
+  - python3-dev
+  - libffi-dev
+  - python3-pip
+  - python3-wheel
+  - python3-setuptools
+  - python3-virtualenv
+  - python3-venv
+  - sqlite3
+  - libssl-dev
+  - libjpeg-dev
+  - libxslt1-dev
+  - libpq-dev
+  - libxslt1-dev
+  - xmlsec1
+  - python3-icu
