@@ -78,6 +78,8 @@ alertmanager_route:
 prometheus_alert_rules:
   - record: traefik_service_requests_total:status_class
     expr: 'sum by (instance, job, method, service, protocol, status_class) (label_replace(traefik_service_requests_total, "status_class", "${1}xx", "code", "(\\d)\\d{2}"))'
+  - record: node_memory_MemAvailable_percentage
+    expr: (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100
   - alert: InstanceDown
     expr: "up == 0"
     for: 5m
@@ -111,7 +113,7 @@ prometheus_alert_rules:
       description: "{% raw %}{{ $labels.instance }} of job {{ $labels.job }} has Critical CPU load for more than 2 minutes.{% endraw %}"
       summary: "{% raw %}Instance {{ $labels.instance }} - Critical CPU load{% endraw %}"
   - alert: CriticalRAMUsage
-    expr: '(1 - ((node_memory_MemFree_bytes + node_memory_Buffers_bytes + node_memory_Cached_bytes) / node_memory_MemTotal_bytes)) * 100 > 75'
+    expr: ((node_memory_MemAvailable_percentage < 5) or (node_memory_MemFree_bytes < (1024 * 200)))
     for: 5m
     labels:
       severity: critical
